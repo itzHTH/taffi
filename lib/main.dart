@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:taffi/core/features/login/screen/login_screen.dart';
+import 'package:taffi/core/theme/app_theme.dart';
+import 'package:taffi/features/auth/screens/login_screen.dart';
 
 void main() {
   runApp(const TaffiApp());
@@ -10,6 +11,11 @@ class TaffiApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(home: LoginScreen());
+    return MaterialApp(
+      title: 'Taffi',
+      theme: AppTheme.lightTheme,
+      debugShowCheckedModeBanner: false,
+      home: const LoginScreen(),
+    );
   }
 }
