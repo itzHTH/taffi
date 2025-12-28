@@ -15,7 +15,11 @@ class TaffiApp extends StatelessWidget {
       title: 'Taffi',
       theme: AppTheme.lightTheme,
       debugShowCheckedModeBanner: false,
-      home: const LoginScreen(),
+
+      home: Directionality(
+        textDirection: TextDirection.rtl,
+        child: const LoginScreen(),
+      ),
     );
   }
 }

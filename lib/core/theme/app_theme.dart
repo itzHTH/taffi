@@ -7,6 +7,7 @@ class AppTheme {
 
   static ThemeData get lightTheme {
     return ThemeData(
+      fontFamily: "BalooBhaijaan2",
       useMaterial3: true,
       colorScheme: ColorScheme.fromSeed(
         seedColor: AppColors.primary,
@@ -26,21 +27,22 @@ class AppTheme {
       ),
       inputDecorationTheme: InputDecorationTheme(
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-          borderSide: const BorderSide(color: AppColors.border),
+          borderRadius: BorderRadius.circular(20),
+          borderSide: const BorderSide(color: AppColors.primary, width: 1.4),
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-          borderSide: const BorderSide(color: AppColors.border),
+          borderRadius: BorderRadius.circular(20),
+          borderSide: const BorderSide(color: AppColors.primary, width: 1.4),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-          borderSide: const BorderSide(color: AppColors.primary, width: 2),
+          borderRadius: BorderRadius.circular(20),
+          borderSide: const BorderSide(color: AppColors.primary, width: 1.8),
         ),
         errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(20),
           borderSide: const BorderSide(color: AppColors.error),
         ),
+
         filled: true,
         fillColor: AppColors.surface,
       ),
@@ -48,10 +50,29 @@ class AppTheme {
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.primary,
           foregroundColor: Colors.white,
+
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
         ),
       ),
+
+      textTheme: TextTheme(
+        labelSmall: TextStyle(
+          fontSize: 18,
+          fontWeight: FontWeight.w600,
+          color: AppColors.primary,
+        ),
+
+        displaySmall: TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.w400,
+          color: AppColors.primary,
+        ),
+      ),
+
+      checkboxTheme: CheckboxThemeData(shape: CircleBorder()),
     );
   }
 }
