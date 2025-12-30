@@ -72,6 +72,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             prefixIcon: "assets/images/password.svg",
                             isPassword: true,
                             verticalContentPadding: 20,
+                            hidePasswordIcon: false,
 
                             textInputAction: TextInputAction.done,
                             onFieldSubmitted: (value) {

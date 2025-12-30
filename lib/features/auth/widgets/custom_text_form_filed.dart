@@ -6,7 +6,7 @@ class CustomTextFormFiled extends StatefulWidget {
   const CustomTextFormFiled({
     super.key,
     required this.hint,
-    required this.prefixIcon,
+    this.prefixIcon,
     this.isPassword = false,
     required this.validator,
     this.textEditingController,
@@ -18,10 +18,11 @@ class CustomTextFormFiled extends StatefulWidget {
     this.textInputAction,
     this.onFieldSubmitted,
     this.scrollPadding,
+    this.borderRadius,
   });
 
   final String hint;
-  final String prefixIcon;
+  final String? prefixIcon;
   final bool isPassword;
   final bool hidePasswordIcon;
   final double verticalContentPadding;
@@ -33,6 +34,7 @@ class CustomTextFormFiled extends StatefulWidget {
   final void Function(String value)? onFieldSubmitted;
   final EdgeInsets? scrollPadding;
   final String? Function(String? value) validator;
+  final double? borderRadius;
 
   @override
   State<CustomTextFormFiled> createState() => _CustomTextFormFiledState();
@@ -59,15 +61,34 @@ class _CustomTextFormFiledState extends State<CustomTextFormFiled> {
       decoration: InputDecoration(
         contentPadding: EdgeInsets.symmetric(
           vertical: widget.verticalContentPadding,
+          horizontal: 10,
         ),
-        prefixIcon: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: SvgPicture.asset(
-            widget.prefixIcon,
-            width: 20,
-            height: 20,
-            fit: BoxFit.contain,
-          ),
+        prefixIcon: widget.prefixIcon != null
+            ? Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: SvgPicture.asset(
+                  widget.prefixIcon!,
+                  width: 20,
+                  height: 20,
+                  fit: BoxFit.contain,
+                ),
+              )
+            : null,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(widget.borderRadius ?? 20),
+          borderSide: const BorderSide(color: AppColors.primary, width: 1.4),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(widget.borderRadius ?? 20),
+          borderSide: const BorderSide(color: AppColors.primary, width: 1.8),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(widget.borderRadius ?? 20),
+          borderSide: const BorderSide(color: AppColors.primary, width: 1.4),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(widget.borderRadius ?? 20),
+          borderSide: const BorderSide(color: AppColors.error),
         ),
         hintText: widget.hint,
         hintStyle: TextStyle(

@@ -67,9 +67,71 @@ class Validators {
       return 'رقم الهاتف مطلوب';
     }
 
-    final phoneRegex = RegExp(r'^[0-9]{10,}$');
+    final phoneRegex = RegExp(r'[0-9]{10,}');
     if (!phoneRegex.hasMatch(value)) {
       return 'يرجى إدخال رقم هاتف صحيح';
+    }
+
+    return null;
+  }
+
+  /// Validates phone number
+  static String? age(String? value) {
+    if (value == null || value.isEmpty) {
+      return ' العمر مطلوب';
+    }
+
+    final phoneRegex = RegExp(r'^[0-9]{1,}$');
+    if (!phoneRegex.hasMatch(value)) {
+      return 'يرجى إدخال عمر صحيح';
+    }
+
+    return null;
+  }
+
+  static String? fullName(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'الاسم الكامل مطلوب';
+    }
+
+    String trimmedValue = value.trim();
+
+    final RegExp nameRegex = RegExp(
+      r'^[\u0621-\u064A]+\s+[\u0621-\u064A]+\s+[\u0621-\u064A]+(?:[\s\u0621-\u064A]*)$',
+    );
+
+    if (!nameRegex.hasMatch(trimmedValue)) {
+      if (!RegExp(r'^[\u0621-\u064A\s]+$').hasMatch(trimmedValue)) {
+        return 'يجب استخدام الحروف العربية فقط';
+      }
+      return 'يجب كتابة الاسم الثلاثي كاملاً (الاسم، اسم الأب، اسم الجد)';
+    }
+
+    return null;
+  }
+
+  static String? username(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'اسم المستخدم مطلوب';
+    }
+
+    if (value.length < 4) {
+      return 'قصير جداً (4 أحرف على الأقل)';
+    }
+    if (value.length > 20) {
+      return 'طويل جداً (20 حرف كحد أقصى)';
+    }
+
+    final RegExp usernameRegex = RegExp(r'^[a-zA-Z][a-zA-Z0-9_]*$');
+
+    if (!usernameRegex.hasMatch(value)) {
+      if (value.contains(' ')) {
+        return 'لا يسمح باستخدام المسافات';
+      }
+      if (RegExp(r'^[^a-zA-Z]').hasMatch(value)) {
+        return 'يجب أن يبدأ بحرف إنجليزي';
+      }
+      return 'يجب استخدام أحرف إنجليزية وأرقام و (_) فقط';
     }
 
     return null;

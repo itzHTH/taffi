@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:taffi/core/utils/validators.dart';
+import 'package:taffi/features/auth/screens/fill_personal_info_screen.dart';
 import 'package:taffi/features/auth/widgets/custom_text_form_filed.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -57,7 +58,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       child: Column(
                         children: [
                           CustomTextFormFiled(
-                            validator: (value) => Validators.required(value),
+                            validator: (value) => Validators.username(value),
                             hint: "اسم المستخدم",
                             prefixIcon: "assets/images/person.svg",
                             textInputAction: TextInputAction.next,
@@ -116,9 +117,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           SizedBox(height: 18),
                           ElevatedButton(
                             onPressed: () {
-                              if (_key.currentState!.validate()) {
-                                // TODO: Register Func
-                              }
+                              // if (_key.currentState!.validate()) {
+                              // TODO: Register Func
+                              // }
+
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      FillPersonalInfoScreen(),
+                                ),
+                              );
                             },
                             style: ElevatedButton.styleFrom(
                               fixedSize: Size(MediaQuery.widthOf(context), 60),

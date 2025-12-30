@@ -1,0 +1,249 @@
+import 'package:flutter/material.dart';
+import 'package:taffi/core/theme/app_colors.dart';
+import 'package:taffi/core/utils/validators.dart';
+import 'package:taffi/features/auth/widgets/custom_text_form_filed.dart';
+import 'package:taffi/core/constants/app_constants.dart';
+
+class FillPersonalInfoScreen extends StatefulWidget {
+  const FillPersonalInfoScreen({super.key});
+
+  @override
+  State<FillPersonalInfoScreen> createState() => _FillPersonalInfoScreenState();
+}
+
+class _FillPersonalInfoScreenState extends State<FillPersonalInfoScreen> {
+  final GlobalKey<FormState> _key = GlobalKey<FormState>();
+
+  String dropdownValue = AppConstants.iraqGovernorates.first;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        body: SafeArea(
+          child: Form(
+            key: _key,
+            child: SingleChildScrollView(
+              reverse: true,
+              child: Center(
+                child: Column(
+                  children: [
+                    Container(
+                      width: MediaQuery.widthOf(context),
+                      decoration: BoxDecoration(
+                        border: Border(
+                          bottom: BorderSide(color: Colors.black38),
+                        ),
+                      ),
+                      child: ClipRect(
+                        child: Align(
+                          alignment: Alignment.topCenter,
+                          widthFactor: 0.8,
+                          heightFactor: 0.8,
+                          child: Image.asset("assets/images/doctor1.png"),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 36),
+                    Text(
+                      "المعلومات الشخصية",
+                      style: Theme.of(context).textTheme.labelSmall,
+                    ),
+                    SizedBox(height: 28),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 36.0),
+                      child: Column(
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "الأسم الثلاثي",
+                                style: Theme.of(context).textTheme.titleSmall,
+                              ),
+                              CustomTextFormFiled(
+                                validator: (value) =>
+                                    Validators.fullName(value),
+                                hint: "ادخل اسمك الثلاثي هنا",
+
+                                textInputAction: TextInputAction.next,
+                                borderRadius: 6,
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 14),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "رقم الهاتف",
+                                style: Theme.of(context).textTheme.titleSmall,
+                              ),
+                              CustomTextFormFiled(
+                                validator: (value) => Validators.phone(value),
+                                hint: "ادخل رقم هاتفك هنا",
+
+                                textInputAction: TextInputAction.next,
+                                keyboardType: TextInputType.phone,
+                                borderRadius: 6,
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 14),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "المحافظة",
+                                      style: Theme.of(
+                                        context,
+                                      ).textTheme.titleSmall,
+                                    ),
+                                    DropdownMenu<String>(
+                                      dropdownMenuEntries: AppConstants
+                                          .iraqGovernorates
+                                          .map((e) {
+                                            return DropdownMenuEntry(
+                                              value: e,
+                                              label: e,
+                                            );
+                                          })
+                                          .toList(),
+                                      trailingIcon: Icon(
+                                        Icons.keyboard_arrow_down_rounded,
+                                        color: AppColors.primary,
+                                      ),
+
+                                      selectedTrailingIcon: Icon(
+                                        Icons.keyboard_arrow_up_rounded,
+                                        color: AppColors.primary,
+                                      ),
+                                      initialSelection: dropdownValue,
+                                      inputDecorationTheme:
+                                          InputDecorationTheme(
+                                            // isDense: ,
+                                            contentPadding:
+                                                const EdgeInsets.symmetric(
+                                                  horizontal: 16,
+                                                ),
+                                            constraints: BoxConstraints.tight(
+                                              const Size.fromHeight(49),
+                                            ),
+                                            focusedBorder: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(6),
+                                              borderSide: const BorderSide(
+                                                color: AppColors.primary,
+                                                width: 1.8,
+                                              ),
+                                            ),
+                                            border: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(6),
+                                              borderSide: const BorderSide(
+                                                color: AppColors.primary,
+                                                width: 1.8,
+                                              ),
+                                            ),
+                                            enabledBorder: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(6),
+                                              borderSide: const BorderSide(
+                                                color: AppColors.primary,
+                                                width: 1.8,
+                                              ),
+                                            ),
+                                          ),
+                                      menuHeight: 150,
+
+                                      textStyle: Theme.of(
+                                        context,
+                                      ).textTheme.titleSmall,
+                                      menuStyle: MenuStyle(
+                                        backgroundColor: WidgetStatePropertyAll(
+                                          AppColors.background,
+                                        ),
+                                        alignment: Alignment.topRight,
+                                      ),
+                                      onSelected: (value) {
+                                        dropdownValue = value!;
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(width: 12),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "العمر",
+                                      style: Theme.of(
+                                        context,
+                                      ).textTheme.titleSmall,
+                                    ),
+                                    CustomTextFormFiled(
+                                      validator: (value) =>
+                                          Validators.age(value),
+                                      hint: "ادخل العمر هنا",
+                                      scrollPadding: EdgeInsets.only(
+                                        bottom: 150,
+                                      ),
+                                      keyboardType: TextInputType.number,
+                                      textInputAction: TextInputAction.done,
+                                      borderRadius: 6,
+                                      onFieldSubmitted: (value) {
+                                        if (_key.currentState!.validate()) {
+                                          // TODO: Register Func
+                                        }
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 70),
+                          ElevatedButton(
+                            onPressed: () {
+                              // if (_key.currentState!.validate()) {
+                              // TODO: Register Func
+                              // }
+                            },
+                            style: ElevatedButton.styleFrom(
+                              fixedSize: Size(MediaQuery.widthOf(context), 60),
+                            ),
+                            child: Text(
+                              "حفظ المعلومات",
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 6),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsetsGeometry.only(
+                        bottom: MediaQuery.of(context).viewInsets.bottom,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
