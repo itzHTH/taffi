@@ -29,6 +29,27 @@ class Validators {
       return 'كلمة المرور يجب أن تكون 6 أحرف على الأقل';
     }
 
+    String pattern =
+        r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$';
+    RegExp regex = RegExp(pattern);
+
+    if (!regex.hasMatch(value)) {
+      return 'يجب أن تحتوي على حرف كبير، صغير، رقم، ورمز خاص (!@#)';
+    }
+
+    return null;
+  }
+
+  /// Validates password
+  static String? confrimPassword(String? currentValue, String? originValue) {
+    if (currentValue == null || currentValue.isEmpty) {
+      return 'تاكيد كلمة المرور مطلوب';
+    }
+
+    if (currentValue != originValue) {
+      return '! كلمة المرور غير متطابقه';
+    }
+
     return null;
   }
 

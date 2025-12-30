@@ -10,13 +10,28 @@ class CustomTextFormFiled extends StatefulWidget {
     this.isPassword = false,
     required this.validator,
     this.textEditingController,
+    this.verticalContentPadding = 0,
+    this.hidePasswordIcon = true,
+    this.isPasswordVisible,
+    this.onPasswordVisibilityChanged,
+    this.keyboardType,
+    this.textInputAction,
+    this.onFieldSubmitted,
+    this.scrollPadding,
   });
 
   final String hint;
   final String prefixIcon;
   final bool isPassword;
+  final bool hidePasswordIcon;
+  final double verticalContentPadding;
   final TextEditingController? textEditingController;
-
+  final bool? isPasswordVisible;
+  final ValueChanged<bool>? onPasswordVisibilityChanged;
+  final TextInputType? keyboardType;
+  final TextInputAction? textInputAction;
+  final void Function(String value)? onFieldSubmitted;
+  final EdgeInsets? scrollPadding;
   final String? Function(String? value) validator;
 
   @override
@@ -26,15 +41,25 @@ class CustomTextFormFiled extends StatefulWidget {
 class _CustomTextFormFiledState extends State<CustomTextFormFiled> {
   bool _isHide = true;
 
+  bool get _isPasswordHidden {
+    return widget.isPasswordVisible ?? _isHide;
+  }
+
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       controller: widget.textEditingController,
       autocorrect: widget.isPassword,
-
+      keyboardType: widget.keyboardType ?? TextInputType.text,
+      textInputAction: widget.textInputAction,
+      onFieldSubmitted: widget.onFieldSubmitted,
       validator: widget.validator,
+      scrollPadding: widget.scrollPadding ?? EdgeInsets.all(20),
+      autovalidateMode: AutovalidateMode.onUserInteraction,
       decoration: InputDecoration(
-        contentPadding: EdgeInsets.symmetric(vertical: 20),
+        contentPadding: EdgeInsets.symmetric(
+          vertical: widget.verticalContentPadding,
+        ),
         prefixIcon: Padding(
           padding: const EdgeInsets.all(12.0),
           child: SvgPicture.asset(
@@ -49,15 +74,20 @@ class _CustomTextFormFiledState extends State<CustomTextFormFiled> {
           fontSize: 16,
           color: AppColors.primary.withValues(alpha: 0.73),
         ),
-        suffixIcon: widget.isPassword
+        suffixIcon: widget.isPassword && !widget.hidePasswordIcon
             ? IconButton(
                 onPressed: () {
-                  setState(() {
-                    _isHide = !_isHide;
-                  });
+                  final newValue = !_isPasswordHidden;
+                  if (widget.onPasswordVisibilityChanged != null) {
+                    widget.onPasswordVisibilityChanged!(newValue);
+                  } else {
+                    setState(() {
+                      _isHide = newValue;
+                    });
+                  }
                 },
                 icon: Icon(
-                  _isHide
+                  _isPasswordHidden
                       ? Icons.visibility_off_outlined
                       : Icons.visibility_outlined,
                 ),
@@ -65,7 +95,7 @@ class _CustomTextFormFiledState extends State<CustomTextFormFiled> {
               )
             : null,
       ),
-      obscureText: widget.isPassword ? _isHide : false,
+      obscureText: widget.isPassword ? _isPasswordHidden : false,
 
       cursorColor: AppColors.primary,
     );
