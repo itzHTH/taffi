@@ -3,6 +3,7 @@ import 'package:taffi/core/theme/app_colors.dart';
 import 'package:taffi/core/utils/validators.dart';
 import 'package:taffi/features/auth/widgets/custom_text_form_filed.dart';
 import 'package:taffi/core/constants/app_constants.dart';
+import 'package:taffi/features/home/screens/main_screen.dart';
 
 class FillPersonalInfoScreen extends StatefulWidget {
   const FillPersonalInfoScreen({super.key});
@@ -216,6 +217,13 @@ class _FillPersonalInfoScreenState extends State<FillPersonalInfoScreen> {
                               // if (_key.currentState!.validate()) {
                               // TODO: Register Func
                               // }
+
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const MainScreen(),
+                                ),
+                              );
                             },
                             style: ElevatedButton.styleFrom(
                               fixedSize: Size(MediaQuery.widthOf(context), 60),

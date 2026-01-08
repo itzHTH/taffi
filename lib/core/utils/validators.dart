@@ -81,7 +81,7 @@ class Validators {
       return ' العمر مطلوب';
     }
 
-    final phoneRegex = RegExp(r'^[0-9]{1,}$');
+    final phoneRegex = RegExp(r'^[1-9]{1,}$');
     if (!phoneRegex.hasMatch(value)) {
       return 'يرجى إدخال عمر صحيح';
     }
