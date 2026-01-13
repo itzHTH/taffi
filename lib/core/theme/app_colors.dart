@@ -13,7 +13,8 @@ class AppColors {
   static const Color secondaryLight = Color(0xFF0055B5);
 
   // Background Colors
-  static const Color background = Color(0xFFFFFFFF);
+  static const Color background = Colors.white;
+  static const Color backgroundLight = Color(0xFFDFEEFF);
   static const Color surface = Colors.white;
 
   // Text Colors

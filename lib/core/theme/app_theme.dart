@@ -90,6 +90,12 @@ class AppTheme {
           fontWeight: FontWeight.w500,
           color: Color(0xFFADA4A5),
         ),
+
+        titleLarge: TextStyle(
+          fontSize: 24,
+          fontWeight: FontWeight.w600,
+          color: AppColors.primary,
+        ),
       ),
 
       checkboxTheme: CheckboxThemeData(shape: CircleBorder()),

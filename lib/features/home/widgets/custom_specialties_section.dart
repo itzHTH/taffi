@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:taffi/features/home/widgets/specialty_card.dart';
+import 'package:taffi/core/widgets/specialty_card.dart';
+import 'package:taffi/features/specialties/screens/specialties_screen.dart';
 
 class CustomSpecialtiesSection extends StatelessWidget {
   CustomSpecialtiesSection({super.key});
@@ -30,12 +31,27 @@ class CustomSpecialtiesSection extends StatelessWidget {
       children: [
         Row(
           children: [
-            SvgPicture.asset("assets/images/server.svg", width: 28),
-            SizedBox(width: 8),
-            Text("التخصصات", style: Theme.of(context).textTheme.labelSmall),
+            Hero(
+              tag: "specialtiesTitle",
+              child: Row(
+                children: [
+                  SvgPicture.asset("assets/images/server.svg", width: 28),
+                  SizedBox(width: 8),
+                  Text(
+                    "التخصصات الطبية",
+                    style: Theme.of(context).textTheme.labelSmall,
+                  ),
+                ],
+              ),
+            ),
             Spacer(),
             TextButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => SpecialtiesScreen()),
+                );
+              },
               child: Text(
                 "عرض الكل",
                 style: Theme.of(context).textTheme.labelSmall,
