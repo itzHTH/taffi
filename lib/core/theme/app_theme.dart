@@ -48,7 +48,7 @@ class AppTheme {
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.primary,
+          backgroundColor: AppColors.secondary,
           foregroundColor: Colors.white,
 
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
@@ -58,9 +58,17 @@ class AppTheme {
         ),
       ),
 
+      searchViewTheme: SearchViewThemeData(backgroundColor: Color(0xffDFEEFF)),
+
       textTheme: TextTheme(
         labelSmall: TextStyle(
           fontSize: 18,
+          fontWeight: FontWeight.w600,
+          color: AppColors.primary,
+        ),
+
+        labelMedium: TextStyle(
+          fontSize: 16,
           fontWeight: FontWeight.w600,
           color: AppColors.primary,
         ),
@@ -75,6 +83,12 @@ class AppTheme {
           fontSize: 16,
           fontWeight: FontWeight.w500,
           color: AppColors.primary.withValues(alpha: .73),
+        ),
+
+        bodySmall: TextStyle(
+          fontSize: 14,
+          fontWeight: FontWeight.w500,
+          color: Color(0xFFADA4A5),
         ),
       ),
 

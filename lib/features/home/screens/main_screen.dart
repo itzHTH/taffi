@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:taffi/core/theme/app_colors.dart';
 import 'package:taffi/features/appointment/screens/appointments_screen.dart';
 import 'package:taffi/features/home/screens/home_screen.dart';
 import 'package:taffi/features/home/widgets/custom_bottom_navigation_bar.dart';
@@ -15,27 +13,64 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  final List<Widget> _screens = [
-    HomeScreen(),
-    MessagesScreen(),
-    AppointmentScreen(),
-    ProfileScreen(),
-  ];
-  int _currentIndex = 0;
+  int _currentScreen = 0;
+  late PageController _pageController;
+
+  @override
+  void initState() {
+    super.initState();
+    _pageController = PageController(initialPage: _currentScreen);
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
+
+  Widget _getScreen(int index) {
+    switch (index) {
+      case 0:
+        return const HomeScreen();
+      case 1:
+        return const MessagesScreen();
+      case 2:
+        return const AppointmentScreen();
+      case 3:
+        return const ProfileScreen();
+      default:
+        return const HomeScreen();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[100],
       bottomNavigationBar: CustomBottomNavigationBar(
-        currentIndex: _currentIndex,
+        currentIndex: _currentScreen,
         onTap: (index) {
+          _pageController.animateToPage(
+            index,
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeInOut,
+          );
           setState(() {
-            _currentIndex = index;
+            _currentScreen = index;
           });
         },
       ),
-      body: IndexedStack(index: _currentIndex, children: _screens),
+      body: PageView.builder(
+        itemBuilder: (context, index) => _getScreen(index),
+        itemCount: 4,
+        controller: _pageController,
+        onPageChanged: (index) {
+          setState(() {
+            _currentScreen = index;
+          });
+        },
+        physics: BouncingScrollPhysics(),
+      ),
     );
   }
 }
