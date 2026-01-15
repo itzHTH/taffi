@@ -111,9 +111,6 @@ class AppTheme {
       ),
 
       checkboxTheme: CheckboxThemeData(shape: CircleBorder()),
-
-      splashColor: Colors.black.withValues(alpha: 0.9),
-      highlightColor: Colors.black.withValues(alpha: 0.9),
     );
   }
 }
