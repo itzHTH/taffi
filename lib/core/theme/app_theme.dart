@@ -96,9 +96,24 @@ class AppTheme {
           fontWeight: FontWeight.w600,
           color: AppColors.primary,
         ),
+
+        displayMedium: TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.w500,
+          color: Colors.white.withAlpha(190),
+        ),
+
+        headlineMedium: TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.w600,
+          color: Colors.white,
+        ),
       ),
 
       checkboxTheme: CheckboxThemeData(shape: CircleBorder()),
+
+      splashColor: Colors.black.withValues(alpha: 0.9),
+      highlightColor: Colors.black.withValues(alpha: 0.9),
     );
   }
 }
