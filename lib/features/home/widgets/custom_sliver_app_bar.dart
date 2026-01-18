@@ -10,7 +10,7 @@ class CustomSliverAppBar extends StatelessWidget {
     return SliverAppBar(
       backgroundColor: Colors.transparent,
       leading: CustomCachedNetworkAvatar(
-        imageUrl: "https://taafi.ddns.net/uploads/doctors/dr_ahmed.jpg",
+        imageUrl: "https://taafi.ddns.net/uploads/doctors/dr_ahmed.png",
         size: 70,
       ),
       centerTitle: false,

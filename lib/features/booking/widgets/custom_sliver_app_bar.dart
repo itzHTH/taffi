@@ -9,6 +9,7 @@ class CustomSliverAppBar extends StatelessWidget {
     return SliverAppBar(
       backgroundColor: Colors.white,
       surfaceTintColor: Colors.transparent,
+      automaticallyImplyLeading: false,
       title: Hero(
         tag: "SpecialName",
         child: Text(

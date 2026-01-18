@@ -59,7 +59,7 @@ class _FamousDoctorSliderState extends State<FamousDoctorSlider> {
           doctorName: "د. نور الهدى",
           doctorSpecialization: "طب الأسنان",
           rating: 4.40,
-          doctorImage: "https://taafi.ddns.net/uploads/doctors/dr_noor.jpg",
+          doctorImage: "https://taafi.ddns.net/uploads/doctors/dr_noor.png",
           doctorLocation: "البصرة - الجزائر",
           onBookingTap: () {},
         );
@@ -77,7 +77,7 @@ class _FamousDoctorSliderState extends State<FamousDoctorSlider> {
           doctorName: "د. عمر فاروق",
           doctorSpecialization: "طب العيون",
           rating: 4.60,
-          doctorImage: "https://taafi.ddns.net/uploads/doctors/dr_omar.jpg",
+          doctorImage: "https://taafi.ddns.net/uploads/doctors/dr_omar.png",
           doctorLocation: "بغداد - الحارثية",
           onBookingTap: () {},
         );
@@ -86,7 +86,7 @@ class _FamousDoctorSliderState extends State<FamousDoctorSlider> {
           doctorName: "د. أحمد عباس خالد",
           doctorSpecialization: "أمراض القلب",
           rating: 4.90,
-          doctorImage: "https://taafi.ddns.net/uploads/doctors/dr_ahmed.jpg",
+          doctorImage: "https://taafi.ddns.net/uploads/doctors/dr_ahmed.png",
           doctorLocation: "بغداد - الكرادة",
           onBookingTap: () {},
         );
