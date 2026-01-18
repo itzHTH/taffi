@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:taffi/core/widgets/specialty_card.dart';
+import 'package:taffi/features/booking/screens/booking_screen.dart';
 
 class SliverSpecialtyGrid extends StatefulWidget {
   const SliverSpecialtyGrid({super.key});
@@ -54,7 +55,12 @@ class _SliverSpecialtyGridState extends State<SliverSpecialtyGrid> {
         return SpecialtyCard(
           title: specialties[index]['name'] ?? "اسم التخصص",
           imageUrl: specialties[index]['iconUrl'] ?? "",
-          onTap: () {},
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const BookingScreen()),
+            );
+          },
         );
       },
     );

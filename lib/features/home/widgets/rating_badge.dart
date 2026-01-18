@@ -22,10 +22,10 @@ class RatingBadge extends StatelessWidget {
           const SizedBox(width: 4),
           Text(
             "$rating",
-            style: const TextStyle(
+            style: TextStyle(
               fontWeight: FontWeight.w500,
               fontSize: 14,
-              color: Colors.white,
+              color: Colors.black54,
             ),
           ),
         ],

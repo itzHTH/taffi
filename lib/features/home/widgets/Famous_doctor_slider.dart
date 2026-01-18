@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:taffi/core/theme/app_colors.dart';
-import 'package:taffi/features/home/widgets/famous_doctor_card.dart';
+import 'package:taffi/core/widgets/big_doctor_card.dart';
 
 class FamousDoctorSlider extends StatefulWidget {
   const FamousDoctorSlider({super.key});
@@ -55,7 +55,7 @@ class _FamousDoctorSliderState extends State<FamousDoctorSlider> {
   Widget _getDoctorCard(int index) {
     switch (index) {
       case 0:
-        return FamousDoctorCard(
+        return BigDoctorCard(
           doctorName: "د. نور الهدى",
           doctorSpecialization: "طب الأسنان",
           rating: 4.40,
@@ -64,7 +64,7 @@ class _FamousDoctorSliderState extends State<FamousDoctorSlider> {
           onBookingTap: () {},
         );
       case 1:
-        return FamousDoctorCard(
+        return BigDoctorCard(
           doctorName: "د. ليلى عبد العزيز",
           doctorSpecialization: "الجلدية والتجميل",
           rating: 4.80,
@@ -73,7 +73,7 @@ class _FamousDoctorSliderState extends State<FamousDoctorSlider> {
           onBookingTap: () {},
         );
       case 2:
-        return FamousDoctorCard(
+        return BigDoctorCard(
           doctorName: "د. عمر فاروق",
           doctorSpecialization: "طب العيون",
           rating: 4.60,
@@ -82,7 +82,7 @@ class _FamousDoctorSliderState extends State<FamousDoctorSlider> {
           onBookingTap: () {},
         );
       case 3:
-        return FamousDoctorCard(
+        return BigDoctorCard(
           doctorName: "د. أحمد عباس خالد",
           doctorSpecialization: "أمراض القلب",
           rating: 4.90,

@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:taffi/core/theme/app_colors.dart';
-
 import 'package:taffi/features/chat/widgets/custom_app_bar.dart';
 import 'package:taffi/features/chat/widgets/custom_chat_field_bottom.dart';
 import 'package:taffi/features/chat/widgets/date_header_delegate.dart';

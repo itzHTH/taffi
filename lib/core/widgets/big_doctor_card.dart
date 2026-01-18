@@ -1,10 +1,11 @@
+import 'package:dashed_border/dashed_border.dart';
 import 'package:flutter/material.dart';
 import 'package:taffi/core/theme/app_colors.dart';
 import 'package:taffi/core/widgets/custom_cached_network_avatar.dart';
 import 'package:taffi/features/home/widgets/rating_badge.dart';
 
-class FamousDoctorCard extends StatefulWidget {
-  const FamousDoctorCard({
+class BigDoctorCard extends StatefulWidget {
+  const BigDoctorCard({
     super.key,
     required this.doctorName,
     required this.doctorSpecialization,
@@ -12,6 +13,8 @@ class FamousDoctorCard extends StatefulWidget {
     required this.doctorImage,
     required this.doctorLocation,
     required this.onBookingTap,
+
+    this.isDashedBorder = false,
   });
 
   final String doctorName;
@@ -20,20 +23,30 @@ class FamousDoctorCard extends StatefulWidget {
   final String doctorImage;
   final String doctorLocation;
   final VoidCallback onBookingTap;
+  final bool isDashedBorder;
 
   @override
-  State<FamousDoctorCard> createState() => _FamousDoctorCardState();
+  State<BigDoctorCard> createState() => _BigDoctorCardState();
 }
 
-class _FamousDoctorCardState extends State<FamousDoctorCard>
+class _BigDoctorCardState extends State<BigDoctorCard>
     with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
     super.build(context);
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.secondary,
+        color: widget.isDashedBorder ? Colors.transparent : AppColors.secondary,
         borderRadius: BorderRadius.circular(12),
+        border: widget.isDashedBorder
+            ? DashedBorder(
+                color: AppColors.primary,
+                dashLength: 20,
+                dashGap: 16,
+                width: 1.5,
+                borderRadius: BorderRadius.circular(12),
+              )
+            : null,
       ),
       height: 200,
       width: 200,
@@ -54,8 +67,10 @@ class _FamousDoctorCardState extends State<FamousDoctorCard>
                     widget.doctorName,
                     style: TextStyle(
                       fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
+                      fontWeight: FontWeight.w600,
+                      color: widget.isDashedBorder
+                          ? Colors.black
+                          : Colors.white,
                     ),
                   ),
                   Row(
@@ -65,7 +80,9 @@ class _FamousDoctorCardState extends State<FamousDoctorCard>
                         style: TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.w500,
-                          color: Color(0xffBBBBBB),
+                          color: widget.isDashedBorder
+                              ? Color(0xff8F8F8F)
+                              : Color(0XFFBBBBBB),
                         ),
                       ),
                       SizedBox(width: 8),
@@ -80,20 +97,32 @@ class _FamousDoctorCardState extends State<FamousDoctorCard>
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(Icons.location_on, color: Color(0XFFBBBBBB)),
+              Icon(
+                Icons.location_on,
+                color: widget.isDashedBorder
+                    ? Color(0xff8F8F8F)
+                    : Color(0XFFBBBBBB),
+              ),
               SizedBox(width: 8),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
+                    Text(
                       "الموقع",
-                      style: TextStyle(color: Color(0xffBBBBBB), fontSize: 14),
+                      style: TextStyle(
+                        color: widget.isDashedBorder
+                            ? Color(0xff8F8F8F)
+                            : Color(0xffBBBBBB),
+                        fontSize: 14,
+                      ),
                     ),
                     Text(
                       widget.doctorLocation,
-                      style: const TextStyle(
-                        color: Color(0xffBBBBBB),
+                      style: TextStyle(
+                        color: widget.isDashedBorder
+                            ? Color(0xff8F8F8F)
+                            : Color(0xffBBBBBB),
                         fontSize: 14,
                       ),
                       overflow: TextOverflow.ellipsis,
@@ -106,8 +135,12 @@ class _FamousDoctorCardState extends State<FamousDoctorCard>
               ElevatedButton(
                 onPressed: widget.onBookingTap,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.white,
-                  foregroundColor: Colors.black,
+                  backgroundColor: widget.isDashedBorder
+                      ? AppColors.secondary
+                      : Colors.white,
+                  foregroundColor: widget.isDashedBorder
+                      ? Colors.white
+                      : Colors.black,
                 ),
                 child: Text(
                   "احجز  الأن",
