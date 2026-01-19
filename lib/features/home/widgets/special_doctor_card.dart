@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:taffi/core/theme/app_colors.dart';
-import 'package:taffi/features/home/widgets/rating_badge.dart';
+import 'package:taffi/core/widgets/rating_badge.dart';
 
 class SpecialDoctorCard extends StatelessWidget {
   const SpecialDoctorCard({
@@ -40,28 +40,42 @@ class SpecialDoctorCard extends StatelessWidget {
                   child: CachedNetworkImage(
                     imageUrl: imageUrl,
                     fit: BoxFit.contain,
-                    placeholder: (context, url) => const Center(
-                      child: Center(
-                        child: SizedBox(
-                          width: 50,
-                          height: 50,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                            color: Colors.white,
+                    placeholder: (context, url) =>
+                        const Center(
+                          child: Center(
+                            child: SizedBox(
+                              width: 50,
+                              height: 50,
+                              child:
+                                  CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                    color: Colors.white,
+                                  ),
+                            ),
                           ),
                         ),
-                      ),
-                    ),
                     errorWidget: (context, url, error) =>
-                        const Icon(Icons.error, color: Colors.red),
+                        const Icon(
+                          Icons.error,
+                          color: Colors.red,
+                        ),
                     fadeInCurve: Curves.bounceIn,
                   ),
                 ),
-                Positioned(left: 6, top: 8, child: RatingBadge(rating: rating)),
+                Positioned(
+                  left: 6,
+                  top: 8,
+                  child: RatingBadge(rating: rating),
+                ),
               ],
             ),
             SizedBox(height: 8),
-            Text(doctorName, style: Theme.of(context).textTheme.titleMedium),
+            Text(
+              doctorName,
+              style: Theme.of(
+                context,
+              ).textTheme.titleMedium,
+            ),
             SizedBox(height: 4),
             Text(
               doctorSpecialty,

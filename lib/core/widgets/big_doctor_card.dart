@@ -2,7 +2,7 @@ import 'package:dashed_border/dashed_border.dart';
 import 'package:flutter/material.dart';
 import 'package:taffi/core/theme/app_colors.dart';
 import 'package:taffi/core/widgets/custom_cached_network_avatar.dart';
-import 'package:taffi/features/home/widgets/rating_badge.dart';
+import 'package:taffi/core/widgets/rating_badge.dart';
 
 class BigDoctorCard extends StatefulWidget {
   const BigDoctorCard({
@@ -26,7 +26,8 @@ class BigDoctorCard extends StatefulWidget {
   final bool isDashedBorder;
 
   @override
-  State<BigDoctorCard> createState() => _BigDoctorCardState();
+  State<BigDoctorCard> createState() =>
+      _BigDoctorCardState();
 }
 
 class _BigDoctorCardState extends State<BigDoctorCard>
@@ -36,7 +37,9 @@ class _BigDoctorCardState extends State<BigDoctorCard>
     super.build(context);
     return Container(
       decoration: BoxDecoration(
-        color: widget.isDashedBorder ? Colors.transparent : AppColors.secondary,
+        color: widget.isDashedBorder
+            ? Colors.transparent
+            : AppColors.secondary,
         borderRadius: BorderRadius.circular(12),
         border: widget.isDashedBorder
             ? DashedBorder(
@@ -58,10 +61,14 @@ class _BigDoctorCardState extends State<BigDoctorCard>
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              CustomCachedNetworkAvatar(imageUrl: widget.doctorImage, size: 70),
+              CustomCachedNetworkAvatar(
+                imageUrl: widget.doctorImage,
+                size: 70,
+              ),
               SizedBox(width: 18),
               Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment:
+                    CrossAxisAlignment.start,
                 children: [
                   Text(
                     widget.doctorName,
@@ -86,7 +93,13 @@ class _BigDoctorCardState extends State<BigDoctorCard>
                         ),
                       ),
                       SizedBox(width: 8),
-                      RatingBadge(rating: widget.rating),
+                      RatingBadge(
+                        rating: widget.rating,
+
+                        textColor: widget.isDashedBorder
+                            ? Colors.black
+                            : Colors.white,
+                      ),
                     ],
                   ),
                 ],
@@ -106,7 +119,8 @@ class _BigDoctorCardState extends State<BigDoctorCard>
               SizedBox(width: 8),
               Expanded(
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment:
+                      CrossAxisAlignment.start,
                   children: [
                     Text(
                       "الموقع",
@@ -144,7 +158,10 @@ class _BigDoctorCardState extends State<BigDoctorCard>
                 ),
                 child: Text(
                   "احجز  الأن",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),
                 ),
               ),
             ],

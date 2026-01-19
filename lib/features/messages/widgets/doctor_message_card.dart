@@ -21,7 +21,7 @@ class DoctorMessageCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.primary,
+        color: AppColors.secondary,
         borderRadius: BorderRadius.circular(22),
         boxShadow: [
           BoxShadow(
@@ -38,13 +38,20 @@ class DoctorMessageCard extends StatelessWidget {
           onTap: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => const ChatScreen()),
+              MaterialPageRoute(
+                builder: (context) => const ChatScreen(),
+              ),
             );
           },
           splashColor: Colors.white.withValues(alpha: 0.2),
-          highlightColor: Colors.white.withValues(alpha: 0.1),
+          highlightColor: Colors.white.withValues(
+            alpha: 0.1,
+          ),
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+            padding: const EdgeInsets.symmetric(
+              horizontal: 16,
+              vertical: 16,
+            ),
             child: Row(
               children: [
                 CustomCachedNetworkAvatar(
@@ -55,17 +62,22 @@ class DoctorMessageCard extends StatelessWidget {
                 const SizedBox(width: 12),
                 Expanded(
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment:
+                        CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.max,
                     children: [
                       Text(
                         name,
-                        style: Theme.of(context).textTheme.headlineMedium,
+                        style: Theme.of(
+                          context,
+                        ).textTheme.headlineMedium,
                       ),
                       const SizedBox(height: 6),
                       Text(
                         message,
-                        style: Theme.of(context).textTheme.displayMedium,
+                        style: Theme.of(
+                          context,
+                        ).textTheme.displayMedium,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -79,7 +91,9 @@ class DoctorMessageCard extends StatelessWidget {
                     alignment: Alignment.topRight,
                     child: Text(
                       time,
-                      style: Theme.of(context).textTheme.displayMedium,
+                      style: Theme.of(
+                        context,
+                      ).textTheme.displayMedium,
                     ),
                   ),
                 ),

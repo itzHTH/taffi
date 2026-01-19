@@ -14,10 +14,8 @@ class CustomSliverAppBar extends StatelessWidget {
       floating: false,
       stretch: true,
       backgroundColor: AppColors.secondary,
-      leading: IconButton(
-        icon: const Icon(Icons.arrow_back, color: Colors.white),
-        onPressed: () => Navigator.pop(context),
-      ),
+
+      automaticallyImplyLeading: false,
       title: const Text(
         'معلومات الدكتور',
         style: TextStyle(
@@ -39,7 +37,6 @@ class CustomSliverAppBar extends StatelessWidget {
                   .clamp(0.0, 1.0);
 
           final scale = 0.6 + (percent * 0.4);
-
           return FlexibleSpaceBar(
             background: Column(
               mainAxisAlignment: MainAxisAlignment.end,
@@ -123,6 +120,17 @@ class CustomSliverAppBar extends StatelessWidget {
           );
         },
       ),
+      actions: [
+        IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: Transform.flip(
+            flipX: true,
+            child: const Icon(Icons.arrow_back, color: Colors.white),
+          ),
+        ),
+      ],
     );
   }
 }

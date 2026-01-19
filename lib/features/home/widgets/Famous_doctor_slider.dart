@@ -68,7 +68,7 @@ class _FamousDoctorSliderState extends State<FamousDoctorSlider> {
           doctorName: "د. ليلى عبد العزيز",
           doctorSpecialization: "الجلدية والتجميل",
           rating: 4.80,
-          doctorImage: "https://taafi.ddns.net/uploads/doctors/dr_layla.jpg",
+          doctorImage: "https://taafi.ddns.net/uploads/doctors/dr_layla.png",
           doctorLocation: "أربيل - شارع 100",
           onBookingTap: () {},
         );

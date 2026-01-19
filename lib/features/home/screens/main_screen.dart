@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:taffi/features/appointment/screens/appointments_screen.dart';
+import 'package:taffi/features/appointments/screens/appointments_screen.dart';
 import 'package:taffi/features/home/screens/home_screen.dart';
 import 'package:taffi/features/home/widgets/custom_bottom_navigation_bar.dart';
 import 'package:taffi/features/messages/screens/messages_screen.dart';
@@ -19,7 +19,9 @@ class _MainScreenState extends State<MainScreen> {
   @override
   void initState() {
     super.initState();
-    _pageController = PageController(initialPage: _currentScreen);
+    _pageController = PageController(
+      initialPage: _currentScreen,
+    );
   }
 
   @override
