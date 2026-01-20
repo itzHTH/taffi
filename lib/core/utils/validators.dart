@@ -41,7 +41,10 @@ class Validators {
   }
 
   /// Validates password
-  static String? confrimPassword(String? currentValue, String? originValue) {
+  static String? confrimPassword(
+    String? currentValue,
+    String? originValue,
+  ) {
     if (currentValue == null || currentValue.isEmpty) {
       return 'تاكيد كلمة المرور مطلوب';
     }
@@ -54,7 +57,10 @@ class Validators {
   }
 
   /// Validates required field
-  static String? required(String? value, [String? fieldName]) {
+  static String? required(
+    String? value, [
+    String? fieldName,
+  ]) {
     if (value == null || value.isEmpty) {
       return '${fieldName ?? 'هذا الحقل'} مطلوب';
     }
@@ -81,8 +87,8 @@ class Validators {
       return ' العمر مطلوب';
     }
 
-    final phoneRegex = RegExp(r'^[1-9]{1,}$');
-    if (!phoneRegex.hasMatch(value)) {
+    final ageRegex = RegExp(r'^[1-9][0-9]{0,2}$');
+    if (!ageRegex.hasMatch(value)) {
       return 'يرجى إدخال عمر صحيح';
     }
 
@@ -101,7 +107,9 @@ class Validators {
     );
 
     if (!nameRegex.hasMatch(trimmedValue)) {
-      if (!RegExp(r'^[\u0621-\u064A\s]+$').hasMatch(trimmedValue)) {
+      if (!RegExp(
+        r'^[\u0621-\u064A\s]+$',
+      ).hasMatch(trimmedValue)) {
         return 'يجب استخدام الحروف العربية فقط';
       }
       return 'يجب كتابة الاسم الثلاثي كاملاً (الاسم، اسم الأب، اسم الجد)';
@@ -122,7 +130,9 @@ class Validators {
       return 'طويل جداً (20 حرف كحد أقصى)';
     }
 
-    final RegExp usernameRegex = RegExp(r'^[a-zA-Z][a-zA-Z0-9_]*$');
+    final RegExp usernameRegex = RegExp(
+      r'^[a-zA-Z][a-zA-Z0-9_]*$',
+    );
 
     if (!usernameRegex.hasMatch(value)) {
       if (value.contains(' ')) {

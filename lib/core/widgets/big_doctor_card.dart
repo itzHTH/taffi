@@ -50,6 +50,18 @@ class _BigDoctorCardState extends State<BigDoctorCard>
                 borderRadius: BorderRadius.circular(12),
               )
             : null,
+
+        boxShadow: widget.isDashedBorder
+            ? []
+            : [
+                BoxShadow(
+                  color: Colors.black.withValues(
+                    alpha: 0.3,
+                  ),
+                  offset: const Offset(0, 2),
+                  blurRadius: 8,
+                ),
+              ],
       ),
       height: 200,
       width: 200,

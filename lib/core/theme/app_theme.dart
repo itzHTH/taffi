@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'app_colors.dart';
 
 /// Application theme configuration
 class AppTheme {
-  AppTheme._(); // Private constructor to prevent instantiation
+  AppTheme._();
 
   static ThemeData get lightTheme {
     return ThemeData(
@@ -14,33 +15,52 @@ class AppTheme {
         brightness: Brightness.light,
       ),
       scaffoldBackgroundColor: AppColors.background,
-      appBarTheme: const AppBarTheme(
+      appBarTheme: AppBarTheme(
         backgroundColor: AppColors.primary,
         foregroundColor: Colors.white,
         elevation: 0,
         centerTitle: true,
+
+        systemOverlayStyle: SystemUiOverlayStyle(
+          statusBarColor: Colors.transparent,
+          statusBarIconBrightness: Brightness.dark,
+          statusBarBrightness: Brightness.light,
+        ),
       ),
       cardTheme: CardThemeData(
         color: AppColors.surface,
         elevation: 2,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
       ),
       inputDecorationTheme: InputDecorationTheme(
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(20),
-          borderSide: const BorderSide(color: AppColors.primary, width: 1.4),
+          borderSide: const BorderSide(
+            color: AppColors.primary,
+            width: 1.4,
+          ),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(20),
-          borderSide: const BorderSide(color: AppColors.primary, width: 1.4),
+          borderSide: const BorderSide(
+            color: AppColors.primary,
+            width: 1.4,
+          ),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(20),
-          borderSide: const BorderSide(color: AppColors.primary, width: 1.8),
+          borderSide: const BorderSide(
+            color: AppColors.primary,
+            width: 1.8,
+          ),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(20),
-          borderSide: const BorderSide(color: AppColors.error),
+          borderSide: const BorderSide(
+            color: AppColors.error,
+          ),
         ),
 
         filled: true,
@@ -51,14 +71,19 @@ class AppTheme {
           backgroundColor: AppColors.secondary,
           foregroundColor: Colors.white,
 
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+          padding: const EdgeInsets.symmetric(
+            horizontal: 24,
+            vertical: 12,
+          ),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),
         ),
       ),
 
-      searchViewTheme: SearchViewThemeData(backgroundColor: Color(0xffDFEEFF)),
+      searchViewTheme: SearchViewThemeData(
+        backgroundColor: Color(0xffDFEEFF),
+      ),
 
       textTheme: TextTheme(
         labelSmall: TextStyle(
@@ -108,9 +133,23 @@ class AppTheme {
           fontWeight: FontWeight.w600,
           color: Colors.white,
         ),
+
+        titleMedium: TextStyle(
+          fontSize: 18,
+          fontWeight: FontWeight.w600,
+          color: AppColors.textPrimary,
+        ),
+
+        headlineSmall: TextStyle(
+          fontSize: 18,
+          fontWeight: FontWeight.w500,
+          color: AppColors.textHint,
+        ),
       ),
 
-      checkboxTheme: CheckboxThemeData(shape: CircleBorder()),
+      checkboxTheme: CheckboxThemeData(
+        shape: CircleBorder(),
+      ),
     );
   }
 }

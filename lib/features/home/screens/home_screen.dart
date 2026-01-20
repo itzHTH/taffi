@@ -19,20 +19,35 @@ class _HomeScreenState extends State<HomeScreen>
   Widget build(BuildContext context) {
     super.build(context);
     return Scaffold(
-      backgroundColor: Color(0xFFDFEEFF),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12),
+          padding: const EdgeInsets.symmetric(
+            horizontal: 12,
+          ),
           child: CustomScrollView(
             slivers: [
               CustomSliverAppBar(),
-              SliverToBoxAdapter(child: SizedBox(height: 20)),
-              SliverToBoxAdapter(child: Center(child: CutomSearchBar())),
-              SliverToBoxAdapter(child: SizedBox(height: 24)),
-              SliverToBoxAdapter(child: FamousDoctorSlider()),
-              SliverToBoxAdapter(child: SizedBox(height: 24)),
-              SliverToBoxAdapter(child: CustomSpecialtiesSection()),
-              SliverToBoxAdapter(child: SizedBox(height: 32)),
+              SliverToBoxAdapter(
+                child: SizedBox(height: 20),
+              ),
+              SliverToBoxAdapter(
+                child: Center(child: CutomSearchBar()),
+              ),
+              SliverToBoxAdapter(
+                child: SizedBox(height: 24),
+              ),
+              SliverToBoxAdapter(
+                child: FamousDoctorSlider(),
+              ),
+              SliverToBoxAdapter(
+                child: SizedBox(height: 24),
+              ),
+              SliverToBoxAdapter(
+                child: CustomSpecialtiesSection(),
+              ),
+              SliverToBoxAdapter(
+                child: SizedBox(height: 32),
+              ),
               SliverToBoxAdapter(
                 child: Column(
                   children: [
@@ -45,7 +60,9 @@ class _HomeScreenState extends State<HomeScreen>
                         SizedBox(width: 8),
                         Text(
                           "الأكثر شهرة",
-                          style: Theme.of(context).textTheme.labelSmall,
+                          style: Theme.of(
+                            context,
+                          ).textTheme.labelSmall,
                         ),
                       ],
                     ),
