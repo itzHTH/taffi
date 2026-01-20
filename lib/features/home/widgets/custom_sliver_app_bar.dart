@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:taffi/features/notifications/screens/notifications_screen.dart';
 
 class CustomSliverAppBar extends StatelessWidget {
   const CustomSliverAppBar({super.key});
@@ -29,16 +30,41 @@ class CustomSliverAppBar extends StatelessWidget {
         ],
       ),
       actions: [
-        SizedBox(
-          width: 60,
-          height: 40,
-          child: ElevatedButton(
-            onPressed: () {},
-            child: SvgPicture.asset(
-              "assets/images/bell.svg",
-              fit: BoxFit.cover,
+        Stack(
+          children: [
+            SizedBox(
+              width: 60,
+              height: 40,
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          const NotificationsScreen(),
+                    ),
+                  );
+                },
+                child: SvgPicture.asset(
+                  "assets/images/bell.svg",
+                  fit: BoxFit.cover,
+                ),
+              ),
             ),
-          ),
+            Positioned(
+              top: 0,
+              left: 0,
+
+              child: Container(
+                width: 14,
+                height: 14,
+                decoration: BoxDecoration(
+                  color: Colors.red,
+                  shape: BoxShape.circle,
+                ),
+              ),
+            ),
+          ],
         ),
       ],
     );
