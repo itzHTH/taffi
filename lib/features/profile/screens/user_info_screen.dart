@@ -35,11 +35,11 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
   @override
   void initState() {
     super.initState();
-    _fullNameController.text = "سجاد علي حسين";
+    _fullNameController.text = "Huthaifa M. Flayyih";
     _userNameController.text = "Leader";
-    _emailController.text = "leader@example.com";
+    _emailController.text = "jhuth981@gmail.com";
     _phoneController.text = "07742869755";
-    _ageController.text = "25";
+    _ageController.text = "20";
   }
 
   @override

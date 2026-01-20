@@ -5,10 +5,12 @@ class DateSelectionWidget extends StatefulWidget {
   const DateSelectionWidget({super.key});
 
   @override
-  State<DateSelectionWidget> createState() => _DateSelectionWidgetState();
+  State<DateSelectionWidget> createState() =>
+      _DateSelectionWidgetState();
 }
 
-class _DateSelectionWidgetState extends State<DateSelectionWidget> {
+class _DateSelectionWidgetState
+    extends State<DateSelectionWidget> {
   DateTime? selectedDate;
 
   @override
@@ -31,9 +33,15 @@ class _DateSelectionWidgetState extends State<DateSelectionWidget> {
             onPressed: () async {
               final selectedDate = await showDatePicker(
                 context: context,
-                initialDate: DateTime.now(),
-                firstDate: DateTime.now(),
-                lastDate: DateTime.now().add(const Duration(days: 30)),
+                initialDate: DateTime.now().add(
+                  const Duration(days: 1),
+                ),
+                firstDate: DateTime.now().add(
+                  const Duration(days: 1),
+                ),
+                lastDate: DateTime.now().add(
+                  const Duration(days: 30),
+                ),
                 builder: (context, child) {
                   return Theme(
                     data: ThemeData(
@@ -47,10 +55,7 @@ class _DateSelectionWidgetState extends State<DateSelectionWidget> {
                   );
                 },
                 selectableDayPredicate: (DateTime day) {
-                  if (day.weekday == DateTime.tuesday ||
-                      day.weekday == DateTime.wednesday ||
-                      day.weekday == DateTime.thursday ||
-                      day.weekday == DateTime.friday) {
+                  if (day.weekday == DateTime.tuesday) {
                     return false;
                   }
                   return true;
@@ -67,9 +72,15 @@ class _DateSelectionWidgetState extends State<DateSelectionWidget> {
               elevation: 0,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8),
-                side: BorderSide(color: Colors.grey[200]!, width: 2),
+                side: BorderSide(
+                  color: Colors.grey[200]!,
+                  width: 2,
+                ),
               ),
-              fixedSize: Size(MediaQuery.of(context).size.width - 48, 56),
+              fixedSize: Size(
+                MediaQuery.of(context).size.width - 48,
+                56,
+              ),
             ),
             child: Text(
               selectedDate == null

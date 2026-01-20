@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:taffi/core/theme/app_colors.dart';
 import 'package:taffi/core/widgets/rating_badge.dart';
+import 'package:taffi/features/Doctor%20Info/screens/doctor_info.dart';
 
 class SpecialDoctorCard extends StatelessWidget {
   const SpecialDoctorCard({
@@ -25,7 +26,15 @@ class SpecialDoctorCard extends StatelessWidget {
       elevation: 3,
       clipBehavior: Clip.antiAlias,
       child: InkWell(
-        onTap: () {},
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) =>
+                  const DoctorInfoScreen(),
+            ),
+          );
+        },
         child: Column(
           children: [
             Stack(

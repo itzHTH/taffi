@@ -9,19 +9,26 @@ class SpecialtiesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.surface,
-      body: CustomScrollView(
-        slivers: [
-          CustomSliverAppBar(),
-          SliverToBoxAdapter(child: SizedBox(height: 16)),
-          SliverToBoxAdapter(child: Center(child: CustomSeacrhBar())),
-          SliverToBoxAdapter(child: SizedBox(height: 16)),
-          SliverPadding(
-            sliver: SliverSpecialtyGrid(),
-            padding: EdgeInsets.symmetric(horizontal: 16),
-          ),
-        ],
+    return GestureDetector(
+      onTap: () {
+        FocusScope.of(context).unfocus();
+      },
+      child: Scaffold(
+        backgroundColor: AppColors.surface,
+        body: CustomScrollView(
+          slivers: [
+            CustomSliverAppBar(),
+            SliverToBoxAdapter(child: SizedBox(height: 16)),
+            SliverToBoxAdapter(
+              child: Center(child: CustomSeacrhBar()),
+            ),
+            SliverToBoxAdapter(child: SizedBox(height: 16)),
+            SliverPadding(
+              sliver: SliverSpecialtyGrid(),
+              padding: EdgeInsets.symmetric(horizontal: 16),
+            ),
+          ],
+        ),
       ),
     );
   }

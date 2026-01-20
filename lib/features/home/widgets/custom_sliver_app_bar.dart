@@ -20,11 +20,11 @@ class CustomSliverAppBar extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "سجاد حسين علي",
+            "Huthaifa M. Flayyih",
             style: Theme.of(context).textTheme.labelMedium,
           ),
           Text(
-            "0771234567",
+            "077428697555",
             style: Theme.of(context).textTheme.bodySmall,
           ),
         ],
@@ -59,8 +59,14 @@ class CustomSliverAppBar extends StatelessWidget {
                 width: 14,
                 height: 14,
                 decoration: BoxDecoration(
-                  color: Colors.red,
+                  color: Color(0xffFF1414),
                   shape: BoxShape.circle,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Color(0xffFF1414),
+                      blurRadius: 1,
+                    ),
+                  ],
                 ),
               ),
             ),

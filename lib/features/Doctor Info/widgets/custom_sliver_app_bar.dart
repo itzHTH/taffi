@@ -14,14 +14,22 @@ class CustomSliverAppBar extends StatelessWidget {
       floating: false,
       stretch: true,
       backgroundColor: AppColors.secondary,
-
-      automaticallyImplyLeading: false,
       title: const Text(
         'معلومات الدكتور',
         style: TextStyle(
           color: Colors.white,
           fontSize: 18,
           fontWeight: FontWeight.w600,
+        ),
+      ),
+
+      leading: IconButton(
+        onPressed: () {
+          Navigator.pop(context);
+        },
+        icon: const Icon(
+          Icons.arrow_back_ios_new,
+          color: Colors.white,
         ),
       ),
       centerTitle: true,
@@ -49,7 +57,9 @@ class CustomSliverAppBar extends StatelessWidget {
                       opacity: 0.5 * percent,
                       child: SizedBox(
                         height: 120,
-                        child: Image.asset('assets/images/wave.png'),
+                        child: Image.asset(
+                          'assets/images/wave.png',
+                        ),
                       ),
                     ),
                     Transform.scale(
@@ -57,37 +67,49 @@ class CustomSliverAppBar extends StatelessWidget {
                       child: CachedNetworkImage(
                         imageUrl:
                             "https://taafi.ddns.net/uploads/doctors/dr_mona.png",
-                        imageBuilder: (context, imageProvider) {
-                          return Container(
-                            width: 250,
-                            height: 280,
-                            decoration: BoxDecoration(
-                              borderRadius: const BorderRadius.only(
-                                bottomLeft: Radius.circular(32),
-                                bottomRight: Radius.circular(32),
-                              ),
-                              image: DecorationImage(
-                                image: imageProvider,
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                          );
-                        },
+                        imageBuilder:
+                            (context, imageProvider) {
+                              return Container(
+                                width: 250,
+                                height: 280,
+                                decoration: BoxDecoration(
+                                  borderRadius:
+                                      const BorderRadius.only(
+                                        bottomLeft:
+                                            Radius.circular(
+                                              32,
+                                            ),
+                                        bottomRight:
+                                            Radius.circular(
+                                              32,
+                                            ),
+                                      ),
+                                  image: DecorationImage(
+                                    image: imageProvider,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              );
+                            },
                         placeholder: (context, url) {
                           return Container(
                             width: 250,
                             height: 280,
                             decoration: const BoxDecoration(
                               color: Colors.white24,
-                              borderRadius: BorderRadius.only(
-                                bottomLeft: Radius.circular(32),
-                                bottomRight: Radius.circular(32),
-                              ),
+                              borderRadius:
+                                  BorderRadius.only(
+                                    bottomLeft:
+                                        Radius.circular(32),
+                                    bottomRight:
+                                        Radius.circular(32),
+                                  ),
                             ),
                             child: const Center(
-                              child: CircularProgressIndicator(
-                                color: Colors.white,
-                              ),
+                              child:
+                                  CircularProgressIndicator(
+                                    color: Colors.white,
+                                  ),
                             ),
                           );
                         },
@@ -97,10 +119,13 @@ class CustomSliverAppBar extends StatelessWidget {
                             height: 280,
                             decoration: const BoxDecoration(
                               color: Colors.white24,
-                              borderRadius: BorderRadius.only(
-                                bottomLeft: Radius.circular(32),
-                                bottomRight: Radius.circular(32),
-                              ),
+                              borderRadius:
+                                  BorderRadius.only(
+                                    bottomLeft:
+                                        Radius.circular(32),
+                                    bottomRight:
+                                        Radius.circular(32),
+                                  ),
                             ),
                             child: const Center(
                               child: Icon(
@@ -120,17 +145,6 @@ class CustomSliverAppBar extends StatelessWidget {
           );
         },
       ),
-      actions: [
-        IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: Transform.flip(
-            flipX: true,
-            child: const Icon(Icons.arrow_back, color: Colors.white),
-          ),
-        ),
-      ],
     );
   }
 }

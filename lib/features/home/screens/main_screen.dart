@@ -57,9 +57,6 @@ class _MainScreenState extends State<MainScreen> {
             duration: const Duration(milliseconds: 300),
             curve: Curves.easeInOut,
           );
-          setState(() {
-            _currentScreen = index;
-          });
         },
       ),
       body: PageView.builder(
@@ -71,7 +68,7 @@ class _MainScreenState extends State<MainScreen> {
             _currentScreen = index;
           });
         },
-        physics: BouncingScrollPhysics(),
+        physics: const BouncingScrollPhysics(),
       ),
     );
   }

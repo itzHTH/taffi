@@ -5,13 +5,15 @@ class SliverMessagesList extends StatefulWidget {
   const SliverMessagesList({super.key});
 
   @override
-  State<SliverMessagesList> createState() => _SliverMessagesListState();
+  State<SliverMessagesList> createState() =>
+      _SliverMessagesListState();
 }
 
-class _SliverMessagesListState extends State<SliverMessagesList> {
+class _SliverMessagesListState
+    extends State<SliverMessagesList> {
   final List<Map<String, dynamic>> messages = [
-    {"message": "Hello", "isUserSender": true},
-    {"message": "Hello Sir", "isUserSender": false},
+    {"message": "اهلا دكتور", "isUserSender": true},
+    {"message": "اهلا بك", "isUserSender": false},
   ];
 
   @override
@@ -20,7 +22,10 @@ class _SliverMessagesListState extends State<SliverMessagesList> {
       itemCount: messages.length,
       itemBuilder: (context, index) {
         return Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+          padding: const EdgeInsets.symmetric(
+            vertical: 8,
+            horizontal: 16,
+          ),
           child: MessageBubble(
             message: messages[index]["message"],
             isUserSender: messages[index]["isUserSender"],

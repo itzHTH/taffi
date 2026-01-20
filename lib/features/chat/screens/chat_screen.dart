@@ -11,16 +11,21 @@ class ChatScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: true,
-      body: CustomScrollView(
-        slivers: [
-          CustomAppBar(),
-          SliverToBoxAdapter(child: SizedBox(height: 16)),
-          SliverPersistentHeader(
-            pinned: true,
-            delegate: DateHeaderDelegate("2026/1/19"),
-          ),
-          SliverMessagesList(),
-        ],
+      body: GestureDetector(
+        onTap: () {
+          FocusScope.of(context).unfocus();
+        },
+        child: CustomScrollView(
+          slivers: [
+            CustomAppBar(),
+            SliverToBoxAdapter(child: SizedBox(height: 16)),
+            SliverPersistentHeader(
+              pinned: true,
+              delegate: DateHeaderDelegate("2026/1/19"),
+            ),
+            SliverMessagesList(),
+          ],
+        ),
       ),
       bottomSheet: CustomChatFieldBottom(),
     );

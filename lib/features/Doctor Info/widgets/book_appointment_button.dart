@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:taffi/core/theme/app_colors.dart';
 
 class BookAppointmentButton extends StatelessWidget {
-  const BookAppointmentButton({super.key});
+  final VoidCallback? onPressed;
+
+  const BookAppointmentButton({super.key, this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -12,7 +14,7 @@ class BookAppointmentButton extends StatelessWidget {
         width: double.infinity,
         height: 56,
         child: ElevatedButton(
-          onPressed: () {},
+          onPressed: onPressed,
           style: ElevatedButton.styleFrom(
             backgroundColor: AppColors.secondary,
             foregroundColor: Colors.white,
@@ -23,7 +25,10 @@ class BookAppointmentButton extends StatelessWidget {
           ),
           child: const Text(
             'حجز موعد',
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
       ),

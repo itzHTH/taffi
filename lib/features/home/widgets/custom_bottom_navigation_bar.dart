@@ -8,19 +8,29 @@ class CustomBottomNavigationBar extends StatefulWidget {
     required this.onTap,
   });
   final int currentIndex;
-
   final ValueChanged<int> onTap;
+
   @override
   State<CustomBottomNavigationBar> createState() =>
       _CustomBottomNavigationBarState();
 }
 
-class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
+class _CustomBottomNavigationBarState
+    extends State<CustomBottomNavigationBar> {
   final List<Map<String, dynamic>> _items = [
     {"icon": "assets/images/home.svg", "label": "الرئيسية"},
-    {"icon": "assets/images/messages.svg", "label": "الرسائل"},
-    {"icon": "assets/images/calendar.svg", "label": "جدول المواعيد"},
-    {"icon": "assets/images/profile.svg", "label": "الملف الشخصي"},
+    {
+      "icon": "assets/images/messages.svg",
+      "label": "الرسائل",
+    },
+    {
+      "icon": "assets/images/calendar.svg",
+      "label": "جدول المواعيد",
+    },
+    {
+      "icon": "assets/images/profile.svg",
+      "label": "الملف الشخصي",
+    },
   ];
 
   @override
@@ -28,23 +38,21 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
     return SafeArea(
       child: Container(
         height: 90,
-        padding: EdgeInsets.symmetric(horizontal: 8),
-
-        decoration: BoxDecoration(color: Colors.white),
+        padding: const EdgeInsets.symmetric(horizontal: 8),
+        decoration: const BoxDecoration(
+          color: Colors.white,
+        ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: _items.map((item) {
+            final index = _items.indexOf(item);
             return GestureDetector(
               behavior: HitTestBehavior.opaque,
-              onTap: () {
-                setState(() {
-                  widget.onTap(_items.indexOf(item));
-                });
-              },
+              onTap: () => widget.onTap(index),
               child: CustomBottomNavItem(
                 itemLabel: item["label"],
                 itemIconPath: item["icon"],
-                isActive: widget.currentIndex == _items.indexOf(item),
+                isActive: widget.currentIndex == index,
               ),
             );
           }).toList(),
@@ -69,24 +77,31 @@ class CustomBottomNavItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      mainAxisAlignment: .center,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Stack(
           alignment: Alignment.center,
           children: [
-            AnimatedContainer(
-              duration: Duration(milliseconds: 300),
-              curve: Curves.easeInOut,
-              width: isActive ? 50 : 0,
-              height: isActive ? 50 : 0,
-
-              child: SvgPicture.asset(
-                "assets/images/bg_active.svg",
-                fit: BoxFit.cover,
+            AnimatedOpacity(
+              duration: const Duration(milliseconds: 300),
+              opacity: isActive ? 1.0 : 0.0,
+              child: AnimatedScale(
+                scale: isActive ? 1.0 : 0.0,
+                duration: const Duration(milliseconds: 300),
+                curve: Curves.easeInOut,
+                child: SvgPicture.asset(
+                  "assets/images/bg_active.svg",
+                  width: 50,
+                  height: 50,
+                ),
               ),
             ),
-            Padding(
-              padding: EdgeInsets.only(bottom: isActive ? 10.0 : 0),
+            AnimatedPadding(
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeInOut,
+              padding: EdgeInsets.only(
+                bottom: isActive ? 10.0 : 0,
+              ),
               child: SvgPicture.asset(
                 itemIconPath,
                 width: 28,
@@ -102,9 +117,8 @@ class CustomBottomNavItem extends StatelessWidget {
         SizedBox(height: isActive ? 0 : 8),
         Text(
           itemLabel,
-          style: Theme.of(
-            context,
-          ).textTheme.bodyMedium!.copyWith(color: Colors.black),
+          style: Theme.of(context).textTheme.bodyMedium!
+              .copyWith(color: Colors.black),
         ),
       ],
     );

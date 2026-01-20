@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:taffi/core/theme/app_colors.dart';
 
 class CustomSliverAppBar extends StatelessWidget {
   const CustomSliverAppBar({super.key});
@@ -19,14 +19,15 @@ class CustomSliverAppBar extends StatelessWidget {
       ),
       pinned: true,
       centerTitle: true,
-      actions: [
-        IconButton(
-          icon: SvgPicture.asset("assets/images/arrow-left.svg", width: 36),
-          onPressed: () {
-            Navigator.pop(context);
-          },
+      leading: IconButton(
+        icon: Icon(
+          Icons.arrow_back_ios_new_outlined,
+          color: AppColors.primary,
         ),
-      ],
+        onPressed: () {
+          Navigator.pop(context);
+        },
+      ),
     );
   }
 }

@@ -45,18 +45,33 @@ class CustomCachedNetworkAvatar extends StatelessWidget {
                   ),
                 ),
               ),
+
+              errorBuilder: (context, error, stackTrace) =>
+                  Center(
+                    child: SizedBox(
+                      width: size - 6,
+                      height: size - 6,
+                      child: Icon(
+                        Icons.error,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
             )
           : CachedNetworkImage(
               imageUrl: imageUrl,
-              imageBuilder: (context, imageProvider) => Container(
-                decoration: BoxDecoration(shape: BoxShape.circle),
-                width: size,
-                height: size,
-                child: CircleAvatar(
-                  radius: size / 2,
-                  backgroundImage: imageProvider,
-                ),
-              ),
+              imageBuilder: (context, imageProvider) =>
+                  Container(
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                    ),
+                    width: size,
+                    height: size,
+                    child: CircleAvatar(
+                      radius: size / 2,
+                      backgroundImage: imageProvider,
+                    ),
+                  ),
               placeholder: (context, url) => Center(
                 child: SizedBox(
                   width: size - 6,
@@ -67,14 +82,20 @@ class CustomCachedNetworkAvatar extends StatelessWidget {
                   ),
                 ),
               ),
-              errorWidget: (context, url, error) => Container(
-                decoration: const BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Color(0xFFEEEEEE),
-                ),
-                child: const Icon(Icons.error, color: Colors.red),
+              errorWidget: (context, url, error) =>
+                  Container(
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Color(0xFFEEEEEE),
+                    ),
+                    child: const Icon(
+                      Icons.error,
+                      color: Colors.red,
+                    ),
+                  ),
+              fadeInDuration: const Duration(
+                milliseconds: 300,
               ),
-              fadeInDuration: const Duration(milliseconds: 300),
             ),
     );
   }

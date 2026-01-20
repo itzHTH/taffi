@@ -34,7 +34,7 @@ class CustomChatFieldBottom extends StatelessWidget {
                 "assets/images/send.svg",
                 width: 36,
                 colorFilter: ColorFilter.mode(
-                  AppColors.primary,
+                  AppColors.secondary,
                   BlendMode.srcIn,
                 ),
               ),
@@ -60,7 +60,7 @@ class CustomChatFieldBottom extends StatelessWidget {
                     border: InputBorder.none,
                     focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(
-                        color: Colors.grey,
+                        color: AppColors.secondary,
                         width: 2.2,
                       ),
                       borderRadius: BorderRadius.circular(
@@ -69,7 +69,7 @@ class CustomChatFieldBottom extends StatelessWidget {
                     ),
                     enabledBorder: OutlineInputBorder(
                       borderSide: BorderSide(
-                        color: Colors.grey,
+                        color: AppColors.secondary,
                         width: 1.6,
                       ),
                       borderRadius: BorderRadius.circular(
