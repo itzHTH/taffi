@@ -5,6 +5,9 @@ class AppConstants {
   static const String appName = 'Taffi';
   static const String appVersion = '1.0.0';
 
+  static const String accessToken = "token";
+  static const String refreshToken = "refreshToken";
+
   static const List<String> iraqGovernorates = [
     "ديالى",
     "بغداد",
