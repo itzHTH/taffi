@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:taffi/core/data/local/secure_storage.dart';
 import 'package:taffi/core/theme/app_colors.dart';
 import 'package:taffi/features/auth/screens/login_screen.dart';
 import 'package:taffi/features/profile/screens/about_us_screen.dart';
@@ -20,17 +21,12 @@ class ProfileScreen extends StatelessWidget {
         appBar: AppBar(
           backgroundColor: Colors.white,
           elevation: 0,
-          title: Text(
-            "ملفي الشخصي",
-            style: Theme.of(context).textTheme.titleLarge,
-          ),
+          title: Text("ملفي الشخصي", style: Theme.of(context).textTheme.titleLarge),
         ),
         body: SafeArea(
           child: SingleChildScrollView(
             child: Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 24,
-              ),
+              padding: const EdgeInsets.symmetric(horizontal: 24),
               child: Column(
                 children: [
                   Hero(
@@ -42,15 +38,12 @@ class ProfileScreen extends StatelessWidget {
                         shape: BoxShape.circle,
                         color: Colors.grey[200],
                         image: const DecorationImage(
-                          image: AssetImage(
-                            'assets/images/user.png',
-                          ),
+                          image: AssetImage('assets/images/user.png'),
                           fit: BoxFit.cover,
                         ),
                         boxShadow: [
                           BoxShadow(
-                            color: AppColors.primary
-                                .withValues(alpha: 0.2),
+                            color: AppColors.primary.withValues(alpha: 0.2),
                             blurRadius: 12,
                             offset: const Offset(0, 6),
                           ),
@@ -59,19 +52,9 @@ class ProfileScreen extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 16),
-                  Text(
-                    "Huthaifa M. Flayyih",
-                    style: Theme.of(
-                      context,
-                    ).textTheme.titleMedium,
-                  ),
+                  Text("Huthaifa M. Flayyih", style: Theme.of(context).textTheme.titleMedium),
 
-                  Text(
-                    "Leader@",
-                    style: Theme.of(
-                      context,
-                    ).textTheme.headlineSmall,
-                  ),
+                  Text("Leader@", style: Theme.of(context).textTheme.headlineSmall),
                   const SizedBox(height: 36),
                   MenuItem(
                     icon: 'assets/images/profile.svg',
@@ -79,10 +62,7 @@ class ProfileScreen extends StatelessWidget {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              const UserInfoScreen(),
-                        ),
+                        MaterialPageRoute(builder: (context) => const UserInfoScreen()),
                       );
                     },
                   ),
@@ -93,10 +73,7 @@ class ProfileScreen extends StatelessWidget {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              const PrivacyPolicyScreen(),
-                        ),
+                        MaterialPageRoute(builder: (context) => const PrivacyPolicyScreen()),
                       );
                     },
                   ),
@@ -104,13 +81,12 @@ class ProfileScreen extends StatelessWidget {
                   MenuItem(
                     icon: 'assets/images/logout.svg',
                     title: 'تسجيل الخروج',
-                    onTap: () {
+                    onTap: () async {
+                      final storage = SecureStorage.instance;
+                      await storage.deleteTokens();
                       Navigator.pushAndRemoveUntil(
                         context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              const LoginScreen(),
-                        ),
+                        MaterialPageRoute(builder: (context) => const LoginScreen()),
                         (route) => false,
                       );
                     },
@@ -123,10 +99,7 @@ class ProfileScreen extends StatelessWidget {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              const AboutUsScreen(),
-                        ),
+                        MaterialPageRoute(builder: (context) => const AboutUsScreen()),
                       );
                     },
                   ),
