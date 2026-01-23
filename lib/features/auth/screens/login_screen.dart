@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:taffi/core/utils/validators.dart';
 import 'package:taffi/features/auth/providers/login_provider.dart';
+import 'package:taffi/features/auth/providers/register_provider.dart';
 import 'package:taffi/features/auth/screens/register_screen.dart';
 import 'package:taffi/features/auth/widgets/custom_text_form_filed.dart';
 import 'package:taffi/features/home/screens/main_screen.dart';
@@ -229,7 +230,12 @@ class _LoginScreenState extends State<LoginScreen> {
                                   onPressed: () {
                                     Navigator.push(
                                       context,
-                                      MaterialPageRoute(builder: (context) => RegisterScreen()),
+                                      MaterialPageRoute(
+                                        builder: (context) => ChangeNotifierProvider(
+                                          create: (context) => RegisterProvider(),
+                                          child: RegisterScreen(),
+                                        ),
+                                      ),
                                     );
                                   },
                                   child: Text(

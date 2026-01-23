@@ -8,9 +8,7 @@ class Validators {
       return 'البريد الإلكتروني مطلوب';
     }
 
-    final emailRegex = RegExp(
-      r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
-    );
+    final emailRegex = RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
 
     if (!emailRegex.hasMatch(value)) {
       return 'يرجى إدخال بريد إلكتروني صحيح';
@@ -29,8 +27,7 @@ class Validators {
       return 'كلمة المرور يجب أن تكون 6 أحرف على الأقل';
     }
 
-    String pattern =
-        r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$';
+    String pattern = r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$';
     RegExp regex = RegExp(pattern);
 
     if (!regex.hasMatch(value)) {
@@ -41,10 +38,7 @@ class Validators {
   }
 
   /// Validates password
-  static String? confrimPassword(
-    String? currentValue,
-    String? originValue,
-  ) {
+  static String? confrimPassword(String? currentValue, String? originValue) {
     if (currentValue == null || currentValue.isEmpty) {
       return 'تاكيد كلمة المرور مطلوب';
     }
@@ -57,10 +51,7 @@ class Validators {
   }
 
   /// Validates required field
-  static String? required(
-    String? value, [
-    String? fieldName,
-  ]) {
+  static String? required(String? value, [String? fieldName]) {
     if (value == null || value.isEmpty) {
       return '${fieldName ?? 'هذا الحقل'} مطلوب';
     }
@@ -87,7 +78,7 @@ class Validators {
       return ' العمر مطلوب';
     }
 
-    final ageRegex = RegExp(r'^[1-9][0-9]{0,2}$');
+    final ageRegex = RegExp(r'^[1-9][0-9]{0,1}$');
     if (!ageRegex.hasMatch(value)) {
       return 'يرجى إدخال عمر صحيح';
     }
@@ -107,9 +98,7 @@ class Validators {
     );
 
     if (!nameRegex.hasMatch(trimmedValue)) {
-      if (!RegExp(
-        r'^[\u0621-\u064A\s]+$',
-      ).hasMatch(trimmedValue)) {
+      if (!RegExp(r'^[\u0621-\u064A\s]+$').hasMatch(trimmedValue)) {
         return 'يجب استخدام الحروف العربية فقط';
       }
       return 'يجب كتابة الاسم الثلاثي كاملاً (الاسم، اسم الأب، اسم الجد)';
@@ -130,9 +119,7 @@ class Validators {
       return 'طويل جداً (20 حرف كحد أقصى)';
     }
 
-    final RegExp usernameRegex = RegExp(
-      r'^[a-zA-Z][a-zA-Z0-9_]*$',
-    );
+    final RegExp usernameRegex = RegExp(r'^[a-zA-Z][a-zA-Z0-9_]*$');
 
     if (!usernameRegex.hasMatch(value)) {
       if (value.contains(' ')) {
