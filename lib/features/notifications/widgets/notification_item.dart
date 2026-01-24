@@ -18,32 +18,22 @@ class NotificationItem extends StatefulWidget {
   });
 
   @override
-  State<NotificationItem> createState() =>
-      _NotificationItemState();
+  State<NotificationItem> createState() => _NotificationItemState();
 }
 
-class _NotificationItemState
-    extends State<NotificationItem> {
+class _NotificationItemState extends State<NotificationItem> {
   bool _isExpanded = false;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(
-        horizontal: 16,
-        vertical: 8,
-      ),
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
-        color: widget.isRead
-            ? Colors.white
-            : AppColors.backgroundLight.withValues(
-                alpha: 0.3,
-              ),
+        color: widget.isRead ? Colors.white : AppColors.backgroundLight.withValues(alpha: 0.3),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: AppColors.border,
-          width: 1,
-        ),
+        border: Border.all(color: AppColors.border, width: 1),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.05),
@@ -72,57 +62,35 @@ class _NotificationItemState
                       width: 40,
                       height: 40,
                       decoration: BoxDecoration(
-                        color: AppColors.primary.withValues(
-                          alpha: 0.1,
-                        ),
+                        color: AppColors.primary.withValues(alpha: 0.1),
                         shape: BoxShape.circle,
                       ),
-                      child: const Icon(
-                        Icons.notifications,
-                        color: AppColors.primary,
-                        size: 20,
-                      ),
+                      child: const Icon(Icons.notifications, color: AppColors.primary, size: 20),
                     ),
                     const SizedBox(width: 12),
                     Expanded(
                       child: Column(
-                        crossAxisAlignment:
-                            CrossAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
                             widget.title,
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleMedium
-                                ?.copyWith(
-                                  fontWeight: widget.isRead
-                                      ? FontWeight.normal
-                                      : FontWeight.bold,
-                                  color:
-                                      AppColors.textPrimary,
-                                ),
+                            style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                              fontWeight: widget.isRead ? FontWeight.normal : FontWeight.bold,
+                              color: AppColors.textPrimary,
+                            ),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                           ),
                           const SizedBox(height: 4),
                           Row(
                             children: [
-                              Icon(
-                                Icons.access_time,
-                                size: 14,
-                                color:
-                                    AppColors.textSecondary,
-                              ),
+                              Icon(Icons.access_time, size: 14, color: AppColors.textSecondary),
                               const SizedBox(width: 4),
                               Text(
                                 widget.time,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodySmall
-                                    ?.copyWith(
-                                      color: AppColors
-                                          .textSecondary,
-                                    ),
+                                style: Theme.of(
+                                  context,
+                                ).textTheme.bodySmall?.copyWith(color: AppColors.textSecondary),
                               ),
                             ],
                           ),
@@ -130,9 +98,7 @@ class _NotificationItemState
                       ),
                     ),
                     Icon(
-                      _isExpanded
-                          ? Icons.keyboard_arrow_up
-                          : Icons.keyboard_arrow_down,
+                      _isExpanded ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
                       color: AppColors.textSecondary,
                     ),
                   ],
@@ -140,32 +106,20 @@ class _NotificationItemState
                 AnimatedCrossFade(
                   firstChild: const SizedBox.shrink(),
                   secondChild: Padding(
-                    padding: const EdgeInsets.only(
-                      top: 12,
-                      right: 52,
-                    ),
+                    padding: const EdgeInsets.only(top: 12, right: 52),
                     child: Column(
-                      crossAxisAlignment:
-                          CrossAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Divider(
-                          color: AppColors.divider,
-                          height: 1,
-                        ),
+                        const Divider(color: AppColors.divider, height: 1),
                         const SizedBox(height: 12),
                         Text(
                           widget.message,
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyMedium
-                              ?.copyWith(
-                                color:
-                                    AppColors.textPrimary,
-                                height: 1.5,
-                              ),
+                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: AppColors.textPrimary,
+                            height: 1.5,
+                          ),
                         ),
-                        if (!widget.isRead &&
-                            widget.onRead != null) ...[
+                        if (!widget.isRead && widget.onRead != null) ...[
                           const SizedBox(height: 12),
                           SizedBox(
                             width: double.infinity,
@@ -176,28 +130,14 @@ class _NotificationItemState
                                   _isExpanded = false;
                                 });
                               },
-                              icon: const Icon(
-                                Icons.check_circle_outline,
-                                size: 18,
-                              ),
-                              label: const Text(
-                                'تم القراءة',
-                              ),
+                              icon: const Icon(Icons.check_circle_outline, size: 18),
+                              label: const Text('تم القراءة'),
                               style: ElevatedButton.styleFrom(
-                                backgroundColor:
-                                    AppColors.primary,
-                                foregroundColor:
-                                    Colors.white,
-                                padding:
-                                    const EdgeInsets.symmetric(
-                                      vertical: 12,
-                                      horizontal: 16,
-                                    ),
+                                backgroundColor: AppColors.primary,
+                                foregroundColor: Colors.white,
+                                padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
                                 shape: RoundedRectangleBorder(
-                                  borderRadius:
-                                      BorderRadius.circular(
-                                        8,
-                                      ),
+                                  borderRadius: BorderRadius.circular(8),
                                 ),
                               ),
                             ),
@@ -209,9 +149,7 @@ class _NotificationItemState
                   crossFadeState: _isExpanded
                       ? CrossFadeState.showSecond
                       : CrossFadeState.showFirst,
-                  duration: const Duration(
-                    milliseconds: 200,
-                  ),
+                  duration: const Duration(milliseconds: 200),
                 ),
               ],
             ),

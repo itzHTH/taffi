@@ -1,78 +1,70 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:taffi/core/enums/status_enum.dart';
 import 'package:taffi/core/theme/app_colors.dart';
+import 'package:taffi/features/notifications/providers/notification_provider.dart';
 import 'package:taffi/features/notifications/widgets/notification_item.dart';
+import 'package:taffi/features/notifications/widgets/notification_shimmer.dart';
 
 class NotificationsScreen extends StatefulWidget {
   const NotificationsScreen({super.key});
 
   @override
-  State<NotificationsScreen> createState() =>
-      _NotificationsScreenState();
+  State<NotificationsScreen> createState() => _NotificationsScreenState();
 }
 
-class _NotificationsScreenState
-    extends State<NotificationsScreen> {
-  late List<Map<String, dynamic>> notifications;
-
+class _NotificationsScreenState extends State<NotificationsScreen> {
   @override
   void initState() {
     super.initState();
-    notifications = [
-      {
-        'title': 'موعد جديد مع الدكتور أحمد',
-        'message':
-            'تم تأكيد موعدك مع الدكتور أحمد يوم الأحد 22 يناير 2026 في تمام الساعة 10:00 صباحاً. يرجى الحضور قبل الموعد بـ 15 دقيقة.',
-        'time': 'منذ ساعة',
-        'isRead': false,
-      },
-      {
-        'title': 'تذكير بالموعد',
-        'message':
-            'موعدك مع الدكتور سارة غداً في تمام الساعة 3:00 مساءً. لا تنسى إحضار التحاليل الطبية.',
-        'time': 'منذ 3 ساعات',
-        'isRead': false,
-      },
-      {
-        'title': 'نتائج الفحوصات جاهزة',
-        'message':
-            'أصبحت نتائج فحوصاتك الطبية جاهزة الآن. يمكنك الاطلاع عليها من خلال التطبيق أو استلامها من العيادة.',
-        'time': 'منذ يوم',
-        'isRead': true,
-      },
-      {
-        'title': 'تم إلغاء الموعد',
-        'message':
-            'نأسف لإبلاغك بأن موعدك مع الدكتور محمد تم إلغاؤه. يرجى إعادة جدولة موعد جديد في أقرب وقت ممكن.',
-        'time': 'منذ يومين',
-        'isRead': true,
-      },
-      {
-        'title': 'عرض خاص لك',
-        'message':
-            'احصل على خصم 20% على جميع الفحوصات الطبية الشاملة لفترة محدودة. اغتنم الفرصة الآن!',
-        'time': 'منذ 3 أيام',
-        'isRead': true,
-      },
-    ];
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _fetchNotifications();
+    });
   }
 
-  void _markAsRead(int index) {
-    setState(() {
-      notifications[index]['isRead'] = true;
-    });
+  Future<void> _fetchNotifications() async {
+    await context.read<NotificationProvider>().getAllNotifications();
+  }
+
+  Future<void> _markAsRead(String id) async {
+    final success = await context.read<NotificationProvider>().markAsRead(id);
+
+    if (!mounted) return;
+
+    if (success) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: const Text('تم وضع علامة مقروء بنجاح'),
+          backgroundColor: Colors.green,
+          behavior: SnackBarBehavior.floating,
+          duration: const Duration(seconds: 2),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        ),
+      );
+    } else {
+      final errorMessage = context.read<NotificationProvider>().message;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(errorMessage ?? 'فشل في وضع علامة مقروء'),
+          backgroundColor: Colors.red,
+          behavior: SnackBarBehavior.floating,
+          duration: const Duration(seconds: 3),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        ),
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    final provider = context.watch<NotificationProvider>();
+
     return Scaffold(
       backgroundColor: AppColors.background,
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
-            title: Text(
-              "الإشعارات",
-              style: Theme.of(context).textTheme.titleLarge,
-            ),
+            title: Text("الإشعارات", style: Theme.of(context).textTheme.titleLarge),
             backgroundColor: Colors.transparent,
             foregroundColor: AppColors.primary,
             leading: IconButton(
@@ -84,60 +76,94 @@ class _NotificationsScreenState
             floating: true,
             snap: true,
           ),
-          notifications.isEmpty
-              ? SliverFillRemaining(
-                  child: Center(
-                    child: Column(
-                      mainAxisAlignment:
-                          MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.notifications_none,
-                          size: 80,
-                          color: AppColors.textHint,
-                        ),
-                        const SizedBox(height: 16),
-                        Text(
-                          'لا توجد إشعارات',
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleMedium
-                              ?.copyWith(
-                                color:
-                                    AppColors.textSecondary,
-                              ),
-                        ),
-                      ],
-                    ),
-                  ),
-                )
-              : SliverPadding(
-                  padding: const EdgeInsets.only(
-                    top: 8,
-                    bottom: 16,
-                  ),
-                  sliver: SliverList(
-                    delegate: SliverChildBuilderDelegate((
-                      context,
-                      index,
-                    ) {
-                      final notification =
-                          notifications[index];
-                      return NotificationItem(
-                        title:
-                            notification['title'] as String,
-                        message:
-                            notification['message']
-                                as String,
-                        time:
-                            notification['time'] as String,
-                        isRead:
-                            notification['isRead'] as bool,
-                        onRead: () => _markAsRead(index),
-                      );
-                    }, childCount: notifications.length),
-                  ),
+
+          if (provider.status == Status.loading)
+            SliverPadding(
+              padding: const EdgeInsets.only(top: 8, bottom: 16),
+              sliver: SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  (context, index) => const NotificationShimmer(),
+                  childCount: 5,
                 ),
+              ),
+            )
+          // Error state
+          else if (provider.status == Status.error)
+            SliverFillRemaining(
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.error_outline, size: 80, color: Colors.red[300]),
+                    const SizedBox(height: 16),
+                    Text(
+                      'حدث خطأ',
+                      style: Theme.of(
+                        context,
+                      ).textTheme.titleMedium?.copyWith(color: AppColors.textPrimary),
+                    ),
+                    const SizedBox(height: 8),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 32),
+                      child: Text(
+                        provider.message ?? 'فشل في تحميل الإشعارات',
+                        textAlign: TextAlign.center,
+                        style: Theme.of(
+                          context,
+                        ).textTheme.bodyMedium?.copyWith(color: AppColors.textSecondary),
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+                    ElevatedButton.icon(
+                      onPressed: _fetchNotifications,
+                      icon: const Icon(Icons.refresh),
+                      label: const Text('إعادة المحاولة'),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.primary,
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            )
+          // Empty state
+          else if (provider.notifications.isEmpty)
+            SliverFillRemaining(
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.notifications_none, size: 80, color: AppColors.textHint),
+                    const SizedBox(height: 16),
+                    Text(
+                      'لا توجد إشعارات',
+                      style: Theme.of(
+                        context,
+                      ).textTheme.titleMedium?.copyWith(color: AppColors.textSecondary),
+                    ),
+                  ],
+                ),
+              ),
+            )
+          // Success state with notifications
+          else
+            SliverPadding(
+              padding: const EdgeInsets.only(top: 8, bottom: 16),
+              sliver: SliverList(
+                delegate: SliverChildBuilderDelegate((context, index) {
+                  final notification = provider.notifications[index];
+                  return NotificationItem(
+                    title: notification.title ?? "عنوان الإشعار",
+                    message: notification.message ?? "رسالة الإشعار",
+                    time: notification.createdAt?.toLocal().toString() ?? "وقت الإشعار",
+                    isRead: notification.isRead ?? false,
+                    onRead: () async => await _markAsRead(notification.id ?? ""),
+                  );
+                }, childCount: provider.notifications.length),
+              ),
+            ),
         ],
       ),
     );

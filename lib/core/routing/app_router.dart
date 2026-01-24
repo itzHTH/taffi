@@ -11,6 +11,7 @@ import 'package:taffi/features/booking/screens/booking_screen.dart';
 import 'package:taffi/features/chat/screens/chat_screen.dart';
 import 'package:taffi/features/home/screens/main_screen.dart';
 import 'package:taffi/features/messages/screens/messages_screen.dart';
+import 'package:taffi/features/notifications/providers/notification_provider.dart';
 import 'package:taffi/features/notifications/screens/notifications_screen.dart';
 import 'package:taffi/features/profile/screens/about_us_screen.dart';
 import 'package:taffi/features/profile/screens/privacy_policy_screen.dart';
@@ -86,7 +87,12 @@ class AppRouter {
         return MaterialPageRoute(builder: (_) => const ChatScreen());
 
       case RouteNames.notifications:
-        return MaterialPageRoute(builder: (_) => const NotificationsScreen());
+        return MaterialPageRoute(
+          builder: (_) => ChangeNotifierProvider(
+            create: (context) => NotificationProvider(),
+            child: const NotificationsScreen(),
+          ),
+        );
 
       // Default route (404)
       default:
