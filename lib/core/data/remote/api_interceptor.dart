@@ -2,8 +2,10 @@ import 'package:dio/dio.dart';
 import 'package:taffi/core/constants/api_config.dart';
 import 'package:taffi/core/constants/app_constants.dart';
 import 'package:taffi/core/data/local/secure_storage.dart';
+import 'package:taffi/core/routing/route_names.dart';
+import 'package:taffi/core/services/navigation_service.dart';
 
-class ApiInterceptor extends Interceptor {
+class ApiInterceptor extends QueuedInterceptorsWrapper {
   final Dio _dio;
 
   ApiInterceptor(this._dio);
@@ -23,11 +25,13 @@ class ApiInterceptor extends Interceptor {
     if (err.response?.statusCode == 401) {
       // if the refresh token is got an error (refresh token is expired) => logout
       if (err.requestOptions.path.contains(EndPoints.auth.refreshToken)) {
+        await SecureStorage.instance.deleteTokens();
+        NavigationService().pushNamedAndRemoveUntil(RouteNames.splash);
         return handler.next(err);
       }
 
       try {
-        final String? oldToken = await SecureStorage.instance.getRefreshToken();
+        final String? oldToken = await SecureStorage.instance.getAccessToken();
         final String? refreshToken = await SecureStorage.instance.getRefreshToken();
 
         // create a new dio instance to avoid infinite loop
@@ -48,7 +52,12 @@ class ApiInterceptor extends Interceptor {
         if (response.statusCode == 200) {
           final String newAccessToken = response.data[AppConstants.accessToken];
           final String newRefreshToken = response.data[AppConstants.refreshToken];
-          await SecureStorage.instance.saveTokens(newAccessToken, newRefreshToken);
+          final String newRefreshTokenExpireAt = response.data[AppConstants.refreshTokenExpireAt];
+          await SecureStorage.instance.saveTokens(
+            newAccessToken,
+            newRefreshToken,
+            newRefreshTokenExpireAt,
+          );
 
           // clone request options to edit the headers
           final opts = err.requestOptions;

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import 'package:taffi/core/constants/app_constants.dart';
+import 'package:taffi/core/enums/status_enum.dart';
+import 'package:taffi/core/routing/route_names.dart';
 import 'package:taffi/core/theme/app_colors.dart';
 import 'package:taffi/core/utils/validators.dart';
 import 'package:taffi/features/auth/providers/register_provider.dart';
 import 'package:taffi/features/auth/widgets/custom_text_form_filed.dart';
-import 'package:taffi/features/home/screens/main_screen.dart';
 
 class FillPersonalInfoScreen extends StatefulWidget {
   const FillPersonalInfoScreen({super.key});
@@ -53,7 +53,28 @@ class _FillPersonalInfoScreenState extends State<FillPersonalInfoScreen> {
     if (!context.mounted) return;
 
     if (result) {
-      Navigator.push(context, MaterialPageRoute(builder: (context) => const MainScreen()));
+      Navigator.pushNamedAndRemoveUntil(context, RouteNames.main, (route) => false);
+    } else {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(registerProvider.errorMessage ?? "حدث خطأ")));
+    }
+  }
+
+  Future<void> _updateUserInfo(BuildContext context) async {
+    final registerProvider = Provider.of<RegisterProvider>(context, listen: false);
+
+    final result = await registerProvider.updateUserInfo(
+      name: fullNameController.text,
+      phone: phoneController.text,
+      age: ageController.text,
+      governorate: dropdownValue,
+    );
+
+    if (!context.mounted) return;
+
+    if (result) {
+      Navigator.pushNamedAndRemoveUntil(context, RouteNames.main, (route) => false);
     } else {
       ScaffoldMessenger.of(
         context,
@@ -208,7 +229,11 @@ class _FillPersonalInfoScreenState extends State<FillPersonalInfoScreen> {
                                       textEditingController: ageController,
                                       onFieldSubmitted: (value) async {
                                         if (_key.currentState!.validate()) {
-                                          await _registerAndLogin(context);
+                                          if (context.read<RegisterProvider>().isGoogleLogin) {
+                                            await _updateUserInfo(context);
+                                          } else {
+                                            await _registerAndLogin(context);
+                                          }
                                         }
                                       },
                                     ),
@@ -223,13 +248,17 @@ class _FillPersonalInfoScreenState extends State<FillPersonalInfoScreen> {
                               return ElevatedButton(
                                 onPressed: () async {
                                   if (_key.currentState!.validate()) {
-                                    await _registerAndLogin(context);
+                                    if (context.read<RegisterProvider>().isGoogleLogin) {
+                                      await _updateUserInfo(context);
+                                    } else {
+                                      await _registerAndLogin(context);
+                                    }
                                   }
                                 },
                                 style: ElevatedButton.styleFrom(
                                   fixedSize: Size(MediaQuery.widthOf(context), 60),
                                 ),
-                                child: provider.isLoading
+                                child: provider.status == Status.loading
                                     ? CircularProgressIndicator()
                                     : Text(
                                         "حفظ المعلومات",

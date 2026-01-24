@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:taffi/core/routing/app_router.dart';
+import 'package:taffi/core/routing/route_names.dart';
+import 'package:taffi/core/services/navigation_service.dart';
 import 'package:taffi/core/theme/app_theme.dart';
-import 'package:taffi/features/splash/screens/splash_screen.dart';
 
 void main() {
   runApp(const TaffiApp());
@@ -18,7 +20,9 @@ class TaffiApp extends StatelessWidget {
       builder: (context, child) {
         return Directionality(textDirection: TextDirection.rtl, child: child!);
       },
-      home: const SplashScreen(),
+      initialRoute: RouteNames.splash,
+      onGenerateRoute: AppRouter.generateRoute,
+      navigatorKey: NavigationService().navigatorKey,
     );
   }
 }

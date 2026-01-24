@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:taffi/core/data/local/secure_storage.dart';
+import 'package:taffi/core/routing/route_names.dart';
 import 'package:taffi/core/theme/app_colors.dart';
-import 'package:taffi/features/auth/screens/login_screen.dart';
-import 'package:taffi/features/profile/screens/about_us_screen.dart';
-import 'package:taffi/features/profile/screens/privacy_policy_screen.dart';
-import 'package:taffi/features/profile/screens/user_info_screen.dart';
 import 'package:taffi/features/profile/widgets/menu_item.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -60,10 +57,7 @@ class ProfileScreen extends StatelessWidget {
                     icon: 'assets/images/profile.svg',
                     title: "المعلومات الشخصيه",
                     onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => const UserInfoScreen()),
-                      );
+                      Navigator.pushNamed(context, RouteNames.userInfo);
                     },
                   ),
                   const SizedBox(height: 8),
@@ -71,10 +65,7 @@ class ProfileScreen extends StatelessWidget {
                     icon: 'assets/images/password.svg',
                     title: 'سياسة الخصوصية',
                     onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => const PrivacyPolicyScreen()),
-                      );
+                      Navigator.pushNamed(context, RouteNames.privacyPolicy);
                     },
                   ),
                   const SizedBox(height: 8),
@@ -84,9 +75,9 @@ class ProfileScreen extends StatelessWidget {
                     onTap: () async {
                       final storage = SecureStorage.instance;
                       await storage.deleteTokens();
-                      Navigator.pushAndRemoveUntil(
+                      Navigator.pushNamedAndRemoveUntil(
                         context,
-                        MaterialPageRoute(builder: (context) => const LoginScreen()),
+                        RouteNames.login,
                         (route) => false,
                       );
                     },
@@ -97,10 +88,7 @@ class ProfileScreen extends StatelessWidget {
                     iconData: Icons.help_outline_rounded,
                     title: 'من نحن',
                     onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => const AboutUsScreen()),
-                      );
+                      Navigator.pushNamed(context, RouteNames.aboutUs);
                     },
                   ),
                 ],

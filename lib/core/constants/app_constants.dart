@@ -7,6 +7,7 @@ class AppConstants {
 
   static const String accessToken = "token";
   static const String refreshToken = "refreshToken";
+  static const String refreshTokenExpireAt = "refreshTokenExpireAt";
 
   static const List<String> iraqGovernorates = [
     "ديالى",

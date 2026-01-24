@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:taffi/core/routing/route_names.dart';
 import 'package:taffi/core/widgets/big_doctor_card.dart';
-import 'package:taffi/features/Doctor%20Info/screens/doctor_info.dart';
 
 class SliverBookingDoctorList extends StatefulWidget {
   const SliverBookingDoctorList({super.key});
 
   @override
-  State<SliverBookingDoctorList> createState() =>
-      _SliverBookingDoctorListState();
+  State<SliverBookingDoctorList> createState() => _SliverBookingDoctorListState();
 }
 
 class _SliverBookingDoctorListState extends State<SliverBookingDoctorList> {
@@ -56,12 +55,7 @@ class _SliverBookingDoctorListState extends State<SliverBookingDoctorList> {
             doctorImage: doctors[index]["imageUrl"],
             doctorLocation: doctors[index]["location"],
             onBookingTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const DoctorInfoScreen(),
-                ),
-              );
+              Navigator.pushNamed(context, RouteNames.doctorInfo);
             },
 
             isDashedBorder: true,

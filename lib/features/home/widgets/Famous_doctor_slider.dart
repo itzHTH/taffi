@@ -1,20 +1,18 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:taffi/core/routing/route_names.dart';
 import 'package:taffi/core/theme/app_colors.dart';
 import 'package:taffi/core/widgets/big_doctor_card.dart';
-import 'package:taffi/features/Doctor%20Info/screens/doctor_info.dart';
 
 class FamousDoctorSlider extends StatefulWidget {
   const FamousDoctorSlider({super.key});
 
   @override
-  State<FamousDoctorSlider> createState() =>
-      _FamousDoctorSliderState();
+  State<FamousDoctorSlider> createState() => _FamousDoctorSliderState();
 }
 
-class _FamousDoctorSliderState
-    extends State<FamousDoctorSlider> {
+class _FamousDoctorSliderState extends State<FamousDoctorSlider> {
   late PageController _pageController;
   Timer? _timer;
   int _currentPage = 0;
@@ -34,9 +32,7 @@ class _FamousDoctorSliderState
   }
 
   void _startTimer() {
-    _timer = Timer.periodic(const Duration(seconds: 4), (
-      timer,
-    ) {
+    _timer = Timer.periodic(const Duration(seconds: 4), (timer) {
       if (_currentPage < 3) {
         _currentPage++;
       } else {
@@ -64,17 +60,10 @@ class _FamousDoctorSliderState
           doctorName: "د. نور الهدى",
           doctorSpecialization: "طب الأسنان",
           rating: 4.40,
-          doctorImage:
-              "https://taafi.ddns.net/uploads/doctors/dr_noor.png",
+          doctorImage: "https://taafi.ddns.net/uploads/doctors/dr_noor.png",
           doctorLocation: "البصرة - الجزائر",
           onBookingTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) =>
-                    const DoctorInfoScreen(),
-              ),
-            );
+            Navigator.pushNamed(context, RouteNames.doctorInfo);
           },
         );
       case 1:
@@ -82,17 +71,10 @@ class _FamousDoctorSliderState
           doctorName: "د. ليلى عبد العزيز",
           doctorSpecialization: "الجلدية والتجميل",
           rating: 4.80,
-          doctorImage:
-              "https://taafi.ddns.net/uploads/doctors/dr_layla.png",
+          doctorImage: "https://taafi.ddns.net/uploads/doctors/dr_layla.png",
           doctorLocation: "أربيل - شارع 100",
           onBookingTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) =>
-                    const DoctorInfoScreen(),
-              ),
-            );
+            Navigator.pushNamed(context, RouteNames.doctorInfo);
           },
         );
       case 2:
@@ -100,17 +82,10 @@ class _FamousDoctorSliderState
           doctorName: "د. عمر فاروق",
           doctorSpecialization: "طب العيون",
           rating: 4.60,
-          doctorImage:
-              "https://taafi.ddns.net/uploads/doctors/dr_omar.png",
+          doctorImage: "https://taafi.ddns.net/uploads/doctors/dr_omar.png",
           doctorLocation: "بغداد - الحارثية",
           onBookingTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) =>
-                    const DoctorInfoScreen(),
-              ),
-            );
+            Navigator.pushNamed(context, RouteNames.doctorInfo);
           },
         );
       case 3:
@@ -118,17 +93,10 @@ class _FamousDoctorSliderState
           doctorName: "د. أحمد عباس خالد",
           doctorSpecialization: "أمراض القلب",
           rating: 4.90,
-          doctorImage:
-              "https://taafi.ddns.net/uploads/doctors/dr_ahmed.png",
+          doctorImage: "https://taafi.ddns.net/uploads/doctors/dr_ahmed.png",
           doctorLocation: "بغداد - الكرادة",
           onBookingTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) =>
-                    const DoctorInfoScreen(),
-              ),
-            );
+            Navigator.pushNamed(context, RouteNames.doctorInfo);
           },
         );
 

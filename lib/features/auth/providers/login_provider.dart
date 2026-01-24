@@ -1,13 +1,16 @@
 import 'package:flutter/foundation.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:taffi/core/constants/api_config.dart';
-import 'package:taffi/core/constants/app_constants.dart';
 import 'package:taffi/core/data/local/secure_storage.dart';
 import 'package:taffi/core/data/remote/api_service.dart';
 import 'package:taffi/core/data/remote/server_exception.dart';
+import 'package:taffi/core/enums/status_enum.dart';
+import 'package:taffi/core/routing/route_names.dart';
+import 'package:taffi/core/services/navigation_service.dart';
+import 'package:taffi/features/auth/models/auth_model.dart';
 
 class LoginProvider extends ChangeNotifier {
-  bool isLoading = false;
+  Status status = Status.initial;
 
   String? errorMessage;
 
@@ -18,7 +21,7 @@ class LoginProvider extends ChangeNotifier {
     required String password,
     required bool saveInfo,
   }) async {
-    isLoading = true;
+    status = Status.loading;
     notifyListeners();
     try {
       // Login By Email And Password
@@ -27,39 +30,42 @@ class LoginProvider extends ChangeNotifier {
         data: {"email": email, "password": password},
       );
 
+      final authModel = AuthModel.fromJson(response);
+
       // Check If The User Is Authenticated (Email And Password Are Correct)
-      if (response["isAuthenticated"] == true) {
+      if (authModel.isAuthenticated == true) {
         // Save Tokens
         await SecureStorage.instance.saveTokens(
-          response[AppConstants.accessToken],
-          response[AppConstants.refreshToken],
+          authModel.token,
+          authModel.refreshToken,
+          authModel.refreshTokenExpiration,
         );
         // Stop Loading
-        isLoading = false;
+        status = Status.success;
         notifyListeners();
         return true;
       }
       // User Not Authenticated (Email Or Password Is Incorrect)
-      isLoading = false;
+      status = Status.error;
       notifyListeners();
       return false;
     } on ServerException catch (e) {
       // Server Exception
       errorMessage = e.message;
-      isLoading = false;
+      status = Status.error;
       notifyListeners();
       return false;
     } catch (e) {
       // Unknown Exception
       errorMessage = "حدث خطأ ما";
-      isLoading = false;
+      status = Status.error;
       notifyListeners();
       return false;
     }
   }
 
   Future<bool> loginWithGoogle() async {
-    isLoading = true;
+    status = Status.loading;
     notifyListeners();
     try {
       final GoogleSignInAccount? account = await GoogleSignIn(
@@ -77,33 +83,49 @@ class LoginProvider extends ChangeNotifier {
           data: {"idToken": idToken},
         );
 
+        final authModel = AuthModel.fromJson(response);
+
         // Check If The User Is Authenticated
-        if (response["isAuthenticated"] == true) {
+        if (authModel.isAuthenticated == true) {
           // Save Tokens
           await SecureStorage.instance.saveTokens(
-            response[AppConstants.accessToken],
-            response[AppConstants.refreshToken],
+            authModel.token,
+            authModel.refreshToken,
+            authModel.refreshTokenExpiration,
           );
+
+          // Check If The User Is New User
+          if (authModel.isNewUser == true) {
+            NavigationService().pushNamedAndRemoveUntil(
+              RouteNames.fillPersonalInfo,
+              arguments: {'isFromGoogle': true},
+            );
+
+            status = Status.initial;
+            notifyListeners();
+            return false; // Navigate To Fill Personal Info Page
+          }
+
           // Stop Loading
-          isLoading = false;
+          status = Status.success;
           notifyListeners();
           return true;
         }
       }
       // User Not Authenticated
-      isLoading = false;
+      status = Status.error;
       notifyListeners();
       return false;
     } on ServerException catch (e) {
       // Server Exception
       errorMessage = e.message;
-      isLoading = false;
+      status = Status.error;
       notifyListeners();
       return false;
     } catch (e) {
       // Unknown Exception
       errorMessage = "حدث خطأ ما";
-      isLoading = false;
+      status = Status.error;
       notifyListeners();
       return false;
     }

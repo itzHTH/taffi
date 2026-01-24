@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:taffi/core/routing/route_names.dart';
 import 'package:taffi/core/widgets/specialty_card.dart';
-import 'package:taffi/features/booking/screens/booking_screen.dart';
 
 class SliverSpecialtyGrid extends StatefulWidget {
   const SliverSpecialtyGrid({super.key});
@@ -11,34 +11,13 @@ class SliverSpecialtyGrid extends StatefulWidget {
 
 class _SliverSpecialtyGridState extends State<SliverSpecialtyGrid> {
   final List<Map<String, String>> specialties = [
-    {
-      "name": "الجلدية والتجميل",
-      "iconUrl": "https://taafi.ddns.net/uploads/specialties/derma.svg",
-    },
-    {
-      "name": "أنف وأذن وحنجرة",
-      "iconUrl": "https://taafi.ddns.net/uploads/specialties/ent.svg",
-    },
-    {
-      "name": "طب العيون",
-      "iconUrl": "https://taafi.ddns.net/uploads/specialties/eye.svg",
-    },
-    {
-      "name": "أمراض القلب",
-      "iconUrl": "https://taafi.ddns.net/uploads/specialties/heart.svg",
-    },
-    {
-      "name": "طب الأطفال",
-      "iconUrl": "https://taafi.ddns.net/uploads/specialties/baby.svg",
-    },
-    {
-      "name": "العظام والمفاصل",
-      "iconUrl": "https://taafi.ddns.net/uploads/specialties/bone.svg",
-    },
-    {
-      "name": "طب الأسنان",
-      "iconUrl": "https://taafi.ddns.net/uploads/specialties/tooth.svg",
-    },
+    {"name": "الجلدية والتجميل", "iconUrl": "https://taafi.ddns.net/uploads/specialties/derma.svg"},
+    {"name": "أنف وأذن وحنجرة", "iconUrl": "https://taafi.ddns.net/uploads/specialties/ent.svg"},
+    {"name": "طب العيون", "iconUrl": "https://taafi.ddns.net/uploads/specialties/eye.svg"},
+    {"name": "أمراض القلب", "iconUrl": "https://taafi.ddns.net/uploads/specialties/heart.svg"},
+    {"name": "طب الأطفال", "iconUrl": "https://taafi.ddns.net/uploads/specialties/baby.svg"},
+    {"name": "العظام والمفاصل", "iconUrl": "https://taafi.ddns.net/uploads/specialties/bone.svg"},
+    {"name": "طب الأسنان", "iconUrl": "https://taafi.ddns.net/uploads/specialties/tooth.svg"},
   ];
 
   @override
@@ -56,10 +35,7 @@ class _SliverSpecialtyGridState extends State<SliverSpecialtyGrid> {
           title: specialties[index]['name'] ?? "اسم التخصص",
           imageUrl: specialties[index]['iconUrl'] ?? "",
           onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const BookingScreen()),
-            );
+            Navigator.pushNamed(context, RouteNames.booking);
           },
         );
       },

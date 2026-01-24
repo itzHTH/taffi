@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:taffi/core/enums/status_enum.dart';
+import 'package:taffi/core/routing/route_names.dart';
 import 'package:taffi/core/utils/validators.dart';
 import 'package:taffi/features/auth/providers/register_provider.dart';
-import 'package:taffi/features/auth/screens/fill_personal_info_screen.dart';
 import 'package:taffi/features/auth/widgets/custom_text_form_filed.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -44,13 +45,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       email: emailController.text,
       password: passwordController.text,
     );
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) =>
-            ChangeNotifierProvider.value(value: provider, child: FillPersonalInfoScreen()),
-      ),
-    );
+    Navigator.pushNamed(context, RouteNames.fillPersonalInfo);
   }
 
   @override
@@ -162,7 +157,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   style: ElevatedButton.styleFrom(
                                     fixedSize: Size(MediaQuery.widthOf(context), 60),
                                   ),
-                                  child: provider.isLoading
+                                  child: provider.status == Status.loading
                                       ? CircularProgressIndicator()
                                       : Text(
                                           "انشاء الحساب",

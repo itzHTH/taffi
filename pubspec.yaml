@@ -37,6 +37,7 @@ dependencies:
   flutter_secure_storage: ^10.0.0
   flutter_svg: ^2.2.3
   google_sign_in: ^5.2.1
+  jwt_decoder: ^2.0.1
   provider: ^6.1.5+1
   shared_preferences: ^2.5.4
   smooth_page_indicator: ^2.0.1

@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:taffi/core/data/local/secure_storage.dart';
-import 'package:taffi/features/auth/screens/login_screen.dart';
-import 'package:taffi/features/home/screens/main_screen.dart';
+import 'package:taffi/core/routing/route_names.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -95,18 +94,22 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
   Future<void> _checkAuthStatus() async {
     await Future.delayed(const Duration(seconds: 3));
     final storage = SecureStorage.instance;
-    final String? token = await storage.getAccessToken();
+    final String? refreshToken = await storage.getRefreshToken();
+    final String? refreshTokenExpireAt = await storage.getRefreshTokenExpireAt();
+
     if (!mounted) return;
-    if (token != null && token.isNotEmpty) {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const MainScreen()),
-      );
+
+    if (refreshToken != null &&
+        refreshToken.isNotEmpty &&
+        refreshTokenExpireAt != null &&
+        refreshTokenExpireAt.isNotEmpty) {
+      if (DateTime.now().isBefore(DateTime.parse(refreshTokenExpireAt))) {
+        Navigator.pushReplacementNamed(context, RouteNames.main);
+      } else {
+        Navigator.pushReplacementNamed(context, RouteNames.login);
+      }
     } else {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const LoginScreen()),
-      );
+      Navigator.pushReplacementNamed(context, RouteNames.login);
     }
   }
 

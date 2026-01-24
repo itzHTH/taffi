@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
+import 'package:taffi/core/enums/status_enum.dart';
+import 'package:taffi/core/routing/route_names.dart';
 import 'package:taffi/core/utils/validators.dart';
 import 'package:taffi/features/auth/providers/login_provider.dart';
-import 'package:taffi/features/auth/providers/register_provider.dart';
-import 'package:taffi/features/auth/screens/register_screen.dart';
 import 'package:taffi/features/auth/widgets/custom_text_form_filed.dart';
-import 'package:taffi/features/home/screens/main_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -46,10 +45,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
     if (!context.mounted) return;
     if (result) {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const MainScreen()),
-      );
+      Navigator.pushReplacementNamed(context, RouteNames.main);
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -142,7 +138,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 style: ElevatedButton.styleFrom(
                                   fixedSize: Size(MediaQuery.widthOf(context), 60),
                                 ),
-                                child: provider.isLoading
+                                child: provider.status == Status.loading
                                     ? const CircularProgressIndicator()
                                     : Text(
                                         "تسجيل دخول",
@@ -199,10 +195,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                       .loginWithGoogle();
                                   if (!context.mounted) return;
                                   if (result) {
-                                    Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(builder: (context) => MainScreen()),
-                                    );
+                                    Navigator.pushReplacementNamed(context, RouteNames.main);
                                   } else {
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(
@@ -228,15 +221,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 TextButton(
                                   style: TextButton.styleFrom(padding: EdgeInsets.zero),
                                   onPressed: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => ChangeNotifierProvider(
-                                          create: (context) => RegisterProvider(),
-                                          child: RegisterScreen(),
-                                        ),
-                                      ),
-                                    );
+                                    Navigator.pushNamed(context, RouteNames.register);
                                   },
                                   child: Text(
                                     "انشاء حساب",

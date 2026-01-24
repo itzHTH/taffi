@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:taffi/core/constants/api_config.dart';
-import 'package:taffi/core/constants/app_constants.dart';
 import 'package:taffi/core/data/local/secure_storage.dart';
 import 'package:taffi/core/data/remote/api_service.dart';
 import 'package:taffi/core/data/remote/server_exception.dart';
+import 'package:taffi/core/enums/status_enum.dart';
+import 'package:taffi/features/auth/models/auth_model.dart';
 
 class RegisterProvider extends ChangeNotifier {
   String? errorMessage;
-  bool isLoading = false;
+  Status status = Status.initial;
+  bool isGoogleLogin = false;
 
   String? name;
   String? phone;
@@ -22,13 +24,13 @@ class RegisterProvider extends ChangeNotifier {
     required String email,
     required String password,
   }) async {
-    isLoading = true;
+    status = Status.loading;
     notifyListeners();
     await Future.delayed(const Duration(milliseconds: 500));
     this.username = username;
     this.email = email;
     this.password = password;
-    isLoading = false;
+    status = Status.success;
     notifyListeners();
   }
 
@@ -38,7 +40,7 @@ class RegisterProvider extends ChangeNotifier {
     required String age,
     required String governorate,
   }) async {
-    isLoading = true;
+    status = Status.loading;
     notifyListeners();
 
     try {
@@ -54,38 +56,86 @@ class RegisterProvider extends ChangeNotifier {
           "age": int.parse(age),
         },
       );
+      final registerAuthModel = AuthModel.fromJson(registerResponse);
       // Check if the user is registered
-      if (registerResponse["isAuthenticated"] == true) {
+      if (registerAuthModel.isAuthenticated == true) {
         // Login the user
         final loginResponse = await ApiService.instance.post(
           EndPoints.auth.login,
           data: {"email": email, "password": password},
         );
+        final loginAuthModel = AuthModel.fromJson(loginResponse);
         // check if the user is logged in
-        if (loginResponse["isAuthenticated"] == true) {
+        if (loginAuthModel.isAuthenticated == true) {
           SecureStorage.instance.saveTokens(
-            loginResponse[AppConstants.accessToken],
-            loginResponse[AppConstants.refreshToken],
+            loginAuthModel.token,
+            loginAuthModel.refreshToken,
+            loginAuthModel.refreshTokenExpiration,
           );
-          isLoading = false;
+          status = Status.success;
           notifyListeners();
           return true;
         }
       }
       // if the user is not registered or not logged in
-      isLoading = false;
+      status = Status.error;
       notifyListeners();
       return false;
     } on ServerException catch (e) {
       // server error
       errorMessage = e.message;
-      isLoading = false;
+      status = Status.error;
       notifyListeners();
       return false;
     } catch (e) {
       // unknown error
       errorMessage = "حدث خطأ ما";
-      isLoading = false;
+      status = Status.error;
+      notifyListeners();
+      return false;
+    }
+  }
+
+  Future<bool> updateUserInfo({
+    required String name,
+    required String phone,
+    required String age,
+    required String governorate,
+  }) async {
+    status = Status.loading;
+    notifyListeners();
+
+    try {
+      final updateProfileResponse = await ApiService.instance.put(
+        EndPoints.auth.updateProfile,
+        data: {
+          "fullName": name,
+          "governorate": governorate,
+          "phoneNumber": phone,
+          "age": int.parse(age),
+        },
+      );
+      final updateProfileAuthModel = AuthModel.fromJson(updateProfileResponse);
+      // Check if the user is updated
+      if (updateProfileAuthModel.isAuthenticated == true) {
+        status = Status.success;
+        notifyListeners();
+        return true;
+      }
+      // if the user is not updated
+      status = Status.error;
+      notifyListeners();
+      return false;
+    } on ServerException catch (e) {
+      // server error
+      errorMessage = e.message;
+      status = Status.error;
+      notifyListeners();
+      return false;
+    } catch (e) {
+      // unknown error
+      errorMessage = "حدث خطأ ما";
+      status = Status.error;
       notifyListeners();
       return false;
     }

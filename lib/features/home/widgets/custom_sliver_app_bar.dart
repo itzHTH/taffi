@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:taffi/features/notifications/screens/notifications_screen.dart';
+import 'package:taffi/core/routing/route_names.dart';
 
 class CustomSliverAppBar extends StatelessWidget {
   const CustomSliverAppBar({super.key});
@@ -11,22 +11,14 @@ class CustomSliverAppBar extends StatelessWidget {
       backgroundColor: Colors.transparent,
       leading: const CircleAvatar(
         radius: 30,
-        backgroundImage: AssetImage(
-          "assets/images/user.png",
-        ),
+        backgroundImage: AssetImage("assets/images/user.png"),
       ),
       centerTitle: false,
       title: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            "Huthaifa M. Flayyih",
-            style: Theme.of(context).textTheme.labelMedium,
-          ),
-          Text(
-            "077428697555",
-            style: Theme.of(context).textTheme.bodySmall,
-          ),
+          Text("Huthaifa M. Flayyih", style: Theme.of(context).textTheme.labelMedium),
+          Text("077428697555", style: Theme.of(context).textTheme.bodySmall),
         ],
       ),
       actions: [
@@ -37,18 +29,9 @@ class CustomSliverAppBar extends StatelessWidget {
               height: 40,
               child: ElevatedButton(
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          const NotificationsScreen(),
-                    ),
-                  );
+                  Navigator.pushNamed(context, RouteNames.notifications);
                 },
-                child: SvgPicture.asset(
-                  "assets/images/bell.svg",
-                  fit: BoxFit.cover,
-                ),
+                child: SvgPicture.asset("assets/images/bell.svg", fit: BoxFit.cover),
               ),
             ),
             Positioned(
@@ -61,12 +44,7 @@ class CustomSliverAppBar extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: Color(0xffFF1414),
                   shape: BoxShape.circle,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Color(0xffFF1414),
-                      blurRadius: 1,
-                    ),
-                  ],
+                  boxShadow: [BoxShadow(color: Color(0xffFF1414), blurRadius: 1)],
                 ),
               ),
             ),
