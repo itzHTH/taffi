@@ -118,6 +118,11 @@ class RegisterProvider extends ChangeNotifier {
       final updateProfileAuthModel = AuthModel.fromJson(updateProfileResponse);
       // Check if the user is updated
       if (updateProfileAuthModel.isAuthenticated == true) {
+        SecureStorage.instance.saveTokens(
+          updateProfileAuthModel.token,
+          updateProfileAuthModel.refreshToken,
+          updateProfileAuthModel.refreshTokenExpiration,
+        );
         status = Status.success;
         notifyListeners();
         return true;
