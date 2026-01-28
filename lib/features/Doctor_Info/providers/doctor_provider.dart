@@ -13,6 +13,7 @@ import 'package:taffi/features/Doctor_Info/models/schedule_day_model.dart';
 class DoctorProvider extends ChangeNotifier {
   List<DoctorModel> doctors = [];
   List<DoctorModel> topDoctors = [];
+  List<DoctorModel> doctorsBySpecialty = [];
   DoctorModel? doctor;
 
   DateTime? selectedDate;
@@ -22,6 +23,7 @@ class DoctorProvider extends ChangeNotifier {
   Status doctorsStatus = Status.initial;
   Status topDoctorsStatus = Status.initial;
   Status doctorStatus = Status.initial;
+  Status doctorsBySpecialtyStatus = Status.initial;
 
   String? errorMessage;
 
@@ -185,5 +187,39 @@ class DoctorProvider extends ChangeNotifier {
     selectedScheduleIndex = null;
     timeSlots = [];
     doctor = null;
+  }
+
+  Future<void> getDoctorsBySpecialty(String specialtyId) async {
+    try {
+      doctorsBySpecialtyStatus = Status.loading;
+      notifyListeners();
+
+      final doctorsBySpecialtyResponse = await ApiService.instance.get(
+        EndPoints.doctors.bySpecialty(specialtyId),
+      );
+
+      final doctorsBySpecialtyData = ApiResponse<List<DoctorModel>>.fromJson(
+        doctorsBySpecialtyResponse,
+        (json) => (json as List).map((e) => DoctorModel.fromJson(e)).toList(),
+      );
+
+      if (doctorsBySpecialtyData.success) {
+        doctorsBySpecialty = doctorsBySpecialtyData.data!;
+        doctorsBySpecialtyStatus = Status.success;
+        notifyListeners();
+      } else {
+        doctorsBySpecialtyStatus = Status.error;
+        errorMessage = doctorsBySpecialtyData.message;
+        notifyListeners();
+      }
+    } on ServerException catch (e) {
+      doctorsBySpecialtyStatus = Status.error;
+      errorMessage = e.message;
+      notifyListeners();
+    } catch (e) {
+      doctorsBySpecialtyStatus = Status.error;
+      errorMessage = e.toString();
+      notifyListeners();
+    }
   }
 }

@@ -1,20 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
+import 'package:taffi/core/enums/status_enum.dart';
 import 'package:taffi/core/routing/route_names.dart';
 import 'package:taffi/core/widgets/specialty_card.dart';
+import 'package:taffi/features/specialties/providers/specialty_provider.dart';
+import 'package:taffi/features/specialties/widgets/specialty_card_shimmer.dart';
 
 class CustomSpecialtiesSection extends StatelessWidget {
-  CustomSpecialtiesSection({super.key});
-
-  final List<Map<String, String>> specialties = [
-    {
-      "imageUrl": "https://taafi.ddns.net/uploads/specialties/derma.svg",
-      "title": "الجلدية والتجميل",
-    },
-    {"imageUrl": "https://taafi.ddns.net/uploads/specialties/ent.svg", "title": "أنف وأذن وحنجرة"},
-    {"imageUrl": "https://taafi.ddns.net/uploads/specialties/eye.svg", "title": "طب العيون"},
-    {"imageUrl": "https://taafi.ddns.net/uploads/specialties/heart.svg", "title": "أمراض القلب"},
-  ];
+  const CustomSpecialtiesSection({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -42,21 +36,59 @@ class CustomSpecialtiesSection extends StatelessWidget {
           ],
         ),
         SizedBox(height: 6),
-        Row(
+        SpecialtiesRow(),
+      ],
+    );
+  }
+}
+
+class SpecialtiesRow extends StatefulWidget {
+  const SpecialtiesRow({super.key});
+
+  @override
+  State<SpecialtiesRow> createState() => _SpecialtiesRowState();
+}
+
+class _SpecialtiesRowState extends State<SpecialtiesRow> {
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<SpecialtyProvider>(
+      builder: (context, provider, child) {
+        if (provider.specialtiesStatus == Status.loading) {
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: List.generate(4, (index) => const SpecialtyCardShimmer()),
+          );
+        }
+
+        if (provider.specialtiesStatus == Status.error) {
+          return Center(
+            child: Text(provider.errorMessage, style: TextStyle(color: Colors.red)),
+          );
+        }
+
+        if (provider.specialties.isEmpty) {
+          return Center(child: Text("لا توجد تخصصات حاليا"));
+        }
+
+        return Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: List.generate(
             4,
             (index) => SpecialtyCard(
-              imageUrl: specialties[index]["imageUrl"]!,
-              title: specialties[index]["title"]!,
+              imageUrl: provider.specialties[index].iconUrl ?? "",
+              title: provider.specialties[index].name ?? "التخصص",
+              hasHero: false,
               onTap: () {
+                provider.setSelectedSpecialty(provider.specialties[index]);
                 Navigator.pushNamed(context, RouteNames.booking);
               },
             ),
           ),
-        ),
-      ],
+        );
+      },
     );
   }
 }

@@ -5,6 +5,7 @@ import 'package:taffi/core/routing/route_names.dart';
 import 'package:taffi/core/services/navigation_service.dart';
 import 'package:taffi/core/theme/app_theme.dart';
 import 'package:taffi/features/Doctor_Info/providers/doctor_provider.dart';
+import 'package:taffi/features/specialties/providers/specialty_provider.dart';
 
 void main() {
   runApp(const TaffiApp());
@@ -16,7 +17,10 @@ class TaffiApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      providers: [ChangeNotifierProvider(create: (context) => DoctorProvider())],
+      providers: [
+        ChangeNotifierProvider(create: (context) => DoctorProvider()..getAllDoctors()),
+        ChangeNotifierProvider(create: (context) => SpecialtyProvider()..getSpecialties()),
+      ],
       child: MaterialApp(
         title: 'Taffi',
         theme: AppTheme.lightTheme,

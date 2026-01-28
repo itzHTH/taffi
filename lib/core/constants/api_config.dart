@@ -14,6 +14,7 @@ class EndPoints {
   static const AppointmentsEndPoints appointments = AppointmentsEndPoints();
   static const ChatEndPoints chat = ChatEndPoints();
   static const NotificationsEndPoints notifications = NotificationsEndPoints();
+  static const SpecialtiesEndPoints specialties = SpecialtiesEndPoints();
 }
 
 // 1. Auth Group
@@ -35,6 +36,7 @@ class DoctorsEndPoints {
   String search({String? query, String? specialtyId}) =>
       '/Doctor?search=$query&specialtyId=$specialtyId';
   String schedule(String id) => '/Doctor/$id/schedule';
+  String bySpecialty(String specialtyId) => '/Speciality/doctors/$specialtyId';
 }
 
 // 3. Appointments Group
@@ -58,4 +60,10 @@ class NotificationsEndPoints {
   const NotificationsEndPoints();
   final String getAll = '/Notifications';
   String markRead(String id) => '/Notifications/$id/read';
+}
+
+// 6. Specialties Group
+class SpecialtiesEndPoints {
+  const SpecialtiesEndPoints();
+  final String getAll = '/Speciality/specialties';
 }

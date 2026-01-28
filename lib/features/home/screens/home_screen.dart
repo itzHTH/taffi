@@ -22,18 +22,12 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       getTopDoctors();
-      getAllDoctors();
     });
   }
 
   Future<void> getTopDoctors() async {
     final doctorProvider = Provider.of<DoctorProvider>(context, listen: false);
     await doctorProvider.getTopDoctors();
-  }
-
-  Future<void> getAllDoctors() async {
-    final doctorProvider = Provider.of<DoctorProvider>(context, listen: false);
-    await doctorProvider.getAllDoctors();
   }
 
   @override

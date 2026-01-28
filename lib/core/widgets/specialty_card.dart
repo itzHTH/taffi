@@ -7,11 +7,13 @@ class SpecialtyCard extends StatelessWidget {
     required this.imageUrl,
     required this.title,
     required this.onTap,
+    this.hasHero = true,
   });
 
   final String imageUrl;
   final String title;
   final VoidCallback onTap;
+  final bool hasHero;
 
   @override
   Widget build(BuildContext context) {
@@ -33,13 +35,24 @@ class SpecialtyCard extends StatelessWidget {
               padding: EdgeInsets.all(16),
             ),
             SizedBox(height: 4),
-            Text(
-              title,
-              style: Theme.of(context).textTheme.titleMedium,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-              textAlign: TextAlign.center,
-            ),
+            hasHero
+                ? Hero(
+                    tag: title,
+                    child: Text(
+                      title,
+                      style: Theme.of(context).textTheme.titleMedium,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.center,
+                    ),
+                  )
+                : Text(
+                    title,
+                    style: Theme.of(context).textTheme.titleMedium,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.center,
+                  ),
           ],
         ),
       ),

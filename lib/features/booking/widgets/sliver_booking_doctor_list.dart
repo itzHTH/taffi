@@ -1,66 +1,66 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:taffi/core/enums/status_enum.dart';
 import 'package:taffi/core/routing/route_names.dart';
 import 'package:taffi/core/widgets/big_doctor_card.dart';
+import 'package:taffi/core/widgets/big_doctor_card_shimmer.dart';
+import 'package:taffi/features/Doctor_Info/providers/doctor_provider.dart';
 
-class SliverBookingDoctorList extends StatefulWidget {
+class SliverBookingDoctorList extends StatelessWidget {
   const SliverBookingDoctorList({super.key});
 
   @override
-  State<SliverBookingDoctorList> createState() => _SliverBookingDoctorListState();
-}
-
-class _SliverBookingDoctorListState extends State<SliverBookingDoctorList> {
-  final List<Map<String, dynamic>> doctors = [
-    {
-      "name": "د. عمر فاروق",
-      "imageUrl": "https://taafi.ddns.net/uploads/doctors/dr_omar.png",
-      "specialization": "طب العيون",
-      "rating": 4.60,
-      "location": "ديالى",
-    },
-    {
-      "name": "د. منى سامي",
-      "imageUrl": "https://taafi.ddns.net/uploads/doctors/dr_mona.png",
-      "specialization": "أنف وأذن وحنجرة",
-      "rating": 5.00,
-      "location": "انبار",
-    },
-    {
-      "name": "د. علي حسين كاظم",
-      "imageUrl": "https://taafi.ddns.net/uploads/doctors/dr_ali.png",
-      "specialization": "طب الأطفال",
-      "rating": 4.90,
-      "location": "القاهرة",
-    },
-    {
-      "name": "د. نور الهدى",
-      "imageUrl": "https://taafi.ddns.net/uploads/doctors/dr_noor.png",
-      "specialization": "طب الأسنان",
-      "rating": 4.40,
-      "location": "اربيل",
-    },
-  ];
-
-  @override
   Widget build(BuildContext context) {
-    return SliverList.builder(
-      itemCount: doctors.length,
-      itemBuilder: (context, index) {
-        return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
-          child: BigDoctorCard(
-            doctorName: doctors[index]["name"],
-            doctorSpecialization: doctors[index]["specialization"],
-            rating: doctors[index]["rating"],
-            doctorImage: doctors[index]["imageUrl"],
-            doctorLocation: doctors[index]["location"],
-            onBookingTap: () {
-              Navigator.pushNamed(context, RouteNames.doctorInfo);
-            },
+    return Consumer<DoctorProvider>(
+      builder: (context, doctorProvider, child) {
+        if (doctorProvider.doctorsBySpecialtyStatus == Status.loading) {
+          return SliverToBoxAdapter(
+            child: Center(
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: 5,
+                itemBuilder: (context, index) => Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  child: BigDoctorCardShimmer(),
+                ),
+              ),
+            ),
+          );
+        } else if (doctorProvider.doctorsBySpecialtyStatus == Status.error) {
+          return SliverToBoxAdapter(
+            child: Center(child: Text('حصل خطأ ما', style: Theme.of(context).textTheme.titleLarge)),
+          );
+        }
+        return doctorProvider.doctorsBySpecialty.isEmpty
+            ? SliverToBoxAdapter(
+                child: Center(
+                  child: Text('لا يوجد أطباء', style: Theme.of(context).textTheme.titleLarge),
+                ),
+              )
+            : SliverList.builder(
+                itemCount: doctorProvider.doctorsBySpecialty.length,
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+                    child: BigDoctorCard(
+                      doctorName: doctorProvider.doctorsBySpecialty[index].name!,
+                      doctorSpecialization: doctorProvider.doctorsBySpecialty[index].specialtyName!,
+                      rating: doctorProvider.doctorsBySpecialty[index].rate!,
+                      doctorImage: doctorProvider.doctorsBySpecialty[index].imageUrl!,
+                      doctorLocation: doctorProvider.doctorsBySpecialty[index].location!,
+                      onBookingTap: () {
+                        Navigator.pushNamed(
+                          context,
+                          RouteNames.doctorInfo,
+                          arguments: doctorProvider.doctorsBySpecialty[index],
+                        );
+                      },
 
-            isDashedBorder: true,
-          ),
-        );
+                      isDashedBorder: true,
+                    ),
+                  );
+                },
+              );
       },
     );
   }

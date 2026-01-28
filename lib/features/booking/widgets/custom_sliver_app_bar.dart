@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:taffi/core/theme/app_colors.dart';
+import 'package:taffi/features/specialties/providers/specialty_provider.dart';
 
 class CustomSliverAppBar extends StatelessWidget {
   const CustomSliverAppBar({super.key});
@@ -11,19 +13,16 @@ class CustomSliverAppBar extends StatelessWidget {
       surfaceTintColor: Colors.transparent,
       automaticallyImplyLeading: false,
       title: Hero(
-        tag: "SpecialName",
+        tag: Provider.of<SpecialtyProvider>(context).selectedSpecialty!.name!,
         child: Text(
-          "امراض القلب",
+          Provider.of<SpecialtyProvider>(context).selectedSpecialty!.name!,
           style: Theme.of(context).textTheme.titleLarge,
         ),
       ),
       pinned: true,
       centerTitle: true,
       leading: IconButton(
-        icon: Icon(
-          Icons.arrow_back_ios_new_outlined,
-          color: AppColors.primary,
-        ),
+        icon: Icon(Icons.arrow_back_ios_new_outlined, color: AppColors.primary),
         onPressed: () {
           Navigator.pop(context);
         },
