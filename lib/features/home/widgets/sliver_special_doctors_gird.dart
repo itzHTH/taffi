@@ -1,61 +1,59 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:taffi/core/enums/status_enum.dart';
+import 'package:taffi/core/routing/route_names.dart';
+import 'package:taffi/features/Doctor_Info/models/doctor_model.dart';
+import 'package:taffi/features/Doctor_Info/providers/doctor_provider.dart';
+import 'package:taffi/features/home/widgets/doctor_card_shimmer.dart';
 import 'package:taffi/features/home/widgets/special_doctor_card.dart';
 
 class SliverSpecialDoctorsGird extends StatefulWidget {
   const SliverSpecialDoctorsGird({super.key});
 
   @override
-  State<SliverSpecialDoctorsGird> createState() =>
-      _SliverSpecialDoctorsGirdState();
+  State<SliverSpecialDoctorsGird> createState() => _SliverSpecialDoctorsGirdState();
 }
 
 class _SliverSpecialDoctorsGirdState extends State<SliverSpecialDoctorsGird> {
-  List<Map<String, dynamic>> specialDoctors = [
-    {
-      "name": "د. عمر فاروق",
-      "imageUrl": "https://taafi.ddns.net/uploads/doctors/dr_omar.png",
-      "specialty": "طب العيون",
-      "rating": 4.60,
-    },
-    {
-      "name": "د. منى سامي",
-      "imageUrl": "https://taafi.ddns.net/uploads/doctors/dr_mona.png",
-      "specialty": "أنف وأذن وحنجرة",
-      "rating": 5.00,
-    },
-    {
-      "name": "د. علي حسين كاظم",
-      "imageUrl": "https://taafi.ddns.net/uploads/doctors/dr_ali.png",
-      "specialty": "طب الأطفال",
-      "rating": 4.90,
-    },
-    {
-      "name": "د. نور الهدى",
-      "imageUrl": "https://taafi.ddns.net/uploads/doctors/dr_noor.png",
-      "specialty": "طب الأسنان",
-      "rating": 4.40,
-    },
-  ];
+  void setDoctor(DoctorModel doctor) {
+    final provider = context.read<DoctorProvider>();
+    provider.setDoctor(doctor);
+  }
 
   @override
   Widget build(BuildContext context) {
+    final provider = context.watch<DoctorProvider>();
+
     return SliverPadding(
       padding: const EdgeInsets.only(bottom: 12),
       sliver: SliverGrid.builder(
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
           crossAxisSpacing: 12,
           mainAxisSpacing: 12,
           childAspectRatio: 0.90,
         ),
-
-        itemCount: specialDoctors.length,
+        // Show 4 shimmer items while loading, otherwise show actual doctors
+        itemCount: (provider.doctorsStatus == Status.loading || provider.doctors.isEmpty)
+            ? 4
+            : provider.doctors.length,
         itemBuilder: (context, index) {
+          // Show shimmer while loading or empty
+          if (provider.doctorsStatus == Status.loading || provider.doctors.isEmpty) {
+            return const DoctorCardShimmer();
+          }
+
+          // Show actual doctor card
+          final doctor = provider.doctors[index];
           return SpecialDoctorCard(
-            doctorName: specialDoctors[index]["name"] ?? "اسم الدكتور",
-            imageUrl: specialDoctors[index]["imageUrl"] ?? "",
-            doctorSpecialty: specialDoctors[index]["specialty"] ?? "التخصص",
-            rating: specialDoctors[index]["rating"] ?? 0.0,
+            doctorName: doctor.name ?? "اسم الدكتور",
+            imageUrl: doctor.imageUrl ?? "",
+            doctorSpecialty: doctor.specialtyName ?? "التخصص",
+            rating: doctor.rate ?? 0.0,
+            onTap: () {
+              setDoctor(doctor);
+              Navigator.pushNamed(context, RouteNames.doctorInfo, arguments: doctor);
+            },
           );
         },
       ),

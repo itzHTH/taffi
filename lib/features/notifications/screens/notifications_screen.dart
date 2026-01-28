@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:taffi/core/enums/status_enum.dart';
 import 'package:taffi/core/theme/app_colors.dart';
+import 'package:taffi/core/utils/helpers.dart';
 import 'package:taffi/features/notifications/providers/notification_provider.dart';
 import 'package:taffi/features/notifications/widgets/notification_item.dart';
 import 'package:taffi/features/notifications/widgets/notification_shimmer.dart';
@@ -157,7 +158,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                   return NotificationItem(
                     title: notification.title ?? "عنوان الإشعار",
                     message: notification.message ?? "رسالة الإشعار",
-                    time: notification.createdAt?.toLocal().toString() ?? "وقت الإشعار",
+                    time: Helpers.formatDate(notification.createdAt ?? DateTime.utc(0000, 0, 0)),
                     isRead: notification.isRead ?? false,
                     onRead: () async => await _markAsRead(notification.id ?? ""),
                   );

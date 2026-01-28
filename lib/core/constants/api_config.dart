@@ -32,6 +32,8 @@ class DoctorsEndPoints {
   const DoctorsEndPoints();
   final String base = '/Doctor';
   String byId(String id) => '/Doctor/$id';
+  String search({String? query, String? specialtyId}) =>
+      '/Doctor?search=$query&specialtyId=$specialtyId';
   String schedule(String id) => '/Doctor/$id/schedule';
 }
 

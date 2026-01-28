@@ -75,11 +75,13 @@ class ProfileScreen extends StatelessWidget {
                     onTap: () async {
                       final storage = SecureStorage.instance;
                       await storage.deleteTokens();
-                      Navigator.pushNamedAndRemoveUntil(
-                        context,
-                        RouteNames.login,
-                        (route) => false,
-                      );
+                      if (context.mounted) {
+                        Navigator.pushNamedAndRemoveUntil(
+                          context,
+                          RouteNames.login,
+                          (route) => false,
+                        );
+                      }
                     },
                   ),
                   const SizedBox(height: 8),

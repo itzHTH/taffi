@@ -1,6 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:taffi/core/routing/route_names.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:taffi/core/theme/app_colors.dart';
 import 'package:taffi/core/widgets/rating_badge.dart';
 
@@ -11,12 +11,14 @@ class SpecialDoctorCard extends StatelessWidget {
     required this.doctorName,
     required this.doctorSpecialty,
     required this.rating,
+    required this.onTap,
   });
 
   final String imageUrl;
   final String doctorName;
   final String doctorSpecialty;
   final double rating;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -26,9 +28,7 @@ class SpecialDoctorCard extends StatelessWidget {
       elevation: 3,
       clipBehavior: Clip.antiAlias,
       child: InkWell(
-        onTap: () {
-          Navigator.pushNamed(context, RouteNames.doctorInfo);
-        },
+        onTap: onTap,
         child: Column(
           children: [
             Stack(
@@ -43,12 +43,15 @@ class SpecialDoctorCard extends StatelessWidget {
                   child: CachedNetworkImage(
                     imageUrl: imageUrl,
                     fit: BoxFit.contain,
-                    placeholder: (context, url) => const Center(
-                      child: Center(
-                        child: SizedBox(
-                          width: 50,
-                          height: 50,
-                          child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+                    placeholder: (context, url) => Shimmer.fromColors(
+                      baseColor: Colors.grey[300]!,
+                      highlightColor: Colors.grey[100]!,
+                      child: Container(
+                        width: double.infinity,
+                        height: 140,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(12),
                         ),
                       ),
                     ),

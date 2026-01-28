@@ -26,20 +26,16 @@ class BigDoctorCard extends StatefulWidget {
   final bool isDashedBorder;
 
   @override
-  State<BigDoctorCard> createState() =>
-      _BigDoctorCardState();
+  State<BigDoctorCard> createState() => _BigDoctorCardState();
 }
 
-class _BigDoctorCardState extends State<BigDoctorCard>
-    with AutomaticKeepAliveClientMixin {
+class _BigDoctorCardState extends State<BigDoctorCard> with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
     super.build(context);
     return Container(
       decoration: BoxDecoration(
-        color: widget.isDashedBorder
-            ? Colors.transparent
-            : AppColors.secondary,
+        color: widget.isDashedBorder ? Colors.transparent : AppColors.secondary,
         borderRadius: BorderRadius.circular(12),
         border: widget.isDashedBorder
             ? DashedBorder(
@@ -50,14 +46,11 @@ class _BigDoctorCardState extends State<BigDoctorCard>
                 borderRadius: BorderRadius.circular(12),
               )
             : null,
-
         boxShadow: widget.isDashedBorder
             ? []
             : [
                 BoxShadow(
-                  color: Colors.black.withValues(
-                    alpha: 0.3,
-                  ),
+                  color: Colors.black.withValues(alpha: 0.3),
                   offset: const Offset(0, 2),
                   blurRadius: 8,
                 ),
@@ -65,31 +58,25 @@ class _BigDoctorCardState extends State<BigDoctorCard>
       ),
       height: 200,
       width: 200,
-      margin: EdgeInsets.symmetric(horizontal: 18),
-      padding: EdgeInsets.symmetric(horizontal: 36),
+      margin: const EdgeInsets.symmetric(horizontal: 18),
+      padding: const EdgeInsets.symmetric(horizontal: 36),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              CustomCachedNetworkAvatar(
-                imageUrl: widget.doctorImage,
-                size: 70,
-              ),
-              SizedBox(width: 18),
+              CustomCachedNetworkAvatar(imageUrl: widget.doctorImage, size: 70),
+              const SizedBox(width: 18),
               Column(
-                crossAxisAlignment:
-                    CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     widget.doctorName,
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w600,
-                      color: widget.isDashedBorder
-                          ? Colors.black
-                          : Colors.white,
+                      color: widget.isDashedBorder ? Colors.black : Colors.white,
                     ),
                   ),
                   Row(
@@ -100,17 +87,14 @@ class _BigDoctorCardState extends State<BigDoctorCard>
                           fontSize: 15,
                           fontWeight: FontWeight.w500,
                           color: widget.isDashedBorder
-                              ? Color(0xff8F8F8F)
-                              : Color(0XFFBBBBBB),
+                              ? const Color(0xff8F8F8F)
+                              : const Color(0XFFBBBBBB),
                         ),
                       ),
-                      SizedBox(width: 8),
+                      const SizedBox(width: 8),
                       RatingBadge(
                         rating: widget.rating,
-
-                        textColor: widget.isDashedBorder
-                            ? Colors.black
-                            : Colors.white,
+                        textColor: widget.isDashedBorder ? Colors.black : Colors.white,
                       ),
                     ],
                   ),
@@ -118,28 +102,25 @@ class _BigDoctorCardState extends State<BigDoctorCard>
               ),
             ],
           ),
-          SizedBox(height: 28),
+          const SizedBox(height: 28),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(
                 Icons.location_on,
-                color: widget.isDashedBorder
-                    ? Color(0xff8F8F8F)
-                    : Color(0XFFBBBBBB),
+                color: widget.isDashedBorder ? const Color(0xff8F8F8F) : const Color(0XFFBBBBBB),
               ),
-              SizedBox(width: 8),
+              const SizedBox(width: 8),
               Expanded(
                 child: Column(
-                  crossAxisAlignment:
-                      CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       "الموقع",
                       style: TextStyle(
                         color: widget.isDashedBorder
-                            ? Color(0xff8F8F8F)
-                            : Color(0xffBBBBBB),
+                            ? const Color(0xff8F8F8F)
+                            : const Color(0xffBBBBBB),
                         fontSize: 14,
                       ),
                     ),
@@ -147,8 +128,8 @@ class _BigDoctorCardState extends State<BigDoctorCard>
                       widget.doctorLocation,
                       style: TextStyle(
                         color: widget.isDashedBorder
-                            ? Color(0xff8F8F8F)
-                            : Color(0xffBBBBBB),
+                            ? const Color(0xff8F8F8F)
+                            : const Color(0xffBBBBBB),
                         fontSize: 14,
                       ),
                       overflow: TextOverflow.ellipsis,
@@ -157,23 +138,16 @@ class _BigDoctorCardState extends State<BigDoctorCard>
                   ],
                 ),
               ),
-              SizedBox(width: 34),
+              const SizedBox(width: 34),
               ElevatedButton(
                 onPressed: widget.onBookingTap,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: widget.isDashedBorder
-                      ? AppColors.secondary
-                      : Colors.white,
-                  foregroundColor: widget.isDashedBorder
-                      ? Colors.white
-                      : Colors.black,
+                  backgroundColor: widget.isDashedBorder ? AppColors.secondary : Colors.white,
+                  foregroundColor: widget.isDashedBorder ? Colors.white : Colors.black,
                 ),
-                child: Text(
+                child: const Text(
                   "احجز  الأن",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                  ),
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                 ),
               ),
             ],

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:taffi/core/routing/app_router.dart';
 import 'package:taffi/core/routing/route_names.dart';
 import 'package:taffi/core/services/navigation_service.dart';
 import 'package:taffi/core/theme/app_theme.dart';
+import 'package:taffi/features/Doctor_Info/providers/doctor_provider.dart';
 
 void main() {
   runApp(const TaffiApp());
@@ -13,16 +15,19 @@ class TaffiApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Taffi',
-      theme: AppTheme.lightTheme,
-      debugShowCheckedModeBanner: false,
-      builder: (context, child) {
-        return Directionality(textDirection: TextDirection.rtl, child: child!);
-      },
-      initialRoute: RouteNames.splash,
-      onGenerateRoute: AppRouter.generateRoute,
-      navigatorKey: NavigationService().navigatorKey,
+    return MultiProvider(
+      providers: [ChangeNotifierProvider(create: (context) => DoctorProvider())],
+      child: MaterialApp(
+        title: 'Taffi',
+        theme: AppTheme.lightTheme,
+        debugShowCheckedModeBanner: false,
+        builder: (context, child) {
+          return Directionality(textDirection: TextDirection.rtl, child: child!);
+        },
+        initialRoute: RouteNames.splash,
+        onGenerateRoute: AppRouter.generateRoute,
+        navigatorKey: NavigationService().navigatorKey,
+      ),
     );
   }
 }

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:taffi/core/routing/route_names.dart';
-import 'package:taffi/features/Doctor%20Info/screens/doctor_info.dart';
+import 'package:taffi/features/Doctor_Info/models/doctor_model.dart';
+import 'package:taffi/features/Doctor_Info/screens/doctor_info.dart';
 import 'package:taffi/features/appointments/screens/appointments_screen.dart';
 import 'package:taffi/features/auth/providers/register_provider.dart';
 import 'package:taffi/features/auth/screens/fill_personal_info_screen.dart';
@@ -36,7 +37,12 @@ class AppRouter {
         return MaterialPageRoute(builder: (_) => const LoginScreen());
 
       case RouteNames.register:
-        return MaterialPageRoute(builder: (_) => const RegisterScreen());
+        return MaterialPageRoute(
+          builder: (_) => ChangeNotifierProvider.value(
+            value: RegisterProvider(),
+            child: const RegisterScreen(),
+          ),
+        );
 
       case RouteNames.fillPersonalInfo:
         final args = settings.arguments as Map<String, dynamic>?;
@@ -54,7 +60,9 @@ class AppRouter {
 
       // Doctor routes
       case RouteNames.doctorInfo:
-        return MaterialPageRoute(builder: (_) => const DoctorInfoScreen());
+        return MaterialPageRoute(
+          builder: (_) => DoctorInfoScreen(doctor: settings.arguments as DoctorModel),
+        );
 
       // Booking routes
       case RouteNames.booking:
