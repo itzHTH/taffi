@@ -64,9 +64,9 @@ class Validators {
       return 'رقم الهاتف مطلوب';
     }
 
-    final phoneRegex = RegExp(r'[0-9]{10,}');
+    final phoneRegex = RegExp(r'^[0-9]{11}$');
     if (!phoneRegex.hasMatch(value)) {
-      return 'يرجى إدخال رقم هاتف صحيح';
+      return 'يجب إدخال رقم هاتف مكون من 11 رقم';
     }
 
     return null;
@@ -93,15 +93,19 @@ class Validators {
 
     String trimmedValue = value.trim();
 
-    final RegExp nameRegex = RegExp(
-      r'^[\u0621-\u064A]+\s+[\u0621-\u064A]+\s+[\u0621-\u064A]+(?:[\s\u0621-\u064A]*)$',
-    );
+    // Split by spaces and filter out empty strings
+    List<String> words = trimmedValue.split(RegExp(r'\s+'));
 
-    if (!nameRegex.hasMatch(trimmedValue)) {
-      if (!RegExp(r'^[\u0621-\u064A\s]+$').hasMatch(trimmedValue)) {
-        return 'يجب استخدام الحروف العربية فقط';
-      }
+    // Check if there are at least 3 words
+    if (words.length < 3) {
       return 'يجب كتابة الاسم الثلاثي كاملاً (الاسم، اسم الأب، اسم الجد)';
+    }
+
+    // Check that each word contains at least 2 characters
+    for (var word in words) {
+      if (word.length < 2) {
+        return 'كل جزء من الاسم يجب أن يحتوي على حرفين على الأقل';
+      }
     }
 
     return null;

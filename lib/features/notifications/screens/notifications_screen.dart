@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:taffi/core/enums/status_enum.dart';
 import 'package:taffi/core/theme/app_colors.dart';
 import 'package:taffi/core/utils/helpers.dart';
+import 'package:taffi/core/utils/snackbar_helper.dart';
 import 'package:taffi/features/notifications/providers/notification_provider.dart';
 import 'package:taffi/features/notifications/widgets/notification_item.dart';
 import 'package:taffi/features/notifications/widgets/notification_shimmer.dart';
@@ -33,25 +34,17 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
     if (!mounted) return;
 
     if (success) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: const Text('تم وضع علامة مقروء بنجاح'),
-          backgroundColor: Colors.green,
-          behavior: SnackBarBehavior.floating,
-          duration: const Duration(seconds: 2),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-        ),
+      SnackBarHelper.showSuccess(
+        context,
+        'تم وضع علامة مقروء بنجاح',
+        duration: const Duration(seconds: 2),
       );
     } else {
       final errorMessage = context.read<NotificationProvider>().message;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(errorMessage ?? 'فشل في وضع علامة مقروء'),
-          backgroundColor: Colors.red,
-          behavior: SnackBarBehavior.floating,
-          duration: const Duration(seconds: 3),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-        ),
+      SnackBarHelper.showError(
+        context,
+        errorMessage ?? 'فشل في وضع علامة مقروء',
+        duration: const Duration(seconds: 3),
       );
     }
   }

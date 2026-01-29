@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:taffi/core/constants/app_constants.dart';
+import 'package:taffi/core/enums/status_enum.dart';
 import 'package:taffi/core/theme/app_colors.dart';
+import 'package:taffi/core/utils/snackbar_helper.dart';
 import 'package:taffi/core/utils/validators.dart';
 import 'package:taffi/core/widgets/custom_text_form_field.dart';
+import 'package:taffi/features/auth/providers/user_provider.dart';
 import 'package:taffi/features/profile/widgets/disabled_text_field.dart';
 import 'package:taffi/features/profile/widgets/field_label.dart';
 import 'package:taffi/features/profile/widgets/governorate_dropdown.dart';
@@ -11,35 +15,31 @@ class UserInfoScreen extends StatefulWidget {
   const UserInfoScreen({super.key});
 
   @override
-  State<UserInfoScreen> createState() =>
-      _UserInfoScreenState();
+  State<UserInfoScreen> createState() => _UserInfoScreenState();
 }
 
 class _UserInfoScreenState extends State<UserInfoScreen> {
-  final GlobalKey<FormState> _formKey =
-      GlobalKey<FormState>();
-  final TextEditingController _fullNameController =
-      TextEditingController();
-  final TextEditingController _userNameController =
-      TextEditingController();
-  final TextEditingController _emailController =
-      TextEditingController();
-  final TextEditingController _phoneController =
-      TextEditingController();
-  final TextEditingController _ageController =
-      TextEditingController();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final TextEditingController _fullNameController = TextEditingController();
+  final TextEditingController _userNameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController();
+  final TextEditingController _ageController = TextEditingController();
 
-  String _selectedGovernorate =
-      AppConstants.iraqGovernorates.first;
+  String _selectedGovernorate = AppConstants.iraqGovernorates.first;
 
   @override
   void initState() {
     super.initState();
-    _fullNameController.text = "Huthaifa M. Flayyih";
-    _userNameController.text = "Leader";
-    _emailController.text = "jhuth981@gmail.com";
-    _phoneController.text = "07742869755";
-    _ageController.text = "20";
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final userProvider = context.read<UserProvider>();
+      _fullNameController.text = userProvider.user!.fullName ?? "";
+      _userNameController.text = userProvider.user!.userName ?? "";
+      _emailController.text = userProvider.user!.email ?? "";
+      _phoneController.text = userProvider.user!.phoneNumber ?? "";
+      _ageController.text = userProvider.user!.age.toString();
+      _selectedGovernorate = userProvider.user!.governorate ?? "بغداد";
+    });
   }
 
   @override
@@ -65,16 +65,10 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
           elevation: 0,
           centerTitle: true,
           leading: IconButton(
-            icon: Icon(
-              Icons.arrow_back_ios_rounded,
-              color: AppColors.primary,
-            ),
+            icon: Icon(Icons.arrow_back_ios_rounded, color: AppColors.primary),
             onPressed: () => Navigator.pop(context),
           ),
-          title: Text(
-            "المعلومات الشخصيه",
-            style: Theme.of(context).textTheme.titleLarge,
-          ),
+          title: Text("المعلومات الشخصيه", style: Theme.of(context).textTheme.titleLarge),
         ),
         body: SafeArea(
           child: Form(
@@ -82,12 +76,9 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
             child: SingleChildScrollView(
               reverse: true,
               child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 24,
-                ),
+                padding: const EdgeInsets.symmetric(horizontal: 24),
                 child: Column(
-                  crossAxisAlignment:
-                      CrossAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     const SizedBox(height: 24),
                     Hero(
@@ -99,15 +90,12 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                           shape: BoxShape.circle,
                           color: Colors.grey[200],
                           image: const DecorationImage(
-                            image: AssetImage(
-                              'assets/images/user.png',
-                            ),
+                            image: AssetImage('assets/images/user.png'),
                             fit: BoxFit.cover,
                           ),
                           boxShadow: [
                             BoxShadow(
-                              color: AppColors.primary
-                                  .withValues(alpha: 0.2),
+                              color: AppColors.primary.withValues(alpha: 0.2),
                               blurRadius: 12,
                               offset: const Offset(0, 6),
                             ),
@@ -120,10 +108,8 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                     const SizedBox(height: 8),
                     CustomTextFormField(
                       hint: "ادخل اسمك الكامل",
-                      validator: (value) =>
-                          Validators.fullName(value),
-                      textEditingController:
-                          _fullNameController,
+                      validator: (value) => Validators.fullName(value),
+                      textEditingController: _fullNameController,
                       textInputAction: TextInputAction.next,
                       borderRadius: 12,
                       verticalContentPadding: 16,
@@ -131,32 +117,18 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                     const SizedBox(height: 20),
                     const FieldLabel(label: "اسم المستخدم"),
                     const SizedBox(height: 8),
-                    CustomTextFormField(
-                      hint: "ادخل اسم المستخدم",
-                      validator: Validators.username,
-                      textEditingController:
-                          _userNameController,
-                      textInputAction: TextInputAction.next,
-                      borderRadius: 12,
-                      verticalContentPadding: 16,
-                    ),
+                    DisabledTextField(controller: _userNameController),
                     const SizedBox(height: 20),
-                    const FieldLabel(
-                      label: "البريد الإلكتروني",
-                    ),
+                    const FieldLabel(label: "البريد الإلكتروني"),
                     const SizedBox(height: 8),
-                    DisabledTextField(
-                      controller: _emailController,
-                    ),
+                    DisabledTextField(controller: _emailController),
                     const SizedBox(height: 20),
                     const FieldLabel(label: "رقم الهاتف"),
                     const SizedBox(height: 8),
                     CustomTextFormField(
                       hint: "ادخل رقم الهاتف",
-                      validator: (value) =>
-                          Validators.phone(value),
-                      textEditingController:
-                          _phoneController,
+                      validator: (value) => Validators.phone(value),
+                      textEditingController: _phoneController,
                       textInputAction: TextInputAction.next,
                       keyboardType: TextInputType.phone,
                       borderRadius: 12,
@@ -164,26 +136,20 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                     ),
                     const SizedBox(height: 20),
                     Row(
-                      crossAxisAlignment:
-                          CrossAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Expanded(
                           flex: 2,
                           child: Column(
-                            crossAxisAlignment:
-                                CrossAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const FieldLabel(
-                                label: "المحافظة",
-                              ),
+                              const FieldLabel(label: "المحافظة"),
                               const SizedBox(height: 8),
                               GovernorateDropdown(
-                                initialValue:
-                                    _selectedGovernorate,
+                                initialValue: _selectedGovernorate,
                                 onChanged: (value) {
                                   setState(() {
-                                    _selectedGovernorate =
-                                        value;
+                                    _selectedGovernorate = value;
                                   });
                                 },
                               ),
@@ -193,23 +159,16 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                         const SizedBox(width: 16),
                         Expanded(
                           child: Column(
-                            crossAxisAlignment:
-                                CrossAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const FieldLabel(
-                                label: "العمر",
-                              ),
+                              const FieldLabel(label: "العمر"),
                               const SizedBox(height: 8),
                               CustomTextFormField(
                                 hint: "العمر",
-                                validator: (value) =>
-                                    Validators.age(value),
-                                textEditingController:
-                                    _ageController,
-                                textInputAction:
-                                    TextInputAction.done,
-                                keyboardType:
-                                    TextInputType.number,
+                                validator: (value) => Validators.age(value),
+                                textEditingController: _ageController,
+                                textInputAction: TextInputAction.done,
+                                keyboardType: TextInputType.number,
                                 borderRadius: 12,
                                 verticalContentPadding: 16,
                               ),
@@ -222,28 +181,43 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
-                        onPressed: () {
-                          if (_formKey.currentState!
-                              .validate()) {
-                            Navigator.pop(context);
+                        onPressed: () async {
+                          if (_formKey.currentState!.validate()) {
+                            final userProvider = Provider.of<UserProvider>(context, listen: false);
+                            await userProvider.updateUserInfo(
+                              fullname: _fullNameController.text,
+                              phone: _phoneController.text,
+                              age: _ageController.text,
+                              governorate: _selectedGovernorate,
+                            );
+                            if (!context.mounted) return;
+                            if (userProvider.updateUserStatus == Status.success) {
+                              userProvider.getUserInfo();
+                              if (context.mounted) {
+                                SnackBarHelper.showSuccess(context, "تم تحديث المعلومات بنجاح");
+                                Navigator.pop(context);
+                              }
+                            } else {
+                              SnackBarHelper.showError(context, userProvider.errorMessage);
+                            }
                           }
                         },
-                        child: const Text(
-                          "تحديث المعلومات",
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w600,
-                          ),
+                        child: Consumer<UserProvider>(
+                          builder: (context, userProvider, child) {
+                            if (userProvider.updateUserStatus == Status.loading) {
+                              return const Center(child: CircularProgressIndicator());
+                            }
+                            return const Text(
+                              "تحديث المعلومات",
+                              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                            );
+                          },
                         ),
                       ),
                     ),
 
                     Padding(
-                      padding: EdgeInsets.only(
-                        bottom: MediaQuery.of(
-                          context,
-                        ).viewInsets.bottom,
-                      ),
+                      padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
                     ),
                   ],
                 ),

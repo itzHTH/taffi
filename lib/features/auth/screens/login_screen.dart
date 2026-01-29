@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:taffi/core/enums/status_enum.dart';
 import 'package:taffi/core/routing/route_names.dart';
+import 'package:taffi/core/utils/snackbar_helper.dart';
 import 'package:taffi/core/utils/validators.dart';
 import 'package:taffi/features/auth/providers/login_provider.dart';
 import 'package:taffi/features/auth/widgets/custom_text_form_filed.dart';
@@ -47,13 +48,9 @@ class _LoginScreenState extends State<LoginScreen> {
     if (result) {
       Navigator.pushReplacementNamed(context, RouteNames.main);
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            context.read<LoginProvider>().errorMessage ?? "حدث خطا , يرجى المحاولة مرة اخرى ",
-          ),
-          backgroundColor: Colors.red,
-        ),
+      SnackBarHelper.showError(
+        context,
+        context.read<LoginProvider>().errorMessage ?? "حدث خطا , يرجى المحاولة مرة اخرى",
       );
     }
   }
@@ -197,10 +194,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                   if (result) {
                                     Navigator.pushReplacementNamed(context, RouteNames.main);
                                   } else {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: Text(context.read<LoginProvider>().errorMessage!),
-                                      ),
+                                    SnackBarHelper.showError(
+                                      context,
+                                      context.read<LoginProvider>().errorMessage!,
                                     );
                                   }
                                 },

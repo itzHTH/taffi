@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:taffi/core/data/local/secure_storage.dart';
+import 'package:provider/provider.dart';
+import 'package:shimmer/shimmer.dart';
+import 'package:taffi/core/enums/status_enum.dart';
 import 'package:taffi/core/routing/route_names.dart';
-import 'package:taffi/core/theme/app_colors.dart';
+import 'package:taffi/features/auth/providers/user_provider.dart';
 import 'package:taffi/features/profile/widgets/menu_item.dart';
+import 'package:taffi/features/profile/widgets/user_details_widget.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -21,82 +24,132 @@ class ProfileScreen extends StatelessWidget {
           title: Text("ملفي الشخصي", style: Theme.of(context).textTheme.titleLarge),
         ),
         body: SafeArea(
-          child: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24),
-              child: Column(
-                children: [
-                  Hero(
-                    tag: 'profile_image',
-                    child: Container(
-                      width: 110,
-                      height: 110,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.grey[200],
-                        image: const DecorationImage(
-                          image: AssetImage('assets/images/user.png'),
-                          fit: BoxFit.cover,
-                        ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: AppColors.primary.withValues(alpha: 0.2),
-                            blurRadius: 12,
-                            offset: const Offset(0, 6),
-                          ),
-                        ],
+          child: Consumer<UserProvider>(
+            builder: (context, userProvider, child) {
+              if (userProvider.loadUserStatus == Status.loading) {
+                return const _ProfileScreenShimmer();
+              }
+              if (userProvider.loadUserStatus == Status.error) {
+                return Center(
+                  child: Text(
+                    userProvider.errorMessage,
+                    style: Theme.of(context).textTheme.labelMedium,
+                  ),
+                );
+              }
+              // success
+              return SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                  child: Column(
+                    children: [
+                      UserDetailsWidget(),
+                      const SizedBox(height: 36),
+                      MenuItem(
+                        icon: 'assets/images/profile.svg',
+                        title: "المعلومات الشخصيه",
+                        onTap: () {
+                          Navigator.pushNamed(context, RouteNames.userInfo);
+                        },
                       ),
-                    ),
+                      const SizedBox(height: 8),
+                      MenuItem(
+                        icon: 'assets/images/password.svg',
+                        title: 'سياسة الخصوصية',
+                        onTap: () {
+                          Navigator.pushNamed(context, RouteNames.privacyPolicy);
+                        },
+                      ),
+                      const SizedBox(height: 8),
+                      MenuItem(
+                        icon: 'assets/images/logout.svg',
+                        title: 'تسجيل الخروج',
+                        onTap: () async {
+                          await userProvider.logout();
+                          if (context.mounted) {
+                            Navigator.pushNamedAndRemoveUntil(
+                              context,
+                              RouteNames.login,
+                              (route) => false,
+                            );
+                          }
+                        },
+                      ),
+                      const SizedBox(height: 8),
+                      MenuItem(
+                        useIconData: true,
+                        iconData: Icons.help_outline_rounded,
+                        title: 'من نحن',
+                        onTap: () {
+                          Navigator.pushNamed(context, RouteNames.aboutUs);
+                        },
+                      ),
+                    ],
                   ),
-                  const SizedBox(height: 16),
-                  Text("Huthaifa M. Flayyih", style: Theme.of(context).textTheme.titleMedium),
+                ),
+              );
+            },
+          ),
+        ),
+      ),
+    );
+  }
+}
 
-                  Text("Leader@", style: Theme.of(context).textTheme.headlineSmall),
-                  const SizedBox(height: 36),
-                  MenuItem(
-                    icon: 'assets/images/profile.svg',
-                    title: "المعلومات الشخصيه",
-                    onTap: () {
-                      Navigator.pushNamed(context, RouteNames.userInfo);
-                    },
-                  ),
-                  const SizedBox(height: 8),
-                  MenuItem(
-                    icon: 'assets/images/password.svg',
-                    title: 'سياسة الخصوصية',
-                    onTap: () {
-                      Navigator.pushNamed(context, RouteNames.privacyPolicy);
-                    },
-                  ),
-                  const SizedBox(height: 8),
-                  MenuItem(
-                    icon: 'assets/images/logout.svg',
-                    title: 'تسجيل الخروج',
-                    onTap: () async {
-                      final storage = SecureStorage.instance;
-                      await storage.deleteTokens();
-                      if (context.mounted) {
-                        Navigator.pushNamedAndRemoveUntil(
-                          context,
-                          RouteNames.login,
-                          (route) => false,
-                        );
-                      }
-                    },
-                  ),
-                  const SizedBox(height: 8),
-                  MenuItem(
-                    useIconData: true,
-                    iconData: Icons.help_outline_rounded,
-                    title: 'من نحن',
-                    onTap: () {
-                      Navigator.pushNamed(context, RouteNames.aboutUs);
-                    },
-                  ),
-                ],
+class _ProfileScreenShimmer extends StatelessWidget {
+  const _ProfileScreenShimmer();
+
+  @override
+  Widget build(BuildContext context) {
+    return Shimmer.fromColors(
+      baseColor: Colors.grey[300]!,
+      highlightColor: Colors.grey[100]!,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 24),
+        child: Column(
+          children: [
+            // Profile Image Shimmer
+            Container(
+              width: 110,
+              height: 110,
+              decoration: const BoxDecoration(shape: BoxShape.circle, color: Colors.white),
+            ),
+            const SizedBox(height: 16),
+            // Name Shimmer
+            Container(
+              width: 150,
+              height: 20,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(4),
               ),
             ),
-          ),
+            const SizedBox(height: 8),
+            // Phone Number Shimmer
+            Container(
+              width: 120,
+              height: 16,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(4),
+              ),
+            ),
+            const SizedBox(height: 36),
+            // Menu Items Shimmer
+            ...List.generate(
+              4,
+              (index) => Padding(
+                padding: const EdgeInsets.only(bottom: 8),
+                child: Container(
+                  height: 60,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );

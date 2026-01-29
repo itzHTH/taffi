@@ -3,8 +3,8 @@ class ApiConfig {
 
   static const String baseUrl = "https://taafi.ddns.net/taafi";
 
-  static const Duration connectTimeout = Duration(seconds: 20);
-  static const Duration receiveTimeout = Duration(seconds: 20);
+  static const Duration connectTimeout = Duration(seconds: 60);
+  static const Duration receiveTimeout = Duration(seconds: 60);
   static const Duration sendTimeout = Duration(seconds: 20);
 }
 

@@ -70,24 +70,40 @@ ServerException _handleException(DioException e) {
   String errorMessage = "حدث خطأ ما , يرجى المحاولة مرة اخرى";
   int? statusCode = e.response?.statusCode;
 
-  // Check If The Server Is respons or Not
-  if (e.response != null) {
-    final response = e.response?.data;
+  // Handle specific DioException types
+  switch (e.type) {
+    case DioExceptionType.connectionTimeout:
+      errorMessage = "انتهت مهلة الاتصال. تأكد من اتصالك بالإنترنت وحاول مرة أخرى";
+      break;
+    case DioExceptionType.receiveTimeout:
+      errorMessage = "الخادم بطيء في الاستجابة. يرجى المحاولة مرة أخرى";
+      break;
+    case DioExceptionType.sendTimeout:
+      errorMessage = "انتهت مهلة إرسال البيانات. يرجى المحاولة مرة أخرى";
+      break;
+    case DioExceptionType.connectionError:
+      errorMessage = "تعذر الاتصال بالخادم. تأكد من اتصالك بالإنترنت";
+      break;
+    default:
+      // Check If The Server Is responding or Not
+      if (e.response != null) {
+        final response = e.response?.data;
 
-    // Check If The Server Has A String Message
-    if (response is String) {
-      errorMessage = response;
-    }
-    // Check If The Server Has A Message
-    else if (response is Map && response.containsKey('message')) {
-      errorMessage = response['message'];
-    }
-    // Check If The Server Has A Generic Title
-    else if (response.containsKey('title')) {
-      errorMessage = response['title'];
-    }
-  } else {
-    errorMessage = "هناك مشكلة في الاتصال بالخادم , يرجى المحاولة مرة اخرى";
+        // Check If The Server Has A String Message
+        if (response is String) {
+          errorMessage = response;
+        }
+        // Check If The Server Has A Message
+        else if (response is Map && response.containsKey('message')) {
+          errorMessage = response['message'];
+        }
+        // Check If The Server Has A Generic Title
+        else if (response.containsKey('title')) {
+          errorMessage = response['title'];
+        }
+      } else {
+        errorMessage = "هناك مشكلة في الاتصال بالخادم , يرجى المحاولة مرة اخرى";
+      }
   }
 
   return ServerException(message: errorMessage, statusCode: statusCode);

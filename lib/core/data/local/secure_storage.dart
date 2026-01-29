@@ -31,8 +31,6 @@ class SecureStorage {
   }
 
   Future<void> deleteTokens() async {
-    await _storage.delete(key: AppConstants.accessToken);
-    await _storage.delete(key: AppConstants.refreshToken);
-    await _storage.delete(key: AppConstants.refreshTokenExpireAt);
+    await _storage.deleteAll();
   }
 }

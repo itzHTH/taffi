@@ -4,8 +4,10 @@ import 'package:taffi/core/constants/app_constants.dart';
 import 'package:taffi/core/enums/status_enum.dart';
 import 'package:taffi/core/routing/route_names.dart';
 import 'package:taffi/core/theme/app_colors.dart';
+import 'package:taffi/core/utils/snackbar_helper.dart';
 import 'package:taffi/core/utils/validators.dart';
 import 'package:taffi/features/auth/providers/register_provider.dart';
+import 'package:taffi/features/auth/providers/user_provider.dart';
 import 'package:taffi/features/auth/widgets/custom_text_form_filed.dart';
 
 class FillPersonalInfoScreen extends StatefulWidget {
@@ -55,17 +57,15 @@ class _FillPersonalInfoScreenState extends State<FillPersonalInfoScreen> {
     if (result) {
       Navigator.pushNamedAndRemoveUntil(context, RouteNames.main, (route) => false);
     } else {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(registerProvider.errorMessage ?? "حدث خطأ")));
+      SnackBarHelper.showError(context, registerProvider.errorMessage ?? "حدث خطأ");
     }
   }
 
   Future<void> _updateUserInfo(BuildContext context) async {
-    final registerProvider = Provider.of<RegisterProvider>(context, listen: false);
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
 
-    final result = await registerProvider.updateUserInfo(
-      name: fullNameController.text,
+    final result = await userProvider.updateUserInfo(
+      fullname: fullNameController.text,
       phone: phoneController.text,
       age: ageController.text,
       governorate: dropdownValue,
@@ -76,9 +76,7 @@ class _FillPersonalInfoScreenState extends State<FillPersonalInfoScreen> {
     if (result) {
       Navigator.pushNamedAndRemoveUntil(context, RouteNames.main, (route) => false);
     } else {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(registerProvider.errorMessage ?? "حدث خطأ")));
+      SnackBarHelper.showError(context, userProvider.errorMessage);
     }
   }
 

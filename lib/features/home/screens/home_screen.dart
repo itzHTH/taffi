@@ -43,6 +43,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
             padding: const EdgeInsets.symmetric(horizontal: 12),
             child: CustomScrollView(
               slivers: [
+                SliverToBoxAdapter(child: SizedBox(height: 16)),
                 CustomSliverAppBar(),
                 SliverToBoxAdapter(child: SizedBox(height: 20)),
                 SliverToBoxAdapter(child: Center(child: CutomSearchBar())),

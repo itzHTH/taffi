@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:taffi/core/theme/app_colors.dart';
+import 'package:taffi/core/utils/snackbar_helper.dart';
 import 'package:taffi/core/widgets/confirmation_dialog.dart';
 import 'package:taffi/features/Doctor_Info/models/doctor_model.dart';
 import 'package:taffi/features/Doctor_Info/providers/doctor_provider.dart';
@@ -40,20 +41,7 @@ class _DoctorInfoScreenState extends State<DoctorInfoScreen> {
   Future<void> _showBookingConfirmationDialog() async {
     // if no schedule is not selected
     if (_doctorProvider.selectedScheduleIndex == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Row(
-            children: const [
-              Icon(Icons.info, color: Colors.white),
-              SizedBox(width: 12),
-              Expanded(child: Text('الرجاء اختيار موعد أولاً', style: TextStyle(fontSize: 15))),
-            ],
-          ),
-          backgroundColor: AppColors.warning,
-          behavior: SnackBarBehavior.floating,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-        ),
-      );
+      SnackBarHelper.showInfo(context, 'الرجاء اختيار موعد أولاً');
       return;
     }
 
@@ -74,25 +62,10 @@ class _DoctorInfoScreenState extends State<DoctorInfoScreen> {
     // TODO: Make booking
 
     // show Done SnackBar
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Row(
-          children: const [
-            Icon(Icons.check_circle, color: Colors.white),
-            SizedBox(width: 12),
-            Expanded(
-              child: Text(
-                'تم تأكيد الحجز بنجاح! سيتم إرسال التفاصيل إلى بريدك الإلكتروني',
-                style: TextStyle(fontSize: 15),
-              ),
-            ),
-          ],
-        ),
-        backgroundColor: AppColors.success,
-        behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-        duration: const Duration(seconds: 4),
-      ),
+    SnackBarHelper.showSuccess(
+      context,
+      'تم تأكيد الحجز بنجاح! سيتم إرسال التفاصيل إلى بريدك الإلكتروني',
+      duration: const Duration(seconds: 4),
     );
     Navigator.pop(context);
   }
