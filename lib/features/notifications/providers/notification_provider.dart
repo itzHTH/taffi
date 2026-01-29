@@ -58,7 +58,7 @@ class NotificationProvider extends ChangeNotifier {
       notifyListeners();
 
       // Make API call
-      final response = await ApiService.instance.post(EndPoints.notifications.markRead(id));
+      final response = await ApiService.instance.put(EndPoints.notifications.markRead(id));
       final apiResponse = ApiResponse<bool>.fromJson(response, (json) => json as bool);
 
       if (apiResponse.success) {

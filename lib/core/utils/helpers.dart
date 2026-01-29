@@ -40,13 +40,12 @@ class Helpers {
     List<String> slots = [];
 
     DateFormat inputFormat = DateFormat('HH:mm');
-    DateFormat outputFormat = DateFormat('HH:mm a');
 
     DateTime start = inputFormat.parse(startTime);
     DateTime end = inputFormat.parse(endTime);
 
     while (start.isBefore(end)) {
-      slots.add(outputFormat.format(start));
+      slots.add(inputFormat.format(start));
       start = start.add(Duration(minutes: interval));
     }
 
@@ -56,12 +55,7 @@ class Helpers {
   /// Converts time from "HH:mm a" format (e.g., "02:30 PM") to "HH:mm:ss" format for API
   /// Example: "02:30 PM" -> "14:30:00"
   static String formatTimeOfDay(String timeString) {
-    // Parse the time with AM/PM (e.g., "02:30 PM")
-    DateFormat inputFormat = DateFormat('hh:mm a'); // Changed from HH to hh for 12-hour format
-    DateTime inputTime = inputFormat.parse(timeString);
-
-    // Return in 24-hour format HH:mm:ss
-    return "${inputTime.hour.toString().padLeft(2, '0')}:${inputTime.minute.toString().padLeft(2, '0')}:00";
+    return "$timeString:00.000";
   }
 
   static bool isDateTimeBeforeNow(String date, String time) {
