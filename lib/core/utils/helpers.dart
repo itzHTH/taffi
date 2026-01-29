@@ -1,4 +1,5 @@
 import 'package:intl/intl.dart';
+import 'package:taffi/core/utils/baghdad_time_helper.dart';
 
 /// Helper utility functions
 class Helpers {
@@ -50,5 +51,29 @@ class Helpers {
     }
 
     return slots;
+  }
+
+  /// Converts time from "HH:mm a" format (e.g., "02:30 PM") to "HH:mm:ss" format for API
+  /// Example: "02:30 PM" -> "14:30:00"
+  static String formatTimeOfDay(String timeString) {
+    // Parse the time with AM/PM (e.g., "02:30 PM")
+    DateFormat inputFormat = DateFormat('hh:mm a'); // Changed from HH to hh for 12-hour format
+    DateTime inputTime = inputFormat.parse(timeString);
+
+    // Return in 24-hour format HH:mm:ss
+    return "${inputTime.hour.toString().padLeft(2, '0')}:${inputTime.minute.toString().padLeft(2, '0')}:00";
+  }
+
+  static bool isDateTimeBeforeNow(String date, String time) {
+    DateTime inputDate = DateTime.parse(date);
+    DateTime inputTime = DateFormat('HH:mm').parse(time);
+    DateTime inputDateTime = DateTime(
+      inputDate.year,
+      inputDate.month,
+      inputDate.day,
+      inputTime.hour,
+      inputTime.minute,
+    );
+    return inputDateTime.isBefore(BaghdadTimeHelper.now());
   }
 }

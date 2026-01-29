@@ -2,36 +2,34 @@ import 'package:dashed_border/dashed_border.dart';
 import 'package:flutter/material.dart';
 import 'package:taffi/core/theme/app_colors.dart';
 import 'package:taffi/core/widgets/custom_cached_network_avatar.dart';
-import 'package:taffi/core/widgets/rating_badge.dart';
 
 class AppointmentDoctorCard extends StatefulWidget {
   const AppointmentDoctorCard({
     super.key,
     required this.doctorName,
     required this.doctorSpecialization,
-    required this.rating,
     required this.doctorImage,
     required this.onBookCancelTap,
     required this.appointmentTime,
     required this.appointmentDate,
+    required this.isCompleted,
+    required this.isCancelled,
   });
 
   final String doctorName;
   final String doctorSpecialization;
-  final double rating;
   final String doctorImage;
   final String appointmentTime;
   final VoidCallback onBookCancelTap;
-
+  final bool isCompleted;
   final String appointmentDate;
+  final bool isCancelled;
 
   @override
-  State<AppointmentDoctorCard> createState() =>
-      _AppointmentDoctorCardState();
+  State<AppointmentDoctorCard> createState() => _AppointmentDoctorCardState();
 }
 
-class _AppointmentDoctorCardState
-    extends State<AppointmentDoctorCard>
+class _AppointmentDoctorCardState extends State<AppointmentDoctorCard>
     with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
@@ -48,28 +46,18 @@ class _AppointmentDoctorCardState
           borderRadius: BorderRadius.circular(16),
         ),
       ),
-      margin: EdgeInsets.symmetric(
-        horizontal: 22,
-        vertical: 8,
-      ),
-      padding: EdgeInsets.symmetric(
-        vertical: 20,
-        horizontal: 28,
-      ),
+      margin: EdgeInsets.symmetric(horizontal: 22, vertical: 8),
+      padding: EdgeInsets.symmetric(vertical: 20, horizontal: 28),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           Row(
             children: [
-              CustomCachedNetworkAvatar(
-                imageUrl: widget.doctorImage,
-                size: 60,
-              ),
+              CustomCachedNetworkAvatar(imageUrl: widget.doctorImage, size: 60),
               SizedBox(width: 16),
               Expanded(
                 child: Column(
-                  crossAxisAlignment:
-                      CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       widget.doctorName,
@@ -91,11 +79,6 @@ class _AppointmentDoctorCardState
                           ),
                         ),
                         SizedBox(width: 8),
-                        RatingBadge(
-                          rating: widget.rating,
-                          hasBackground: false,
-                          textColor: AppColors.textPrimary,
-                        ),
                       ],
                     ),
                   ],
@@ -107,9 +90,7 @@ class _AppointmentDoctorCardState
           SizedBox(height: 20),
 
           Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 12,
-            ),
+            padding: const EdgeInsets.symmetric(horizontal: 12),
             child: Row(
               children: [
                 Container(
@@ -118,11 +99,7 @@ class _AppointmentDoctorCardState
                     color: Color(0xffF5F7FA),
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  child: Icon(
-                    Icons.calendar_today_rounded,
-                    color: Color(0xff677294),
-                    size: 20,
-                  ),
+                  child: Icon(Icons.calendar_today_rounded, color: Color(0xff677294), size: 20),
                 ),
                 SizedBox(width: 8),
                 Text(
@@ -140,11 +117,7 @@ class _AppointmentDoctorCardState
                     color: Color(0xffF5F7FA),
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  child: Icon(
-                    Icons.access_time_rounded,
-                    color: Color(0xff677294),
-                    size: 20,
-                  ),
+                  child: Icon(Icons.access_time_rounded, color: Color(0xff677294), size: 20),
                 ),
                 SizedBox(width: 8),
                 Text(
@@ -162,29 +135,49 @@ class _AppointmentDoctorCardState
 
           SizedBox(height: 20),
 
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton(
-              onPressed: widget.onBookCancelTap,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Color(0xffE8F3F1),
-                foregroundColor: AppColors.primary,
-                elevation: 0,
-                padding: EdgeInsets.symmetric(vertical: 16),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(32),
+          widget.isCancelled
+              ? SizedBox(
+                  child: Text(
+                    "تم الغاء الموعد",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.secondary,
+                    ),
+                  ),
+                )
+              : widget.isCompleted
+              ? SizedBox(
+                  child: Text(
+                    "الموعد مكتمل",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.secondary,
+                    ),
+                  ),
+                )
+              : SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: widget.onBookCancelTap,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Color(0xffE8F3F1),
+                      foregroundColor: AppColors.primary,
+                      elevation: 0,
+                      padding: EdgeInsets.symmetric(vertical: 16),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(32)),
+                    ),
+                    child: Text(
+                      "الغاء الموعد",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.secondary,
+                      ),
+                    ),
+                  ),
                 ),
-              ),
-              child: Text(
-                "الغاء الموعد",
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.secondary,
-                ),
-              ),
-            ),
-          ),
         ],
       ),
     );

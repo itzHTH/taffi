@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:taffi/core/routing/route_names.dart';
 import 'package:taffi/features/Doctor_Info/models/doctor_model.dart';
 import 'package:taffi/features/Doctor_Info/screens/doctor_info.dart';
+import 'package:taffi/features/appointments/providers/appointment_provider.dart';
 import 'package:taffi/features/appointments/screens/appointments_screen.dart';
 import 'package:taffi/features/auth/providers/register_provider.dart';
 import 'package:taffi/features/auth/screens/fill_personal_info_screen.dart';
@@ -86,7 +87,12 @@ class AppRouter {
         return MaterialPageRoute(builder: (_) => const SpecialtiesScreen());
 
       case RouteNames.appointments:
-        return MaterialPageRoute(builder: (_) => const AppointmentScreen());
+        return MaterialPageRoute(
+          builder: (_) => ChangeNotifierProvider.value(
+            value: AppointmentProvider()..getAppointments(),
+            child: const AppointmentScreen(),
+          ),
+        );
 
       case RouteNames.messages:
         return MaterialPageRoute(builder: (_) => const MessagesScreen());
