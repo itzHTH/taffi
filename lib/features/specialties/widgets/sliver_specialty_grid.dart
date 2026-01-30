@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:taffi/core/enums/status_enum.dart';
 import 'package:taffi/core/routing/route_names.dart';
+import 'package:taffi/core/widgets/error_retry_widget.dart';
 import 'package:taffi/core/widgets/specialty_card.dart';
 import 'package:taffi/features/specialties/providers/specialty_provider.dart';
 import 'package:taffi/features/specialties/widgets/specialty_card_shimmer.dart';
@@ -32,7 +33,13 @@ class _SliverSpecialtyGridState extends State<SliverSpecialtyGrid> {
           );
         }
         if (provider.specialtiesStatus == Status.error) {
-          return SliverToBoxAdapter(child: Center(child: Text(provider.errorMessage)));
+          return SliverFillRemaining(
+            hasScrollBody: false,
+            child: ErrorRetryWidget(
+              errorMessage: provider.errorMessage ?? "حدث خطأ أثناء تحميل التخصصات",
+              onRetry: () => provider.getSpecialties(),
+            ),
+          );
         }
         return provider.specialties.isEmpty
             ? SliverToBoxAdapter(child: Center(child: Text("لا توجد تخصصات حاليا")))

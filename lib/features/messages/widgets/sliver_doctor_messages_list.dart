@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:taffi/core/enums/status_enum.dart';
 import 'package:taffi/core/routing/route_names.dart';
+import 'package:taffi/core/widgets/error_retry_widget.dart';
 import 'package:taffi/features/Doctor_Info/providers/doctor_provider.dart';
 import 'package:taffi/features/messages/widgets/doctor_message_card.dart';
 import 'package:taffi/features/messages/widgets/doctor_message_shimmer.dart';
@@ -27,6 +28,17 @@ class _SliverDoctorMessagesListState extends State<SliverDoctorMessagesList> {
                 child: DoctorMessageShimmer(),
               );
             },
+          );
+        }
+
+        // Show error state with retry
+        if (doctorProvider.doctorsStatus == Status.error) {
+          return SliverFillRemaining(
+            hasScrollBody: false,
+            child: ErrorRetryWidget(
+              errorMessage: doctorProvider.errorMessage ?? "حدث خطأ أثناء تحميل المحادثات",
+              onRetry: () => doctorProvider.getAllDoctors(),
+            ),
           );
         }
 

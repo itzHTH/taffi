@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:taffi/core/enums/status_enum.dart';
 import 'package:taffi/core/routing/route_names.dart';
+import 'package:taffi/core/widgets/error_retry_widget.dart';
 import 'package:taffi/features/Doctor_Info/models/doctor_model.dart';
 import 'package:taffi/features/Doctor_Info/providers/doctor_provider.dart';
 import 'package:taffi/features/home/widgets/doctor_card_shimmer.dart';
@@ -23,6 +24,17 @@ class _SliverSpecialDoctorsGirdState extends State<SliverSpecialDoctorsGird> {
   @override
   Widget build(BuildContext context) {
     final provider = context.watch<DoctorProvider>();
+
+    // Show error state with retry
+    if (provider.doctorsStatus == Status.error) {
+      return SliverFillRemaining(
+        hasScrollBody: false,
+        child: ErrorRetryWidget(
+          errorMessage: provider.errorMessage ?? "حدث خطأ أثناء تحميل الأطباء",
+          onRetry: () => provider.getAllDoctors(),
+        ),
+      );
+    }
 
     return SliverPadding(
       padding: const EdgeInsets.only(bottom: 12),

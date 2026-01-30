@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:taffi/core/enums/status_enum.dart';
 import 'package:taffi/core/routing/route_names.dart';
+import 'package:taffi/core/widgets/error_retry_widget.dart';
 import 'package:taffi/features/auth/providers/user_provider.dart';
 import 'package:taffi/features/profile/widgets/menu_item.dart';
 import 'package:taffi/features/profile/widgets/user_details_widget.dart';
@@ -31,9 +32,9 @@ class ProfileScreen extends StatelessWidget {
               }
               if (userProvider.loadUserStatus == Status.error) {
                 return Center(
-                  child: Text(
-                    userProvider.errorMessage,
-                    style: Theme.of(context).textTheme.labelMedium,
+                  child: ErrorRetryWidget(
+                    errorMessage: userProvider.errorMessage,
+                    onRetry: () => userProvider.getUserInfo(),
                   ),
                 );
               }

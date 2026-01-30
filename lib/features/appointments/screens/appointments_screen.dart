@@ -4,6 +4,7 @@ import 'package:taffi/core/enums/status_enum.dart';
 import 'package:taffi/core/utils/helpers.dart';
 import 'package:taffi/core/utils/snackbar_helper.dart';
 import 'package:taffi/core/widgets/confirmation_dialog.dart';
+import 'package:taffi/core/widgets/error_retry_widget.dart';
 import 'package:taffi/features/appointments/models/appointment_model.dart';
 import 'package:taffi/features/appointments/providers/appointment_provider.dart';
 import 'package:taffi/features/appointments/widgets/appointment_doctor_card.dart';
@@ -75,6 +76,19 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                 return SliverList.builder(
                   itemCount: 3,
                   itemBuilder: (context, index) => const AppointmentShimmerCard(),
+                );
+              }
+
+              if (appointmentProvider.status == Status.error) {
+                return SliverFillRemaining(
+                  hasScrollBody: false,
+                  child: Center(
+                    child: ErrorRetryWidget(
+                      errorMessage:
+                          appointmentProvider.errorMessage ?? "حدث خطأ أثناء تحميل المواعيد",
+                      onRetry: () => appointmentProvider.getAppointments(),
+                    ),
+                  ),
                 );
               }
 

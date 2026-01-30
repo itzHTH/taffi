@@ -4,6 +4,7 @@ import 'package:taffi/core/enums/status_enum.dart';
 import 'package:taffi/core/theme/app_colors.dart';
 import 'package:taffi/core/utils/helpers.dart';
 import 'package:taffi/core/utils/snackbar_helper.dart';
+import 'package:taffi/core/widgets/error_retry_widget.dart';
 import 'package:taffi/features/notifications/providers/notification_provider.dart';
 import 'package:taffi/features/notifications/widgets/notification_item.dart';
 import 'package:taffi/features/notifications/widgets/notification_shimmer.dart';
@@ -85,40 +86,9 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
           else if (provider.status == Status.error)
             SliverFillRemaining(
               child: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(Icons.error_outline, size: 80, color: Colors.red[300]),
-                    const SizedBox(height: 16),
-                    Text(
-                      'حدث خطأ',
-                      style: Theme.of(
-                        context,
-                      ).textTheme.titleMedium?.copyWith(color: AppColors.textPrimary),
-                    ),
-                    const SizedBox(height: 8),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 32),
-                      child: Text(
-                        provider.message ?? 'فشل في تحميل الإشعارات',
-                        textAlign: TextAlign.center,
-                        style: Theme.of(
-                          context,
-                        ).textTheme.bodyMedium?.copyWith(color: AppColors.textSecondary),
-                      ),
-                    ),
-                    const SizedBox(height: 24),
-                    ElevatedButton.icon(
-                      onPressed: _fetchNotifications,
-                      icon: const Icon(Icons.refresh),
-                      label: const Text('إعادة المحاولة'),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.primary,
-                        foregroundColor: Colors.white,
-                        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                      ),
-                    ),
-                  ],
+                child: ErrorRetryWidget(
+                  errorMessage: provider.message,
+                  onRetry: () => _fetchNotifications(),
                 ),
               ),
             )

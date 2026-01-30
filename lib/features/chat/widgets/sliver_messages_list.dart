@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:taffi/core/enums/status_enum.dart';
+import 'package:taffi/core/widgets/error_retry_widget.dart';
+import 'package:taffi/core/widgets/error_banner.dart';
+import 'package:taffi/features/chat/models/message_model.dart';
 import 'package:taffi/features/chat/providers/chat_provider.dart';
 import 'package:taffi/features/chat/widgets/message_bubble.dart';
 import 'package:taffi/features/chat/widgets/message_shimmer.dart';
@@ -20,6 +23,17 @@ class SliverMessagesList extends StatelessWidget {
             itemBuilder: (context, index) {
               return const MessageShimmer();
             },
+          );
+        }
+
+        // Show error state with retry button
+        if (chatProvider.getChatStatus == Status.error) {
+          return SliverFillRemaining(
+            hasScrollBody: false,
+            child: ErrorRetryWidget(
+              errorMessage: chatProvider.errorMessage ?? "حدث خطأ أثناء تحميل الرسائل",
+              onRetry: () => chatProvider.getChatMessages(),
+            ),
           );
         }
 
@@ -49,15 +63,43 @@ class SliverMessagesList extends StatelessWidget {
         // Show actual messages (reversed to match reversed scroll)
         final reversedMessages = chatProvider.messages.reversed.toList();
 
-        // Calculate item count: messages + typing indicator if loading
+        // Calculate item count: messages + typing indicator if loading + error banner if error
         final isTyping = chatProvider.sendMessageStatus == Status.loading;
-        final itemCount = reversedMessages.length + (isTyping ? 1 : 0);
+        final hasError = chatProvider.sendMessageStatus == Status.error;
+        var itemCount = reversedMessages.length;
+        if (isTyping) itemCount++;
+        if (hasError) itemCount++;
 
         return SliverList.builder(
           itemCount: itemCount,
           itemBuilder: (context, index) {
-            // Show typing indicator as first item (bottom of screen due to reverse)
-            if (isTyping && index == 0) {
+            var currentIndex = index;
+
+            // Show error banner as first item if there's an error
+            if (hasError && currentIndex == 0) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                child: ErrorBanner(
+                  errorMessage: chatProvider.errorMessage ?? "فشل إرسال الرسالة",
+                  onRetry: () {
+                    // Get the last user message and resend it
+                    final lastUserMessage = reversedMessages.firstWhere(
+                      (msg) => msg.isUserMessage ?? false,
+                      orElse: () => MessageModel(),
+                    );
+                    if (lastUserMessage.content != null) {
+                      chatProvider.sendMessage(lastUserMessage.content!);
+                    }
+                  },
+                ),
+              );
+            }
+
+            // Adjust index if error banner is shown
+            if (hasError) currentIndex--;
+
+            // Show typing indicator as first item (after error banner if present)
+            if (isTyping && currentIndex == 0) {
               return const Padding(
                 padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                 child: TypingIndicatorBubble(),
@@ -65,7 +107,7 @@ class SliverMessagesList extends StatelessWidget {
             }
 
             // Adjust index for messages when typing indicator is present
-            final messageIndex = isTyping ? index - 1 : index;
+            final messageIndex = isTyping ? currentIndex - 1 : currentIndex;
 
             return Padding(
               padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),

@@ -13,7 +13,7 @@ class SpecialtyProvider extends ChangeNotifier {
   Status specialtiesStatus = Status.initial;
   SpecialtyModel? selectedSpecialty;
   Status selectedSpecialtyStatus = Status.initial;
-  String errorMessage = '';
+  String? errorMessage;
 
   Future<void> getSpecialties() async {
     try {
@@ -37,7 +37,7 @@ class SpecialtyProvider extends ChangeNotifier {
       }
     } on ServerException catch (e) {
       specialtiesStatus = Status.error;
-      errorMessage = e.message!;
+      errorMessage = e.message;
       notifyListeners();
     } catch (e) {
       specialtiesStatus = Status.error;

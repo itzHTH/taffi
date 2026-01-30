@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:taffi/core/enums/status_enum.dart';
 import 'package:taffi/core/routing/route_names.dart';
+import 'package:taffi/core/theme/app_colors.dart';
 import 'package:taffi/features/auth/providers/user_provider.dart';
 
 class CustomSliverAppBar extends StatelessWidget {
@@ -23,7 +24,24 @@ class CustomSliverAppBar extends StatelessWidget {
           if (userProvider.loadUserStatus == Status.loading) {
             return const _AppBarShimmer();
           } else if (userProvider.loadUserStatus == Status.error) {
-            return Text("حدث خطأ ما", style: Theme.of(context).textTheme.labelMedium);
+            return Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    userProvider.errorMessage,
+                    style: Theme.of(context).textTheme.labelMedium,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                IconButton(
+                  icon: Icon(Icons.refresh, color: AppColors.primary),
+                  highlightColor: Colors.black.withValues(alpha: 0.2),
+                  onPressed: () {
+                    userProvider.getUserInfo();
+                  },
+                ),
+              ],
+            );
           }
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,

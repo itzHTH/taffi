@@ -4,7 +4,9 @@ import 'package:taffi/core/enums/status_enum.dart';
 import 'package:taffi/core/routing/route_names.dart';
 import 'package:taffi/core/widgets/big_doctor_card.dart';
 import 'package:taffi/core/widgets/big_doctor_card_shimmer.dart';
+import 'package:taffi/core/widgets/error_retry_widget.dart';
 import 'package:taffi/features/Doctor_Info/providers/doctor_provider.dart';
+import 'package:taffi/features/specialties/providers/specialty_provider.dart';
 
 class SliverBookingDoctorList extends StatelessWidget {
   const SliverBookingDoctorList({super.key});
@@ -27,8 +29,17 @@ class SliverBookingDoctorList extends StatelessWidget {
             ),
           );
         } else if (doctorProvider.doctorsBySpecialtyStatus == Status.error) {
-          return SliverToBoxAdapter(
-            child: Center(child: Text('حصل خطأ ما', style: Theme.of(context).textTheme.titleLarge)),
+          return SliverFillRemaining(
+            hasScrollBody: false,
+            child: ErrorRetryWidget(
+              errorMessage: doctorProvider.errorMessage ?? "حدث خطأ أثناء تحميل الأطباء",
+              onRetry: () {
+                final specialtyId = context.read<SpecialtyProvider>().selectedSpecialty?.id;
+                if (specialtyId != null) {
+                  doctorProvider.getDoctorsBySpecialty(specialtyId);
+                }
+              },
+            ),
           );
         }
         return doctorProvider.doctorsBySpecialty.isEmpty

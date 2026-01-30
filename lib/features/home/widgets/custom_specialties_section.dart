@@ -3,6 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:taffi/core/enums/status_enum.dart';
 import 'package:taffi/core/routing/route_names.dart';
+import 'package:taffi/core/widgets/error_banner.dart';
 import 'package:taffi/core/widgets/specialty_card.dart';
 import 'package:taffi/features/specialties/providers/specialty_provider.dart';
 import 'package:taffi/features/specialties/widgets/specialty_card_shimmer.dart';
@@ -64,7 +65,10 @@ class _SpecialtiesRowState extends State<SpecialtiesRow> {
 
         if (provider.specialtiesStatus == Status.error) {
           return Center(
-            child: Text(provider.errorMessage, style: TextStyle(color: Colors.red)),
+            child: ErrorBanner(
+              errorMessage: provider.errorMessage,
+              onRetry: () => provider.getSpecialties(),
+            ),
           );
         }
 

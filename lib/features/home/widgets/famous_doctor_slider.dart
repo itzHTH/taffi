@@ -6,6 +6,7 @@ import 'package:taffi/core/enums/status_enum.dart';
 import 'package:taffi/core/routing/route_names.dart';
 import 'package:taffi/core/theme/app_colors.dart';
 import 'package:taffi/core/widgets/big_doctor_card.dart';
+import 'package:taffi/core/widgets/error_retry_widget.dart';
 import 'package:taffi/features/Doctor_Info/models/doctor_model.dart';
 import 'package:taffi/features/Doctor_Info/providers/doctor_provider.dart';
 import 'package:taffi/features/home/widgets/doctor_slider_shimmer.dart';
@@ -72,19 +73,14 @@ class _FamousDoctorSliderState extends State<FamousDoctorSlider> {
       return const DoctorSliderShimmer();
     }
 
-    // Show error state
+    // Show error state with retry
     if (provider.topDoctorsStatus == Status.error) {
       return SizedBox(
         height: 200,
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(Icons.error_outline, color: Colors.red[300], size: 48),
-              const SizedBox(height: 8),
-              Text('فشل تحميل الأطباء المميزين', style: TextStyle(color: Colors.grey[600])),
-            ],
-          ),
+        child: ErrorRetryWidget(
+          errorMessage: provider.errorMessage ?? "حدث خطأ أثناء تحميل الأطباء المميزين",
+          onRetry: () => provider.getTopDoctors(),
+          iconSize: 48,
         ),
       );
     }
