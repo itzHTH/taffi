@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:taffi/core/theme/app_colors.dart';
 import 'package:taffi/core/utils/baghdad_time_helper.dart';
 import 'package:taffi/core/utils/helpers.dart';
+import 'package:taffi/core/utils/snackbar_helper.dart';
 import 'package:taffi/features/Doctor_Info/providers/doctor_provider.dart';
 
 class DateSelectionWidget extends StatefulWidget {
@@ -30,9 +31,17 @@ class _DateSelectionWidgetState extends State<DateSelectionWidget> {
 
   // to get the first valid date (if today is not valid, skip to the next valid date)
   DateTime _getValidInitialDate() {
+    // If no work days are set, return today
+    if (workDays.isEmpty) {
+      return BaghdadTimeHelper.now();
+    }
+
     DateTime date = BaghdadTimeHelper.now();
-    while (!workDays.contains(date.weekday)) {
+    int attempts = 0;
+    // Prevent infinite loop - max 7 days ahead
+    while (!workDays.contains(date.weekday) && attempts < 7) {
       date = date.add(const Duration(days: 1));
+      attempts++;
     }
     return date;
   }
@@ -54,6 +63,12 @@ class _DateSelectionWidgetState extends State<DateSelectionWidget> {
             builder: (context, selectedDate, child) {
               return ElevatedButton(
                 onPressed: () async {
+                  // Prevent opening date picker if no schedule is loaded
+                  if (workDays.isEmpty) {
+                    SnackBarHelper.showInfo(context, 'جاري تحميل مواعيد الطبيب ...');
+                    return;
+                  }
+
                   final selectedDatePicker = await showDatePicker(
                     context: context,
                     initialDate: _getValidInitialDate(),

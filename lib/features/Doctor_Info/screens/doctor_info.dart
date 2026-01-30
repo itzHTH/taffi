@@ -29,6 +29,9 @@ class _DoctorInfoScreenState extends State<DoctorInfoScreen> {
     super.initState();
     _doctorProvider = context.read<DoctorProvider>();
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      // Set the doctor first (important for specialty screen flow)
+      _doctorProvider.setDoctor(widget.doctor);
+      // Then load the schedule
       _doctorProvider.getDoctorSchedule(widget.doctor.id!);
     });
   }

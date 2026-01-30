@@ -69,20 +69,25 @@ class _FamousDoctorSliderState extends State<FamousDoctorSlider> {
     final provider = context.watch<DoctorProvider>();
 
     // Show shimmer only during loading
-    if (provider.topDoctorsStatus == Status.loading || provider.topDoctors.isEmpty) {
+    if (provider.topDoctorsStatus == Status.loading) {
+      _stopTimer();
       return const DoctorSliderShimmer();
     }
 
-    // Show error state with retry
+    // Show error state with retry (BEFORE checking if empty!)
     if (provider.topDoctorsStatus == Status.error) {
-      return SizedBox(
-        height: 200,
-        child: ErrorRetryWidget(
-          errorMessage: provider.errorMessage ?? "حدث خطأ أثناء تحميل الأطباء المميزين",
-          onRetry: () => provider.getTopDoctors(),
-          iconSize: 48,
-        ),
+      _stopTimer();
+      return ErrorRetryWidget(
+        errorMessage: provider.errorMessage ?? "حدث خطأ أثناء تحميل الأطباء المميزين",
+        onRetry: () => provider.getTopDoctors(),
+        iconSize: 48,
       );
+    }
+
+    // Show shimmer if list is empty (after success)
+    if (provider.topDoctors.isEmpty) {
+      _stopTimer();
+      return const DoctorSliderShimmer();
     }
 
     // Success - show slider
