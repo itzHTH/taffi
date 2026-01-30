@@ -1,21 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:taffi/core/routing/route_names.dart';
 import 'package:taffi/core/theme/app_colors.dart';
 import 'package:taffi/core/widgets/custom_cached_network_avatar.dart';
+import 'package:taffi/features/Doctor_Info/models/doctor_model.dart';
 
 class DoctorMessageCard extends StatelessWidget {
   const DoctorMessageCard({
     super.key,
     required this.imageUrl,
-    required this.name,
-    required this.message,
-    required this.time,
+    required this.doctor,
+    required this.onTap,
   });
 
   final String imageUrl;
-  final String name;
-  final String message;
-  final String time;
+  final DoctorModel doctor;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -35,9 +33,7 @@ class DoctorMessageCard extends StatelessWidget {
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          onTap: () {
-            Navigator.pushNamed(context, RouteNames.chat);
-          },
+          onTap: onTap,
           splashColor: Colors.white.withValues(alpha: 0.2),
           highlightColor: Colors.white.withValues(alpha: 0.1),
           child: Padding(
@@ -51,23 +47,18 @@ class DoctorMessageCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.max,
                     children: [
-                      Text(name, style: Theme.of(context).textTheme.headlineMedium),
+                      Text(
+                        doctor.name ?? "اسم الدكتور",
+                        style: Theme.of(context).textTheme.headlineMedium,
+                      ),
                       const SizedBox(height: 6),
                       Text(
-                        message,
+                        doctor.bio ?? "البايو الخاص بالدكتور",
                         style: Theme.of(context).textTheme.displayMedium,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
                     ],
-                  ),
-                ),
-
-                SizedBox(
-                  height: 56,
-                  child: Align(
-                    alignment: Alignment.topRight,
-                    child: Text(time, style: Theme.of(context).textTheme.displayMedium),
                   ),
                 ),
               ],

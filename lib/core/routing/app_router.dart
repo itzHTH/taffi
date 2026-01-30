@@ -10,6 +10,7 @@ import 'package:taffi/features/auth/screens/fill_personal_info_screen.dart';
 import 'package:taffi/features/auth/screens/login_screen.dart';
 import 'package:taffi/features/auth/screens/register_screen.dart';
 import 'package:taffi/features/booking/screens/booking_screen.dart';
+import 'package:taffi/features/chat/providers/chat_provider.dart';
 import 'package:taffi/features/chat/screens/chat_screen.dart';
 import 'package:taffi/features/home/screens/main_screen.dart';
 import 'package:taffi/features/messages/screens/messages_screen.dart';
@@ -98,7 +99,12 @@ class AppRouter {
         return MaterialPageRoute(builder: (_) => const MessagesScreen());
 
       case RouteNames.chat:
-        return MaterialPageRoute(builder: (_) => const ChatScreen());
+        return MaterialPageRoute(
+          builder: (_) => ChangeNotifierProvider.value(
+            value: ChatProvider()..setDoctor(settings.arguments as DoctorModel),
+            child: const ChatScreen(),
+          ),
+        );
 
       case RouteNames.notifications:
         return MaterialPageRoute(

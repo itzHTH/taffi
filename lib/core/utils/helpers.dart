@@ -52,8 +52,6 @@ class Helpers {
     return slots;
   }
 
-  /// Converts time from "HH:mm a" format (e.g., "02:30 PM") to "HH:mm:ss" format for API
-  /// Example: "02:30 PM" -> "14:30:00"
   static String formatTimeOfDay(String timeString) {
     return "$timeString:00.000";
   }
@@ -69,5 +67,33 @@ class Helpers {
       inputTime.minute,
     );
     return inputDateTime.isBefore(BaghdadTimeHelper.now());
+  }
+}
+
+String formatTimestamp(String timestamp) {
+  // Server sends UTC time but without 'Z' suffix
+  // Add 'Z' if not present to ensure it's parsed as UTC
+  String utcTimestamp = timestamp;
+  if (!timestamp.endsWith('Z') && !timestamp.contains('+') && !timestamp.contains('UTC')) {
+    utcTimestamp = '${timestamp}Z';
+  }
+
+  final dateTime = DateTime.parse(utcTimestamp);
+  final now = DateTime.now().toUtc();
+  final difference = now.difference(dateTime);
+  if (difference.inMinutes < 1) {
+    return "منذ ثوانٍ";
+  } else if (difference.inMinutes < 60) {
+    return "منذ ${difference.inMinutes} دقيقة";
+  } else if (difference.inHours < 24) {
+    return "منذ ${difference.inHours} ساعة";
+  } else if (difference.inDays < 7) {
+    return "منذ ${difference.inDays} يوم";
+  } else if (difference.inDays < 30) {
+    return "منذ ${difference.inDays ~/ 7} أسبوع";
+  } else if (difference.inDays < 365) {
+    return "منذ ${difference.inDays ~/ 30} شهر";
+  } else {
+    return "منذ ${difference.inDays ~/ 365} سنة";
   }
 }
