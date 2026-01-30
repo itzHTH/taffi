@@ -18,11 +18,9 @@ class AppointmentScreen extends StatefulWidget {
   State<AppointmentScreen> createState() => _AppointmentScreenState();
 }
 
-class _AppointmentScreenState extends State<AppointmentScreen> {
+class _AppointmentScreenState extends State<AppointmentScreen> with AutomaticKeepAliveClientMixin {
   @override
-  void initState() {
-    super.initState();
-  }
+  bool get wantKeepAlive => true;
 
   Future<void> _showCancelConfirmationDialog(int index) async {
     final appointmentProvider = context.read<AppointmentProvider>();
@@ -58,6 +56,7 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
       body: CustomScrollView(
         slivers: [

@@ -63,7 +63,6 @@ class _SliverSpecialDoctorsGirdState extends State<SliverSpecialDoctorsGird> {
             doctorSpecialty: doctor.specialtyName ?? "التخصص",
             rating: doctor.rate ?? 0.0,
             onTap: () {
-              setDoctor(doctor);
               Navigator.pushNamed(context, RouteNames.doctorInfo, arguments: doctor);
             },
           );

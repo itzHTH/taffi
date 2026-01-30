@@ -28,10 +28,10 @@ class TaffiApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => DoctorProvider()..getAllDoctors()),
-        ChangeNotifierProvider(create: (context) => SpecialtyProvider()..getSpecialties()),
-        ChangeNotifierProvider(create: (context) => UserProvider()..getUserInfo()),
-        ChangeNotifierProvider(create: (context) => AppointmentProvider()..getAppointments()),
+        ChangeNotifierProvider(create: (context) => DoctorProvider()),
+        ChangeNotifierProvider(create: (context) => SpecialtyProvider()),
+        ChangeNotifierProvider(create: (context) => UserProvider()),
+        ChangeNotifierProvider(create: (context) => AppointmentProvider()),
       ],
       child: MaterialApp(
         title: 'Taffi',

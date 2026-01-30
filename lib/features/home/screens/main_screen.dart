@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:taffi/features/Doctor_Info/providers/doctor_provider.dart';
+import 'package:taffi/features/appointments/providers/appointment_provider.dart';
 import 'package:taffi/features/appointments/screens/appointments_screen.dart';
+import 'package:taffi/features/auth/providers/user_provider.dart';
 import 'package:taffi/features/home/screens/home_screen.dart';
 import 'package:taffi/features/home/widgets/custom_bottom_navigation_bar.dart';
 import 'package:taffi/features/messages/screens/messages_screen.dart';
 import 'package:taffi/features/profile/screens/profile_screen.dart';
+import 'package:taffi/features/specialties/providers/specialty_provider.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -20,6 +25,20 @@ class _MainScreenState extends State<MainScreen> {
   void initState() {
     super.initState();
     _pageController = PageController(initialPage: _currentScreen);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (context.read<DoctorProvider>().doctors.isEmpty) {
+        context.read<DoctorProvider>().getAllDoctors();
+      }
+      if (context.read<SpecialtyProvider>().specialties.isEmpty) {
+        context.read<SpecialtyProvider>().getSpecialties();
+      }
+      if (context.read<UserProvider>().user == null) {
+        context.read<UserProvider>().getUserInfo();
+      }
+      if (context.read<AppointmentProvider>().appointmentsResponse.isEmpty) {
+        context.read<AppointmentProvider>().getAppointments();
+      }
+    });
   }
 
   @override

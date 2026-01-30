@@ -115,7 +115,6 @@ class _FamousDoctorSliderState extends State<FamousDoctorSlider> {
                   doctorImage: doctor.imageUrl ?? "",
                   doctorLocation: doctor.location ?? "الموقع",
                   onBookingTap: () async {
-                    setDoctor(doctor);
                     Navigator.pushNamed(context, RouteNames.doctorInfo, arguments: doctor);
                   },
                 );
