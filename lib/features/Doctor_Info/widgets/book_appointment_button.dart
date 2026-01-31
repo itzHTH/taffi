@@ -13,20 +13,21 @@ class BookAppointmentButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<AppointmentProvider>(
       builder: (context, ref, child) {
+        bool isLoading = ref.bookStatus == Status.loading || ref.status == Status.loading;
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24),
           child: SizedBox(
             width: double.infinity,
             height: 56,
             child: ElevatedButton(
-              onPressed: onPressed,
+              onPressed: isLoading ? null : onPressed,
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.secondary,
                 foregroundColor: Colors.white,
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                 elevation: 2,
               ),
-              child: ref.bookStatus == Status.loading
+              child: isLoading
                   ? const Center(child: CircularProgressIndicator())
                   : const Text(
                       'حجز موعد',
