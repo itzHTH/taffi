@@ -4,7 +4,7 @@ import 'package:taffi/core/enums/status_enum.dart';
 import 'package:taffi/core/utils/snackbar_helper.dart';
 import 'package:taffi/features/auth/providers/user_provider.dart';
 
-class UpdateUserInfoButton extends StatelessWidget {
+class UpdateUserInfoButton extends StatefulWidget {
   const UpdateUserInfoButton({
     super.key,
     required this.formKey,
@@ -12,6 +12,7 @@ class UpdateUserInfoButton extends StatelessWidget {
     required this.phoneController,
     required this.ageController,
     required this.selectedGovernorate,
+    this.isEnabled = true,
   });
 
   final GlobalKey<FormState> formKey;
@@ -19,7 +20,13 @@ class UpdateUserInfoButton extends StatelessWidget {
   final TextEditingController phoneController;
   final TextEditingController ageController;
   final String selectedGovernorate;
+  final bool isEnabled;
 
+  @override
+  State<UpdateUserInfoButton> createState() => _UpdateUserInfoButtonState();
+}
+
+class _UpdateUserInfoButtonState extends State<UpdateUserInfoButton> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -28,15 +35,15 @@ class UpdateUserInfoButton extends StatelessWidget {
         builder: (context, userProvider, child) {
           bool isLoading = userProvider.updateUserStatus == Status.loading;
           return ElevatedButton(
-            onPressed: isLoading
+            onPressed: (isLoading || !widget.isEnabled)
                 ? null
                 : () async {
-                    if (formKey.currentState!.validate()) {
+                    if (widget.formKey.currentState!.validate()) {
                       await userProvider.updateUserInfo(
-                        fullname: fullNameController.text,
-                        phone: phoneController.text,
-                        age: ageController.text,
-                        governorate: selectedGovernorate,
+                        fullname: widget.fullNameController.text,
+                        phone: widget.phoneController.text,
+                        age: widget.ageController.text,
+                        governorate: widget.selectedGovernorate,
                       );
                       if (!context.mounted) return;
                       if (userProvider.updateUserStatus == Status.success) {
@@ -51,7 +58,14 @@ class UpdateUserInfoButton extends StatelessWidget {
                     }
                   },
             child: isLoading
-                ? const CircularProgressIndicator()
+                ? const SizedBox(
+                    width: 24,
+                    height: 24,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2.5,
+                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                    ),
+                  )
                 : const Text(
                     "تحديث المعلومات",
                     style: TextStyle(

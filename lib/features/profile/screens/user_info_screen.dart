@@ -27,22 +27,53 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
 
   String _selectedGovernorate = AppConstants.iraqGovernorates.first;
 
+  // القيم الأصلية للمقارنة
+  String _originalFullName = '';
+  String _originalPhone = '';
+  String _originalAge = '';
+  String _originalGovernorate = '';
+  bool _hasChanges = false;
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final userProvider = context.read<UserProvider>();
-      _fullNameController.text = userProvider.user!.fullName ?? "";
-      _userNameController.text = userProvider.user!.userName ?? "";
-      _emailController.text = userProvider.user!.email ?? "";
-      _phoneController.text = userProvider.user!.phoneNumber ?? "";
-      _ageController.text = userProvider.user!.age.toString();
-      _selectedGovernorate = userProvider.user!.governorate ?? "بغداد";
+      setState(() {
+        _fullNameController.text = userProvider.user!.fullName ?? "";
+        _userNameController.text = userProvider.user!.userName ?? "";
+        _emailController.text = userProvider.user!.email ?? "";
+        _phoneController.text = userProvider.user!.phoneNumber ?? "";
+        _ageController.text = userProvider.user!.age.toString();
+        _selectedGovernorate = userProvider.user!.governorate ?? "بغداد";
+
+        _originalFullName = _fullNameController.text;
+        _originalPhone = _phoneController.text;
+        _originalAge = _ageController.text;
+        _originalGovernorate = _selectedGovernorate;
+      });
+
+      _fullNameController.addListener(_checkForChanges);
+      _phoneController.addListener(_checkForChanges);
+      _ageController.addListener(_checkForChanges);
+    });
+  }
+
+  void _checkForChanges() {
+    setState(() {
+      _hasChanges =
+          _fullNameController.text != _originalFullName ||
+          _phoneController.text != _originalPhone ||
+          _ageController.text != _originalAge ||
+          _selectedGovernorate != _originalGovernorate;
     });
   }
 
   @override
   void dispose() {
+    _fullNameController.removeListener(_checkForChanges);
+    _phoneController.removeListener(_checkForChanges);
+    _ageController.removeListener(_checkForChanges);
     _fullNameController.dispose();
     _userNameController.dispose();
     _emailController.dispose();
@@ -149,6 +180,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                                 onChanged: (value) {
                                   setState(() {
                                     _selectedGovernorate = value;
+                                    _checkForChanges();
                                   });
                                 },
                               ),
@@ -183,6 +215,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                       phoneController: _phoneController,
                       ageController: _ageController,
                       selectedGovernorate: _selectedGovernorate,
+                      isEnabled: _hasChanges && _formKey.currentState!.validate(),
                     ),
 
                     Padding(
