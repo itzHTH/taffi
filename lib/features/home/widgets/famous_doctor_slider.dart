@@ -38,8 +38,8 @@ class _FamousDoctorSliderState extends State<FamousDoctorSlider> {
   }
 
   void _startTimer() {
-    _timer = Timer.periodic(const Duration(seconds: 3), (timer) {
-      if (_currentPage < 3) {
+    _timer = Timer.periodic(const Duration(seconds: 4), (timer) {
+      if (_currentPage < context.read<DoctorProvider>().topDoctors.length - 1) {
         _currentPage++;
       } else {
         _currentPage = 0;
