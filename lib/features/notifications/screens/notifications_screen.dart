@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:taffi/core/enums/status_enum.dart';
 import 'package:taffi/core/theme/app_colors.dart';
+import 'package:taffi/core/widgets/custom_refresh_indicator.dart';
 import 'package:taffi/core/utils/helpers.dart';
 import 'package:taffi/core/utils/snackbar_helper.dart';
 import 'package:taffi/core/widgets/error_retry_widget.dart';
@@ -56,79 +57,82 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
 
     return Scaffold(
       backgroundColor: AppColors.background,
-      body: CustomScrollView(
-        slivers: [
-          SliverAppBar(
-            title: Text("الإشعارات", style: Theme.of(context).textTheme.titleLarge),
-            backgroundColor: Colors.transparent,
-            foregroundColor: AppColors.primary,
-            leading: IconButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              icon: const Icon(Icons.arrow_back_ios_new),
+      body: CustomRefreshIndicator(
+        onRefresh: _fetchNotifications,
+        child: CustomScrollView(
+          slivers: [
+            SliverAppBar(
+              title: Text("الإشعارات", style: Theme.of(context).textTheme.titleLarge),
+              backgroundColor: Colors.transparent,
+              foregroundColor: AppColors.primary,
+              leading: IconButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                icon: const Icon(Icons.arrow_back_ios_new),
+              ),
+              floating: true,
+              snap: true,
             ),
-            floating: true,
-            snap: true,
-          ),
 
-          if (provider.status == Status.loading)
-            SliverPadding(
-              padding: const EdgeInsets.only(top: 8, bottom: 16),
-              sliver: SliverList(
-                delegate: SliverChildBuilderDelegate(
-                  (context, index) => const NotificationShimmer(),
-                  childCount: 5,
+            if (provider.status == Status.loading)
+              SliverPadding(
+                padding: const EdgeInsets.only(top: 8, bottom: 16),
+                sliver: SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                    (context, index) => const NotificationShimmer(),
+                    childCount: 5,
+                  ),
+                ),
+              )
+            // Error state
+            else if (provider.status == Status.error)
+              SliverFillRemaining(
+                child: Center(
+                  child: ErrorRetryWidget(
+                    errorMessage: provider.message,
+                    onRetry: () => _fetchNotifications(),
+                  ),
+                ),
+              )
+            // Empty state
+            else if (provider.notifications.isEmpty)
+              SliverFillRemaining(
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.notifications_none, size: 80, color: AppColors.textHint),
+                      const SizedBox(height: 16),
+                      Text(
+                        'لا توجد إشعارات',
+                        style: Theme.of(
+                          context,
+                        ).textTheme.titleMedium?.copyWith(color: AppColors.textSecondary),
+                      ),
+                    ],
+                  ),
+                ),
+              )
+            // Success state with notifications
+            else
+              SliverPadding(
+                padding: const EdgeInsets.only(top: 8, bottom: 16),
+                sliver: SliverList(
+                  delegate: SliverChildBuilderDelegate((context, index) {
+                    final notification = provider.notifications[index];
+                    return NotificationItem(
+                      title: notification.title ?? "عنوان الإشعار",
+                      message: notification.message ?? "رسالة الإشعار",
+                      time: Helpers.formatDate(notification.createdAt ?? DateTime.utc(0000, 0, 0)),
+                      isRead: notification.isRead ?? false,
+                      onRead: () async => await _markAsRead(notification.id ?? ""),
+                    );
+                  }, childCount: provider.notifications.length),
                 ),
               ),
-            )
-          // Error state
-          else if (provider.status == Status.error)
-            SliverFillRemaining(
-              child: Center(
-                child: ErrorRetryWidget(
-                  errorMessage: provider.message,
-                  onRetry: () => _fetchNotifications(),
-                ),
-              ),
-            )
-          // Empty state
-          else if (provider.notifications.isEmpty)
-            SliverFillRemaining(
-              child: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(Icons.notifications_none, size: 80, color: AppColors.textHint),
-                    const SizedBox(height: 16),
-                    Text(
-                      'لا توجد إشعارات',
-                      style: Theme.of(
-                        context,
-                      ).textTheme.titleMedium?.copyWith(color: AppColors.textSecondary),
-                    ),
-                  ],
-                ),
-              ),
-            )
-          // Success state with notifications
-          else
-            SliverPadding(
-              padding: const EdgeInsets.only(top: 8, bottom: 16),
-              sliver: SliverList(
-                delegate: SliverChildBuilderDelegate((context, index) {
-                  final notification = provider.notifications[index];
-                  return NotificationItem(
-                    title: notification.title ?? "عنوان الإشعار",
-                    message: notification.message ?? "رسالة الإشعار",
-                    time: Helpers.formatDate(notification.createdAt ?? DateTime.utc(0000, 0, 0)),
-                    isRead: notification.isRead ?? false,
-                    onRead: () async => await _markAsRead(notification.id ?? ""),
-                  );
-                }, childCount: provider.notifications.length),
-              ),
-            ),
-        ],
+          ],
+        ),
       ),
     );
   }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:taffi/core/theme/app_colors.dart';
 import 'package:taffi/features/Doctor_Info/providers/doctor_provider.dart';
 import 'package:taffi/features/booking/widgets/custom_sliver_app_bar.dart';
 import 'package:taffi/features/booking/widgets/sliver_booking_doctor_list.dart';
@@ -28,10 +29,30 @@ class _BookingScreenState extends State<BookingScreen> {
     });
   }
 
+  Future<void> _onRefresh() async {
+    final selectedSpecialty = Provider.of<SpecialtyProvider>(
+      context,
+      listen: false,
+    ).selectedSpecialty;
+    if (selectedSpecialty != null && selectedSpecialty.id != null) {
+      await Provider.of<DoctorProvider>(
+        context,
+        listen: false,
+      ).getDoctorsBySpecialty(selectedSpecialty.id!);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: CustomScrollView(slivers: [CustomSliverAppBar(), SliverBookingDoctorList()]),
+      body: RefreshIndicator(
+        onRefresh: _onRefresh,
+        color: AppColors.secondary,
+        backgroundColor: Colors.white,
+        strokeWidth: 3.0,
+        displacement: 40,
+        child: CustomScrollView(slivers: [CustomSliverAppBar(), SliverBookingDoctorList()]),
+      ),
     );
   }
 }

@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:taffi/core/enums/status_enum.dart';
 import 'package:taffi/core/routing/route_names.dart';
+import 'package:taffi/core/widgets/custom_refresh_indicator.dart';
 import 'package:taffi/core/widgets/error_retry_widget.dart';
 import 'package:taffi/features/auth/providers/user_provider.dart';
 import 'package:taffi/features/profile/widgets/menu_item.dart';
@@ -13,83 +14,97 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        FocusScope.of(context).unfocus();
-      },
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        appBar: AppBar(
+    return CustomRefreshIndicator(
+      onRefresh: () => context.read<UserProvider>().getUserInfo(),
+      child: GestureDetector(
+        onTap: () {
+          FocusScope.of(context).unfocus();
+        },
+        child: Scaffold(
           backgroundColor: Colors.white,
-          elevation: 0,
-          title: Text("ملفي الشخصي", style: Theme.of(context).textTheme.titleLarge),
-        ),
-        body: SafeArea(
-          child: Consumer<UserProvider>(
-            builder: (context, userProvider, child) {
-              if (userProvider.loadUserStatus == Status.loading) {
-                return const _ProfileScreenShimmer();
-              }
-              if (userProvider.loadUserStatus == Status.error) {
-                return Center(
-                  child: ErrorRetryWidget(
-                    errorMessage: userProvider.errorMessage,
-                    onRetry: () => userProvider.getUserInfo(),
+          appBar: AppBar(
+            backgroundColor: Colors.white,
+            elevation: 0,
+            title: Text("ملفي الشخصي", style: Theme.of(context).textTheme.titleLarge),
+          ),
+          body: SafeArea(
+            child: Consumer<UserProvider>(
+              builder: (context, userProvider, child) {
+                Widget content;
+
+                if (userProvider.loadUserStatus == Status.loading) {
+                  content = const _ProfileScreenShimmer();
+                } else if (userProvider.loadUserStatus == Status.error) {
+                  content = Center(
+                    child: ErrorRetryWidget(
+                      errorMessage: userProvider.errorMessage,
+                      onRetry: () => userProvider.getUserInfo(),
+                    ),
+                  );
+                } else {
+                  // success
+                  content = Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24),
+                    child: Column(
+                      children: [
+                        UserDetailsWidget(),
+                        const SizedBox(height: 36),
+                        MenuItem(
+                          icon: 'assets/images/profile.svg',
+                          title: "المعلومات الشخصيه",
+                          onTap: () {
+                            Navigator.pushNamed(context, RouteNames.userInfo);
+                          },
+                        ),
+                        const SizedBox(height: 8),
+                        MenuItem(
+                          icon: 'assets/images/password.svg',
+                          title: 'سياسة الخصوصية',
+                          onTap: () {
+                            Navigator.pushNamed(context, RouteNames.privacyPolicy);
+                          },
+                        ),
+                        const SizedBox(height: 8),
+                        MenuItem(
+                          icon: 'assets/images/logout.svg',
+                          title: 'تسجيل الخروج',
+                          onTap: () async {
+                            await userProvider.logout();
+                            if (context.mounted) {
+                              Navigator.pushNamedAndRemoveUntil(
+                                context,
+                                RouteNames.login,
+                                (route) => false,
+                              );
+                            }
+                          },
+                        ),
+                        const SizedBox(height: 8),
+                        MenuItem(
+                          useIconData: true,
+                          iconData: Icons.help_outline_rounded,
+                          title: 'من نحن',
+                          onTap: () {
+                            Navigator.pushNamed(context, RouteNames.aboutUs);
+                          },
+                        ),
+                      ],
+                    ),
+                  );
+                }
+
+                return SingleChildScrollView(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  child: SizedBox(
+                    height:
+                        MediaQuery.of(context).size.height -
+                        MediaQuery.of(context).padding.top -
+                        kToolbarHeight,
+                    child: content,
                   ),
                 );
-              }
-              // success
-              return SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24),
-                  child: Column(
-                    children: [
-                      UserDetailsWidget(),
-                      const SizedBox(height: 36),
-                      MenuItem(
-                        icon: 'assets/images/profile.svg',
-                        title: "المعلومات الشخصيه",
-                        onTap: () {
-                          Navigator.pushNamed(context, RouteNames.userInfo);
-                        },
-                      ),
-                      const SizedBox(height: 8),
-                      MenuItem(
-                        icon: 'assets/images/password.svg',
-                        title: 'سياسة الخصوصية',
-                        onTap: () {
-                          Navigator.pushNamed(context, RouteNames.privacyPolicy);
-                        },
-                      ),
-                      const SizedBox(height: 8),
-                      MenuItem(
-                        icon: 'assets/images/logout.svg',
-                        title: 'تسجيل الخروج',
-                        onTap: () async {
-                          await userProvider.logout();
-                          if (context.mounted) {
-                            Navigator.pushNamedAndRemoveUntil(
-                              context,
-                              RouteNames.login,
-                              (route) => false,
-                            );
-                          }
-                        },
-                      ),
-                      const SizedBox(height: 8),
-                      MenuItem(
-                        useIconData: true,
-                        iconData: Icons.help_outline_rounded,
-                        title: 'من نحن',
-                        onTap: () {
-                          Navigator.pushNamed(context, RouteNames.aboutUs);
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            },
+              },
+            ),
           ),
         ),
       ),

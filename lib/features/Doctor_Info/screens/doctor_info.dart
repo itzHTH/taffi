@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:taffi/core/enums/status_enum.dart';
 import 'package:taffi/core/theme/app_colors.dart';
+import 'package:taffi/core/widgets/custom_refresh_indicator.dart';
 import 'package:taffi/core/utils/helpers.dart';
 import 'package:taffi/core/utils/snackbar_helper.dart';
 import 'package:taffi/core/widgets/confirmation_dialog.dart';
@@ -105,40 +106,48 @@ class _DoctorInfoScreenState extends State<DoctorInfoScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.secondary,
-      body: SafeArea(
-        child: CustomScrollView(
-          slivers: [
-            CustomSliverAppBar(imageUrl: widget.doctor.imageUrl ?? ""),
-            SliverToBoxAdapter(
-              child: ConstrainedBox(
-                constraints: BoxConstraints(minHeight: MediaQuery.of(context).size.height * 0.65),
-                child: Container(
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(36),
-                      topRight: Radius.circular(36),
-                    ),
-                  ),
-                  child: Column(
-                    children: [
-                      const SizedBox(height: 2),
-                      Divider(
-                        color: Colors.grey[400],
-                        thickness: 4,
-                        endIndent: MediaQuery.of(context).size.width / 2.3,
-                        indent: MediaQuery.of(context).size.width / 2.3,
-                        radius: BorderRadius.circular(100),
+      body: CustomRefreshIndicator(
+        onRefresh: () async {
+          await Provider.of<DoctorProvider>(
+            context,
+            listen: false,
+          ).getDoctorSchedule(widget.doctor.id!);
+        },
+        child: SafeArea(
+          child: CustomScrollView(
+            slivers: [
+              CustomSliverAppBar(imageUrl: widget.doctor.imageUrl ?? ""),
+              SliverToBoxAdapter(
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(minHeight: MediaQuery.of(context).size.height * 0.65),
+                  child: Container(
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(36),
+                        topRight: Radius.circular(36),
                       ),
-                      const SizedBox(height: 24),
-                      DoctorInfoHeader(widget: widget),
-                      DateAndBookBodyWidget(onBookingPressed: _showBookingConfirmationDialog),
-                    ],
+                    ),
+                    child: Column(
+                      children: [
+                        const SizedBox(height: 2),
+                        Divider(
+                          color: Colors.grey[400],
+                          thickness: 4,
+                          endIndent: MediaQuery.of(context).size.width / 2.3,
+                          indent: MediaQuery.of(context).size.width / 2.3,
+                          radius: BorderRadius.circular(100),
+                        ),
+                        const SizedBox(height: 24),
+                        DoctorInfoHeader(widget: widget),
+                        DateAndBookBodyWidget(onBookingPressed: _showBookingConfirmationDialog),
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

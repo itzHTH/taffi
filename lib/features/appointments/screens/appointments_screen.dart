@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:taffi/core/enums/status_enum.dart';
+import 'package:taffi/core/widgets/custom_refresh_indicator.dart';
 import 'package:taffi/core/utils/helpers.dart';
 import 'package:taffi/core/utils/snackbar_helper.dart';
 import 'package:taffi/core/widgets/confirmation_dialog.dart';
@@ -57,71 +58,74 @@ class _AppointmentScreenState extends State<AppointmentScreen> with AutomaticKee
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return Scaffold(
-      body: CustomScrollView(
-        slivers: [
-          SliverAppBar(
-            title: Text("جدول المواعيد", style: Theme.of(context).textTheme.titleLarge),
-            centerTitle: true,
-            automaticallyImplyLeading: false,
-            backgroundColor: Colors.transparent,
-            surfaceTintColor: Colors.transparent,
-            elevation: 0,
-          ),
-          Consumer<AppointmentProvider>(
-            builder: (context, appointmentProvider, child) {
-              // Show shimmer while loading
-              if (appointmentProvider.status == Status.loading) {
-                return SliverList.builder(
-                  itemCount: 3,
-                  itemBuilder: (context, index) => const AppointmentShimmerCard(),
-                );
-              }
+    return CustomRefreshIndicator(
+      onRefresh: () => context.read<AppointmentProvider>().getAppointments(),
+      child: Scaffold(
+        body: CustomScrollView(
+          slivers: [
+            SliverAppBar(
+              title: Text("جدول المواعيد", style: Theme.of(context).textTheme.titleLarge),
+              centerTitle: true,
+              automaticallyImplyLeading: false,
+              backgroundColor: Colors.transparent,
+              surfaceTintColor: Colors.transparent,
+              elevation: 0,
+            ),
+            Consumer<AppointmentProvider>(
+              builder: (context, appointmentProvider, child) {
+                // Show shimmer while loading
+                if (appointmentProvider.status == Status.loading) {
+                  return SliverList.builder(
+                    itemCount: 3,
+                    itemBuilder: (context, index) => const AppointmentShimmerCard(),
+                  );
+                }
 
-              if (appointmentProvider.status == Status.error) {
-                return SliverFillRemaining(
-                  hasScrollBody: false,
-                  child: Center(
-                    child: ErrorRetryWidget(
-                      errorMessage:
-                          appointmentProvider.errorMessage ?? "حدث خطأ أثناء تحميل المواعيد",
-                      onRetry: () => appointmentProvider.getAppointments(),
+                if (appointmentProvider.status == Status.error) {
+                  return SliverFillRemaining(
+                    hasScrollBody: false,
+                    child: Center(
+                      child: ErrorRetryWidget(
+                        errorMessage:
+                            appointmentProvider.errorMessage ?? "حدث خطأ أثناء تحميل المواعيد",
+                        onRetry: () => appointmentProvider.getAppointments(),
+                      ),
                     ),
-                  ),
+                  );
+                }
+
+                // Show empty state if no appointments
+                if (appointmentProvider.appointmentsResponse.isEmpty) {
+                  return const EmptyAppointmentList();
+                }
+
+                // Show appointments list
+                return SliverList.builder(
+                  itemCount: appointmentProvider.appointmentsResponse.length,
+                  itemBuilder: (context, index) {
+                    final appointment = appointmentProvider.appointmentsResponse[index];
+
+                    bool isCompleted = Helpers.isDateTimeBeforeNow(
+                      appointment.appointmentDate!,
+                      appointment.appointmentTime!,
+                    );
+                    return AppointmentDoctorCard(
+                      doctorName: appointment.doctorName ?? "اسم الطبيب",
+                      doctorSpecialization: appointment.specialtyName ?? "التخصص",
+                      doctorImage: appointment.doctorImage ?? "",
+                      appointmentTime: appointment.formattedTime,
+                      appointmentDate: appointment.formattedDate,
+                      onBookCancelTap: () => _showCancelConfirmationDialog(index),
+
+                      isCompleted: isCompleted,
+                      isCancelled: appointment.status == "Cancelled",
+                    );
+                  },
                 );
-              }
-
-              // Show empty state if no appointments
-              if (appointmentProvider.appointmentsResponse.isEmpty) {
-                return const EmptyAppointmentList();
-              }
-
-              // Show appointments list
-              return SliverList.builder(
-                itemCount: appointmentProvider.appointmentsResponse.length,
-                itemBuilder: (context, index) {
-                  final appointment = appointmentProvider.appointmentsResponse[index];
-
-                  bool isCompleted = Helpers.isDateTimeBeforeNow(
-                    appointment.appointmentDate!,
-                    appointment.appointmentTime!,
-                  );
-                  return AppointmentDoctorCard(
-                    doctorName: appointment.doctorName ?? "اسم الطبيب",
-                    doctorSpecialization: appointment.specialtyName ?? "التخصص",
-                    doctorImage: appointment.doctorImage ?? "",
-                    appointmentTime: appointment.formattedTime,
-                    appointmentDate: appointment.formattedDate,
-                    onBookCancelTap: () => _showCancelConfirmationDialog(index),
-
-                    isCompleted: isCompleted,
-                    isCancelled: appointment.status == "Cancelled",
-                  );
-                },
-              );
-            },
-          ),
-        ],
+              },
+            ),
+          ],
+        ),
       ),
     );
   }

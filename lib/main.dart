@@ -14,7 +14,6 @@ import 'package:timezone/timezone.dart' as tz;
 void main() {
   // Initialize timezone database
   tz.initializeTimeZones();
-
   // Set Baghdad timezone as default
   tz.setLocalLocation(tz.getLocation('Asia/Baghdad'));
 
