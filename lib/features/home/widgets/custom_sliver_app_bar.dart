@@ -47,11 +47,11 @@ class CustomSliverAppBar extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                userProvider.user!.fullName ?? "",
+                userProvider.user?.fullName ?? "مستخدم",
                 style: Theme.of(context).textTheme.labelMedium,
               ),
               Text(
-                userProvider.user!.phoneNumber ?? "",
+                userProvider.user?.phoneNumber ?? "",
                 style: Theme.of(context).textTheme.bodySmall,
               ),
             ],

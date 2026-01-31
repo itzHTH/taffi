@@ -12,9 +12,7 @@ import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
 void main() {
-  // Initialize timezone database
   tz.initializeTimeZones();
-  // Set Baghdad timezone as default
   tz.setLocalLocation(tz.getLocation('Asia/Baghdad'));
 
   runApp(const TaffiApp());
@@ -25,6 +23,8 @@ class TaffiApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final navigatorKey = NavigationService().navigatorKey;
+
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => DoctorProvider()),
@@ -41,7 +41,7 @@ class TaffiApp extends StatelessWidget {
         },
         initialRoute: RouteNames.splash,
         onGenerateRoute: AppRouter.generateRoute,
-        navigatorKey: NavigationService().navigatorKey,
+        navigatorKey: navigatorKey,
       ),
     );
   }
