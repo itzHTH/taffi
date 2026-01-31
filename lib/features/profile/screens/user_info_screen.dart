@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:taffi/core/constants/app_constants.dart';
-import 'package:taffi/core/enums/status_enum.dart';
 import 'package:taffi/core/theme/app_colors.dart';
-import 'package:taffi/core/utils/snackbar_helper.dart';
 import 'package:taffi/core/utils/validators.dart';
 import 'package:taffi/core/widgets/custom_text_form_field.dart';
 import 'package:taffi/features/auth/providers/user_provider.dart';
 import 'package:taffi/features/profile/widgets/disabled_text_field.dart';
 import 'package:taffi/features/profile/widgets/field_label.dart';
 import 'package:taffi/features/profile/widgets/governorate_dropdown.dart';
+import 'package:taffi/features/profile/widgets/update_user_info_button.dart';
 
 class UserInfoScreen extends StatefulWidget {
   const UserInfoScreen({super.key});
@@ -178,42 +177,12 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                       ],
                     ),
                     const SizedBox(height: 40),
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        onPressed: () async {
-                          if (_formKey.currentState!.validate()) {
-                            final userProvider = Provider.of<UserProvider>(context, listen: false);
-                            await userProvider.updateUserInfo(
-                              fullname: _fullNameController.text,
-                              phone: _phoneController.text,
-                              age: _ageController.text,
-                              governorate: _selectedGovernorate,
-                            );
-                            if (!context.mounted) return;
-                            if (userProvider.updateUserStatus == Status.success) {
-                              userProvider.getUserInfo();
-                              if (context.mounted) {
-                                SnackBarHelper.showSuccess(context, "تم تحديث المعلومات بنجاح");
-                                Navigator.pop(context);
-                              }
-                            } else {
-                              SnackBarHelper.showError(context, userProvider.errorMessage);
-                            }
-                          }
-                        },
-                        child: Consumer<UserProvider>(
-                          builder: (context, userProvider, child) {
-                            if (userProvider.updateUserStatus == Status.loading) {
-                              return const Center(child: CircularProgressIndicator());
-                            }
-                            return const Text(
-                              "تحديث المعلومات",
-                              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-                            );
-                          },
-                        ),
-                      ),
+                    UpdateUserInfoButton(
+                      formKey: _formKey,
+                      fullNameController: _fullNameController,
+                      phoneController: _phoneController,
+                      ageController: _ageController,
+                      selectedGovernorate: _selectedGovernorate,
                     ),
 
                     Padding(
