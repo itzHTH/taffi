@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:taffi/core/theme/app_colors.dart';
 
 class CustomSeacrhBar extends StatelessWidget {
-  const CustomSeacrhBar({super.key});
+  const CustomSeacrhBar({super.key, required this.onSearchChanged});
+
+  final Function(String) onSearchChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -10,9 +12,14 @@ class CustomSeacrhBar extends StatelessWidget {
       width: 240,
       height: 45,
       child: SearchBar(
+        onChanged: (query) {
+          onSearchChanged(query);
+        },
+        onTapOutside: (event) {
+          FocusScope.of(context).unfocus();
+        },
         hintText: "ابحث عن تخصص",
         hintStyle: WidgetStatePropertyAll(TextStyle(fontSize: 14)),
-
         leading: Icon(Icons.search, color: AppColors.primary),
         backgroundColor: WidgetStatePropertyAll(Colors.transparent),
         elevation: WidgetStatePropertyAll(0),

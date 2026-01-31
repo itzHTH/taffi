@@ -28,6 +28,14 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
     });
   }
 
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      FocusScope.of(context).unfocus();
+    });
+  }
+
   Future<void> getTopDoctors() async {
     final doctorProvider = Provider.of<DoctorProvider>(context, listen: false);
     await doctorProvider.getTopDoctors();

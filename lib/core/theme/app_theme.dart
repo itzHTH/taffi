@@ -60,7 +60,7 @@ class AppTheme {
         ),
       ),
 
-      searchViewTheme: SearchViewThemeData(backgroundColor: Color(0xffDFEEFF)),
+      searchViewTheme: SearchViewThemeData(backgroundColor: Colors.white),
 
       textTheme: TextTheme(
         labelSmall: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: AppColors.primary),

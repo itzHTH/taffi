@@ -4,11 +4,15 @@ import 'package:taffi/core/enums/status_enum.dart';
 import 'package:taffi/core/routing/route_names.dart';
 import 'package:taffi/core/widgets/error_retry_widget.dart';
 import 'package:taffi/core/widgets/specialty_card.dart';
+import 'package:taffi/features/specialties/models/specialty_model.dart';
 import 'package:taffi/features/specialties/providers/specialty_provider.dart';
 import 'package:taffi/features/specialties/widgets/specialty_card_shimmer.dart';
 
 class SliverSpecialtyGrid extends StatefulWidget {
-  const SliverSpecialtyGrid({super.key});
+  const SliverSpecialtyGrid({super.key, this.specialties});
+
+  final List<SpecialtyModel>? specialties;
+
   @override
   State<SliverSpecialtyGrid> createState() => _SliverSpecialtyGridState();
 }
@@ -41,7 +45,9 @@ class _SliverSpecialtyGridState extends State<SliverSpecialtyGrid> {
             ),
           );
         }
-        return provider.specialties.isEmpty
+
+        final displayList = widget.specialties ?? provider.specialties;
+        return displayList.isEmpty
             ? SliverToBoxAdapter(child: Center(child: Text("لا توجد تخصصات حاليا")))
             : SliverGrid.builder(
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -50,13 +56,13 @@ class _SliverSpecialtyGridState extends State<SliverSpecialtyGrid> {
                   mainAxisSpacing: 16,
                   childAspectRatio: 0.58,
                 ),
-                itemCount: provider.specialties.length,
+                itemCount: displayList.length,
                 itemBuilder: (context, index) {
                   return SpecialtyCard(
-                    title: provider.specialties[index].name ?? "اسم التخصص",
-                    imageUrl: provider.specialties[index].iconUrl ?? "",
+                    title: displayList[index].name ?? "اسم التخصص",
+                    imageUrl: displayList[index].iconUrl ?? "",
                     onTap: () {
-                      provider.setSelectedSpecialty(provider.specialties[index]);
+                      provider.setSelectedSpecialty(displayList[index]);
                       Navigator.pushNamed(context, RouteNames.booking);
                     },
                   );
