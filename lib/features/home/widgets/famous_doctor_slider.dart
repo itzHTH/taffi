@@ -38,7 +38,7 @@ class _FamousDoctorSliderState extends State<FamousDoctorSlider> {
   }
 
   void _startTimer() {
-    _timer = Timer.periodic(const Duration(seconds: 4), (timer) {
+    _timer = Timer.periodic(const Duration(seconds: 3), (timer) {
       if (_currentPage < 3) {
         _currentPage++;
       } else {
@@ -91,6 +91,7 @@ class _FamousDoctorSliderState extends State<FamousDoctorSlider> {
     }
 
     // Success - show slider
+    _startTimer();
     return GestureDetector(
       onPanDown: (details) {
         _stopTimer();
