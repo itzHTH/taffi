@@ -27,18 +27,27 @@ class UpdateUserInfoButton extends StatefulWidget {
 }
 
 class _UpdateUserInfoButtonState extends State<UpdateUserInfoButton> {
+  bool isLoadingLocal = false;
+
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
-      child: Consumer<UserProvider>(
-        builder: (context, userProvider, child) {
-          bool isLoading = userProvider.updateUserStatus == Status.loading;
-          return ElevatedButton(
-            onPressed: (isLoading || !widget.isEnabled)
-                ? null
-                : () async {
-                    if (widget.formKey.currentState!.validate()) {
+    return AbsorbPointer(
+      absorbing: isLoadingLocal,
+      child: SizedBox(
+        width: double.infinity,
+        child: Consumer<UserProvider>(
+          builder: (context, userProvider, child) {
+            bool isLoading =
+                userProvider.updateUserStatus == Status.loading ||
+                userProvider.loadUserStatus == Status.loading;
+            return ElevatedButton(
+              onPressed: (!widget.isEnabled)
+                  ? null
+                  : () async {
+                      if (isLoadingLocal) return;
+                      setState(() {
+                        isLoadingLocal = true;
+                      });
                       await userProvider.updateUserInfo(
                         fullname: widget.fullNameController.text,
                         phone: widget.phoneController.text,
@@ -47,7 +56,7 @@ class _UpdateUserInfoButtonState extends State<UpdateUserInfoButton> {
                       );
                       if (!context.mounted) return;
                       if (userProvider.updateUserStatus == Status.success) {
-                        userProvider.getUserInfo();
+                        await userProvider.getUserInfo();
                         if (context.mounted) {
                           SnackBarHelper.showSuccess(context, "تم تحديث المعلومات بنجاح");
                           Navigator.pop(context);
@@ -55,27 +64,30 @@ class _UpdateUserInfoButtonState extends State<UpdateUserInfoButton> {
                       } else {
                         SnackBarHelper.showError(context, userProvider.errorMessage);
                       }
-                    }
-                  },
-            child: isLoading
-                ? const SizedBox(
-                    width: 24,
-                    height: 24,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2.5,
-                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                      setState(() {
+                        isLoadingLocal = false;
+                      });
+                    },
+              child: isLoading || isLoadingLocal
+                  ? const SizedBox(
+                      width: 24,
+                      height: 24,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2.5,
+                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                      ),
+                    )
+                  : const Text(
+                      "تحديث المعلومات",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white,
+                      ),
                     ),
-                  )
-                : const Text(
-                    "تحديث المعلومات",
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.white,
-                    ),
-                  ),
-          );
-        },
+            );
+          },
+        ),
       ),
     );
   }
