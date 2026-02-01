@@ -28,17 +28,16 @@ class _BookAppointmentButtonState extends State<BookAppointmentButton> {
               width: double.infinity,
               height: 56,
               child: ElevatedButton(
-                onPressed: _isLoadingLocal
-                    ? null
-                    : () async {
-                        setState(() {
-                          _isLoadingLocal = true;
-                        });
-                        await widget.onPressed?.call();
-                        setState(() {
-                          _isLoadingLocal = false;
-                        });
-                      },
+                onPressed: () async {
+                  if (isLoadingState || _isLoadingLocal) return;
+                  setState(() {
+                    _isLoadingLocal = true;
+                  });
+                  await widget.onPressed?.call();
+                  setState(() {
+                    _isLoadingLocal = false;
+                  });
+                },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.secondary,
                   foregroundColor: Colors.white,
