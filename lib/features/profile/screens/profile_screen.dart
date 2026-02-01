@@ -94,7 +94,7 @@ class ProfileScreen extends StatelessWidget {
                 }
 
                 return SingleChildScrollView(
-                  physics: const AlwaysScrollableScrollPhysics(),
+                  physics: const NeverScrollableScrollPhysics(),
                   child: SizedBox(
                     height:
                         MediaQuery.of(context).size.height -

@@ -7,7 +7,6 @@ import 'package:taffi/core/routing/route_names.dart';
 import 'package:taffi/core/theme/app_colors.dart';
 import 'package:taffi/core/widgets/big_doctor_card.dart';
 import 'package:taffi/core/widgets/error_retry_widget.dart';
-import 'package:taffi/features/Doctor_Info/models/doctor_model.dart';
 import 'package:taffi/features/Doctor_Info/providers/doctor_provider.dart';
 import 'package:taffi/features/home/widgets/doctor_slider_shimmer.dart';
 
@@ -27,19 +26,29 @@ class _FamousDoctorSliderState extends State<FamousDoctorSlider> {
   void initState() {
     super.initState();
     _pageController = PageController();
-    _startTimer();
   }
 
   @override
   void dispose() {
-    _pageController.dispose();
     _timer?.cancel();
+    _pageController.dispose();
     super.dispose();
   }
 
   void _startTimer() {
+    _timer?.cancel();
+    if (!mounted) return;
+
     _timer = Timer.periodic(const Duration(seconds: 4), (timer) {
-      if (_currentPage < context.read<DoctorProvider>().topDoctors.length - 1) {
+      if (!mounted) {
+        timer.cancel();
+        return;
+      }
+
+      final doctorCount = context.read<DoctorProvider>().topDoctors.length;
+      if (doctorCount == 0) return;
+
+      if (_currentPage < doctorCount - 1) {
         _currentPage++;
       } else {
         _currentPage = 0;
@@ -57,24 +66,18 @@ class _FamousDoctorSliderState extends State<FamousDoctorSlider> {
 
   void _stopTimer() {
     _timer?.cancel();
-  }
-
-  void setDoctor(DoctorModel doctor) {
-    final provider = context.read<DoctorProvider>();
-    provider.setDoctor(doctor);
+    _timer = null;
   }
 
   @override
   Widget build(BuildContext context) {
     final provider = context.watch<DoctorProvider>();
 
-    // Show shimmer only during loading
     if (provider.topDoctorsStatus == Status.loading) {
       _stopTimer();
       return const DoctorSliderShimmer();
     }
 
-    // Show error state with retry (BEFORE checking if empty!)
     if (provider.topDoctorsStatus == Status.error) {
       _stopTimer();
       return ErrorRetryWidget(
@@ -84,21 +87,18 @@ class _FamousDoctorSliderState extends State<FamousDoctorSlider> {
       );
     }
 
-    // Show shimmer if list is empty (after success)
     if (provider.topDoctors.isEmpty) {
       _stopTimer();
       return const DoctorSliderShimmer();
     }
 
-    // Success - show slider
-    _startTimer();
+    if (_timer == null || !(_timer!.isActive)) {
+      _startTimer();
+    }
+
     return GestureDetector(
-      onPanDown: (details) {
-        _stopTimer();
-      },
-      onPanEnd: (details) {
-        _startTimer();
-      },
+      onPanDown: (_) => _stopTimer(),
+      onPanEnd: (_) => _startTimer(),
       onPanCancel: () => _startTimer(),
       child: Column(
         children: [
@@ -107,6 +107,9 @@ class _FamousDoctorSliderState extends State<FamousDoctorSlider> {
             child: PageView.builder(
               controller: _pageController,
               itemCount: provider.topDoctors.length,
+              onPageChanged: (index) {
+                _currentPage = index;
+              },
               itemBuilder: (context, index) {
                 final doctor = provider.topDoctors[index];
                 return BigDoctorCard(
@@ -115,7 +118,7 @@ class _FamousDoctorSliderState extends State<FamousDoctorSlider> {
                   rating: doctor.rate ?? 0,
                   doctorImage: doctor.imageUrl ?? "",
                   doctorLocation: doctor.location ?? "الموقع",
-                  onBookingTap: () async {
+                  onBookingTap: () {
                     Navigator.pushNamed(context, RouteNames.doctorInfo, arguments: doctor);
                   },
                 );

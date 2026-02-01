@@ -7,6 +7,8 @@ class EmptyAppointmentList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverFillRemaining(
+      hasScrollBody: false,
+      fillOverscroll: true,
       child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
