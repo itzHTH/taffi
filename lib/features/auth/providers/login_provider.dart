@@ -98,7 +98,7 @@ class LoginProvider extends ChangeNotifier {
           if (authModel.isNewUser == true) {
             NavigationService().pushNamedAndRemoveUntil(
               RouteNames.fillPersonalInfo,
-              arguments: {'isFromGoogle': true},
+              arguments: true, // isFromGoogle
             );
 
             status = Status.initial;

@@ -39,21 +39,21 @@ class AppRouter {
         return MaterialPageRoute(builder: (_) => const LoginScreen());
 
       case RouteNames.register:
-        return MaterialPageRoute(
-          builder: (_) => ChangeNotifierProvider.value(
-            value: RegisterProvider(),
-            child: const RegisterScreen(),
-          ),
-        );
+        return MaterialPageRoute(builder: (_) => const RegisterScreen());
 
       case RouteNames.fillPersonalInfo:
-        final args = settings.arguments as Map<String, dynamic>?;
-        final isGoogle = args?['isFromGoogle'] ?? false;
+        // Check if coming from Google login
+        final isFromGoogle = settings.arguments as bool? ?? false;
         return MaterialPageRoute(
-          builder: (_) => ChangeNotifierProvider.value(
-            value: RegisterProvider()..isGoogleLogin = isGoogle,
-            child: const FillPersonalInfoScreen(),
-          ),
+          builder: (context) {
+            // Set the Google login flag if needed
+            if (isFromGoogle) {
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                context.read<RegisterProvider>().isGoogleLogin = true;
+              });
+            }
+            return const FillPersonalInfoScreen();
+          },
         );
 
       // Main routes

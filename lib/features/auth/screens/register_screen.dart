@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:taffi/core/enums/status_enum.dart';
 import 'package:taffi/core/routing/route_names.dart';
 import 'package:taffi/core/utils/validators.dart';
 import 'package:taffi/features/auth/providers/register_provider.dart';
@@ -43,7 +44,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
     await provider.saveFirstForm(
       username: usernameController.text,
       email: emailController.text,
-
       password: passwordController.text,
     );
     if (context.mounted) {
@@ -141,18 +141,25 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             scrollPadding: EdgeInsets.only(bottom: 150),
                             textInputAction: TextInputAction.done,
                             onFieldSubmitted: (value) async {
+                              if (context.read<RegisterProvider>().status == Status.loading) {
+                                return;
+                              }
                               if (_key.currentState!.validate()) {
                                 await _handleRegister(context);
                               }
                             },
                           ),
                           SizedBox(height: 18),
-                          AuthButtonWidget(
-                            isEnabled: _key.currentState?.validate() ?? false,
-                            onPressed: () async {
-                              await _handleRegister(context);
-                            },
-                            text: "انشاء الحساب",
+                          Consumer<RegisterProvider>(
+                            builder: (context, provider, child) => AuthButtonWidget(
+                              isLoading: provider.status == Status.loading,
+                              onPressed: () async {
+                                if (_key.currentState!.validate()) {
+                                  await _handleRegister(context);
+                                }
+                              },
+                              text: "انشاء الحساب",
+                            ),
                           ),
 
                           SizedBox(height: 6),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:taffi/core/constants/app_constants.dart';
+import 'package:taffi/core/enums/status_enum.dart';
 import 'package:taffi/core/routing/route_names.dart';
 import 'package:taffi/core/theme/app_colors.dart';
 import 'package:taffi/core/utils/snackbar_helper.dart';
@@ -227,6 +228,10 @@ class _FillPersonalInfoScreenState extends State<FillPersonalInfoScreen> {
                                       textEditingController: ageController,
                                       onFieldSubmitted: (value) async {
                                         if (_key.currentState?.validate() ?? false) {
+                                          if (context.read<RegisterProvider>().status ==
+                                              Status.loading) {
+                                            return;
+                                          }
                                           if (context.read<RegisterProvider>().isGoogleLogin) {
                                             await _updateUserInfo(context);
                                           } else {
@@ -241,16 +246,20 @@ class _FillPersonalInfoScreenState extends State<FillPersonalInfoScreen> {
                             ],
                           ),
                           SizedBox(height: 70),
-                          AuthButtonWidget(
-                            isEnabled: _key.currentState?.validate() ?? false,
-                            onPressed: () async {
-                              if (context.read<RegisterProvider>().isGoogleLogin) {
-                                await _updateUserInfo(context);
-                              } else {
-                                await _registerAndLogin(context);
-                              }
-                            },
-                            text: "حفظ المعلومات",
+                          Consumer<RegisterProvider>(
+                            builder: (context, provider, child) => AuthButtonWidget(
+                              isLoading: provider.status == Status.loading,
+                              onPressed: () async {
+                                if (_key.currentState!.validate()) {
+                                  if (provider.isGoogleLogin) {
+                                    await _updateUserInfo(context);
+                                  } else {
+                                    await _registerAndLogin(context);
+                                  }
+                                }
+                              },
+                              text: "حفظ المعلومات",
+                            ),
                           ),
                           SizedBox(height: 6),
                         ],

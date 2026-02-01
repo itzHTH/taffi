@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
+import 'package:taffi/core/enums/status_enum.dart';
 import 'package:taffi/core/routing/route_names.dart';
 import 'package:taffi/core/utils/snackbar_helper.dart';
 import 'package:taffi/core/utils/validators.dart';
@@ -119,18 +120,23 @@ class _LoginScreenState extends State<LoginScreen> {
                                 textInputAction: TextInputAction.done,
                                 onFieldSubmitted: (value) async {
                                   if (_key.currentState!.validate()) {
+                                    if (provider.status == Status.loading) return;
                                     await _login(context);
                                   }
                                 },
                               ),
                             ),
                             SizedBox(height: 28),
-                            AuthButtonWidget(
-                              isEnabled: _key.currentState?.validate() ?? false,
-                              onPressed: () async {
-                                await _login(context);
-                              },
-                              text: "تسجيل دخول",
+                            Consumer<LoginProvider>(
+                              builder: (context, provider, child) => AuthButtonWidget(
+                                isLoading: provider.status == Status.loading,
+                                onPressed: () async {
+                                  if (_key.currentState!.validate()) {
+                                    await _login(context);
+                                  }
+                                },
+                                text: "تسجيل دخول",
+                              ),
                             ),
                             SizedBox(height: 8),
                             Row(
