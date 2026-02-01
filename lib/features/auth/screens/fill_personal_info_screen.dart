@@ -102,9 +102,9 @@ class _FillPersonalInfoScreenState extends State<FillPersonalInfoScreen> {
                       child: ClipRect(
                         child: Align(
                           alignment: Alignment.topCenter,
-                          widthFactor: 0.8,
-                          heightFactor: 0.8,
-                          child: Image.asset("assets/images/doctor1.png"),
+                          widthFactor: 0.9,
+                          heightFactor: 0.6,
+                          child: Image.asset("assets/images/doctor3.png"),
                         ),
                       ),
                     ),

@@ -12,6 +12,7 @@ class AppTheme {
       useMaterial3: true,
       colorScheme: ColorScheme.fromSeed(seedColor: AppColors.primary, brightness: Brightness.light),
       scaffoldBackgroundColor: AppColors.background,
+
       appBarTheme: AppBarTheme(
         backgroundColor: AppColors.primary,
         foregroundColor: Colors.white,

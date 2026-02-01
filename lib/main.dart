@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:taffi/core/routing/app_router.dart';
 import 'package:taffi/core/routing/route_names.dart';
@@ -14,7 +15,12 @@ import 'package:timezone/timezone.dart' as tz;
 void main() {
   tz.initializeTimeZones();
   tz.setLocalLocation(tz.getLocation('Asia/Baghdad'));
+  WidgetsFlutterBinding.ensureInitialized();
 
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+  SystemChrome.setSystemUIOverlayStyle(
+    SystemUiOverlayStyle(statusBarColor: Colors.white, statusBarIconBrightness: Brightness.dark),
+  );
   runApp(const TaffiApp());
 }
 
