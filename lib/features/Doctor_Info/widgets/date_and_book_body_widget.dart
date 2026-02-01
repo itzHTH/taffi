@@ -11,7 +11,7 @@ import 'package:taffi/features/Doctor_Info/widgets/shimmer_body_widget.dart';
 class DateAndBookBodyWidget extends StatelessWidget {
   const DateAndBookBodyWidget({super.key, required this.onBookingPressed});
 
-  final VoidCallback onBookingPressed;
+  final Future<void> Function()? onBookingPressed;
 
   @override
   Widget build(BuildContext context) {

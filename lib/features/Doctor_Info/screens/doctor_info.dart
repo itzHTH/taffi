@@ -61,11 +61,11 @@ class _DoctorInfoScreenState extends State<DoctorInfoScreen> {
     );
 
     if (result == true && mounted) {
-      _confirmBooking();
+      await _confirmBooking();
     }
   }
 
-  void _confirmBooking() async {
+  Future<void> _confirmBooking() async {
     final appointmentProvider = context.read<AppointmentProvider>();
     // Book the appointment
     await appointmentProvider.bookAppointment(
