@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:taffi/core/enums/status_enum.dart';
 import 'package:taffi/core/routing/route_names.dart';
 import 'package:taffi/core/utils/validators.dart';
 import 'package:taffi/features/auth/providers/register_provider.dart';
 import 'package:taffi/features/auth/widgets/custom_text_form_filed.dart';
+import 'package:taffi/features/auth/widgets/login_button_widget.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -147,26 +147,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             },
                           ),
                           SizedBox(height: 18),
-                          Consumer<RegisterProvider>(
-                            builder: (context, provider, child) {
-                              return ElevatedButton(
-                                onPressed: () async {
-                                  if (_key.currentState!.validate()) {
-                                    _handleRegister(context);
-                                  }
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  fixedSize: Size(MediaQuery.widthOf(context), 60),
-                                ),
-                                child: provider.status == Status.loading
-                                    ? CircularProgressIndicator()
-                                    : Text(
-                                        "انشاء الحساب",
-                                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
-                                      ),
-                              );
+                          AuthButtonWidget(
+                            isEnabled: _key.currentState?.validate() ?? false,
+                            onPressed: () async {
+                              await _handleRegister(context);
                             },
+                            text: "انشاء الحساب",
                           ),
+
                           SizedBox(height: 6),
                           Row(
                             mainAxisAlignment: .center,
@@ -192,9 +180,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsetsGeometry.only(
-                        bottom: MediaQuery.of(context).viewInsets.bottom,
-                      ),
+                      padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
                     ),
                   ],
                 ),

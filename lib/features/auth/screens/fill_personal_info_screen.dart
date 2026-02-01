@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:taffi/core/constants/app_constants.dart';
-import 'package:taffi/core/enums/status_enum.dart';
 import 'package:taffi/core/routing/route_names.dart';
 import 'package:taffi/core/theme/app_colors.dart';
 import 'package:taffi/core/utils/snackbar_helper.dart';
@@ -9,6 +8,7 @@ import 'package:taffi/core/utils/validators.dart';
 import 'package:taffi/features/auth/providers/register_provider.dart';
 import 'package:taffi/features/auth/providers/user_provider.dart';
 import 'package:taffi/features/auth/widgets/custom_text_form_filed.dart';
+import 'package:taffi/features/auth/widgets/login_button_widget.dart';
 
 class FillPersonalInfoScreen extends StatefulWidget {
   const FillPersonalInfoScreen({super.key});
@@ -226,7 +226,7 @@ class _FillPersonalInfoScreenState extends State<FillPersonalInfoScreen> {
                                       borderRadius: 6,
                                       textEditingController: ageController,
                                       onFieldSubmitted: (value) async {
-                                        if (_key.currentState!.validate()) {
+                                        if (_key.currentState?.validate() ?? false) {
                                           if (context.read<RegisterProvider>().isGoogleLogin) {
                                             await _updateUserInfo(context);
                                           } else {
@@ -241,38 +241,23 @@ class _FillPersonalInfoScreenState extends State<FillPersonalInfoScreen> {
                             ],
                           ),
                           SizedBox(height: 70),
-                          Consumer<RegisterProvider>(
-                            builder: (context, provider, child) {
-                              return ElevatedButton(
-                                onPressed: () async {
-                                  if (_key.currentState!.validate()) {
-                                    if (context.read<RegisterProvider>().isGoogleLogin) {
-                                      await _updateUserInfo(context);
-                                    } else {
-                                      await _registerAndLogin(context);
-                                    }
-                                  }
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  fixedSize: Size(MediaQuery.widthOf(context), 60),
-                                ),
-                                child: provider.status == Status.loading
-                                    ? CircularProgressIndicator()
-                                    : Text(
-                                        "حفظ المعلومات",
-                                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
-                                      ),
-                              );
+                          AuthButtonWidget(
+                            isEnabled: _key.currentState?.validate() ?? false,
+                            onPressed: () async {
+                              if (context.read<RegisterProvider>().isGoogleLogin) {
+                                await _updateUserInfo(context);
+                              } else {
+                                await _registerAndLogin(context);
+                              }
                             },
+                            text: "حفظ المعلومات",
                           ),
                           SizedBox(height: 6),
                         ],
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsetsGeometry.only(
-                        bottom: MediaQuery.of(context).viewInsets.bottom,
-                      ),
+                      padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
                     ),
                   ],
                 ),

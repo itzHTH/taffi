@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
-import 'package:taffi/core/enums/status_enum.dart';
 import 'package:taffi/core/routing/route_names.dart';
 import 'package:taffi/core/utils/snackbar_helper.dart';
 import 'package:taffi/core/utils/validators.dart';
 import 'package:taffi/features/auth/providers/login_provider.dart';
 import 'package:taffi/features/auth/widgets/custom_text_form_filed.dart';
+import 'package:taffi/features/auth/widgets/login_button_widget.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -125,23 +125,12 @@ class _LoginScreenState extends State<LoginScreen> {
                               ),
                             ),
                             SizedBox(height: 28),
-                            Consumer<LoginProvider>(
-                              builder: (context, provider, child) => ElevatedButton(
-                                onPressed: () async {
-                                  if (_key.currentState!.validate()) {
-                                    await _login(context);
-                                  }
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  fixedSize: Size(MediaQuery.widthOf(context), 60),
-                                ),
-                                child: provider.status == Status.loading
-                                    ? const CircularProgressIndicator()
-                                    : Text(
-                                        "تسجيل دخول",
-                                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
-                                      ),
-                              ),
+                            AuthButtonWidget(
+                              isEnabled: _key.currentState?.validate() ?? false,
+                              onPressed: () async {
+                                await _login(context);
+                              },
+                              text: "تسجيل دخول",
                             ),
                             SizedBox(height: 8),
                             Row(
@@ -230,9 +219,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
                       Padding(
-                        padding: EdgeInsetsGeometry.only(
-                          bottom: MediaQuery.of(context).viewInsets.bottom,
-                        ),
+                        padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
                       ),
                     ],
                   ),
