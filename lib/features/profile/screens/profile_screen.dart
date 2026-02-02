@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:taffi/core/enums/status_enum.dart';
 import 'package:taffi/core/routing/route_names.dart';
+import 'package:taffi/core/widgets/confirmation_dialog.dart';
 import 'package:taffi/core/widgets/custom_refresh_indicator.dart';
 import 'package:taffi/core/widgets/error_retry_widget.dart';
 import 'package:taffi/features/auth/providers/user_provider.dart';
@@ -69,13 +70,22 @@ class ProfileScreen extends StatelessWidget {
                           icon: 'assets/images/logout.svg',
                           title: 'تسجيل الخروج',
                           onTap: () async {
-                            await userProvider.logout();
-                            if (context.mounted) {
-                              Navigator.pushNamedAndRemoveUntil(
-                                context,
-                                RouteNames.login,
-                                (route) => false,
-                              );
+                            final shouldLogout = await showDialog<bool>(
+                              context: context,
+                              barrierDismissible: false,
+                              builder: (context) =>
+                                  const ConfirmationDialog(type: ConfirmationDialogType.logout),
+                            );
+
+                            if (shouldLogout == true && context.mounted) {
+                              await userProvider.logout();
+                              if (context.mounted) {
+                                Navigator.pushNamedAndRemoveUntil(
+                                  context,
+                                  RouteNames.login,
+                                  (route) => false,
+                                );
+                              }
                             }
                           },
                         ),
