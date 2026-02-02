@@ -44,6 +44,17 @@ class ApiInterceptor extends QueuedInterceptorsWrapper {
           ),
         );
 
+        tokenDio.interceptors.add(
+          LogInterceptor(
+            requestBody: true,
+            responseBody: true,
+            error: true,
+            request: true,
+            requestHeader: true,
+            responseHeader: true,
+          ),
+        );
+
         final Response response = await tokenDio.post(
           EndPoints.auth.refreshToken,
           data: {AppConstants.accessToken: oldToken, AppConstants.refreshToken: refreshToken},
