@@ -18,16 +18,11 @@ class PrivacyPolicyScreen extends StatelessWidget {
         elevation: 0,
         centerTitle: true,
         leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back_ios_rounded,
-            color: AppColors.primary,
-          ),
+          highlightColor: Colors.black.withValues(alpha: 0.2),
+          icon: const Icon(Icons.arrow_back_ios_rounded, color: AppColors.primary),
           onPressed: () => Navigator.pop(context),
         ),
-        title: Text(
-          "سياسة الخصوصية",
-          style: Theme.of(context).textTheme.titleLarge,
-        ),
+        title: Text("سياسة الخصوصية", style: Theme.of(context).textTheme.titleLarge),
       ),
       body: const SafeArea(
         child: SingleChildScrollView(
@@ -40,13 +35,10 @@ class PrivacyPolicyScreen extends StatelessWidget {
                     "مرحباً بك في تطبيق تعافي. نحن نحترم خصوصيتك ونلتزم بحماية بياناتك الشخصية. توضح سياسة الخصوصية هذه كيفية جمعنا واستخدامنا وحمايتنا للمعلومات عند استخدامك لتطبيقنا.",
               ),
               SizedBox(height: 16),
-              SectionTitle(
-                title: "1. المعلومات التي نجمعها",
-              ),
+              SectionTitle(title: "1. المعلومات التي نجمعها"),
               SizedBox(height: 6),
               ContentParagraph(
-                text:
-                    "نحن نقوم بجمع المعلومات التي تقدمها لنا طواعية عند استخدام التطبيق، وتشمل:",
+                text: "نحن نقوم بجمع المعلومات التي تقدمها لنا طواعية عند استخدام التطبيق، وتشمل:",
               ),
               SizedBox(height: 6),
               BulletPoint(
@@ -64,26 +56,12 @@ class PrivacyPolicyScreen extends StatelessWidget {
               SizedBox(height: 16),
               SectionTitle(title: "2. كيف نستخدم معلوماتك"),
               SizedBox(height: 6),
-              ContentParagraph(
-                text:
-                    "نستخدم المعلومات التي نجمعها للأغراض التالية:",
-              ),
+              ContentParagraph(text: "نستخدم المعلومات التي نجمعها للأغراض التالية:"),
               SizedBox(height: 6),
-              BulletPoint(
-                text:
-                    "توفير وصيانة الخدمات التي يقدمها التطبيق.",
-              ),
-              BulletPoint(
-                text: "إدارة حسابك وتوثيق هويتك.",
-              ),
-              BulletPoint(
-                text:
-                    "تحسين واجهة المستخدم وتجربة الاستخدام (UI/UX).",
-              ),
-              BulletPoint(
-                text:
-                    "الرد على استفساراتك وتقديم الدعم الفني.",
-              ),
+              BulletPoint(text: "توفير وصيانة الخدمات التي يقدمها التطبيق."),
+              BulletPoint(text: "إدارة حسابك وتوثيق هويتك."),
+              BulletPoint(text: "تحسين واجهة المستخدم وتجربة الاستخدام (UI/UX)."),
+              BulletPoint(text: "الرد على استفساراتك وتقديم الدعم الفني."),
               SizedBox(height: 16),
               SectionTitle(title: "3. مشاركة البيانات"),
               SizedBox(height: 6),
@@ -92,13 +70,8 @@ class PrivacyPolicyScreen extends StatelessWidget {
                     "نحن لا نقوم ببيع أو تأجير بياناتك الشخصية لأطراف ثالثة. قد نشارك البيانات فقط في الحالات التالية:",
               ),
               SizedBox(height: 6),
-              BulletPoint(
-                text:
-                    "الامتثال للقوانين أو اللوائح المعمول بها.",
-              ),
-              BulletPoint(
-                text: "حماية حقوق وسلامة مستخدمي التطبيق.",
-              ),
+              BulletPoint(text: "الامتثال للقوانين أو اللوائح المعمول بها."),
+              BulletPoint(text: "حماية حقوق وسلامة مستخدمي التطبيق."),
               SizedBox(height: 16),
               SectionTitle(title: "4. أمن البيانات"),
               SizedBox(height: 6),
@@ -107,9 +80,7 @@ class PrivacyPolicyScreen extends StatelessWidget {
                     "نحن نتخذ إجراءات أمنية معقولة لحماية معلوماتك من الوصول غير المصرح به أو التغيير أو الإفصاح. ومع ذلك، يرجى العلم بأنه لا توجد وسيلة نقل عبر الإنترنت أو طريقة تخزين إلكتروني آمنة بنسبة 100%.",
               ),
               SizedBox(height: 16),
-              SectionTitle(
-                title: "5. التغييرات على سياسة الخصوصية",
-              ),
+              SectionTitle(title: "5. التغييرات على سياسة الخصوصية"),
               SizedBox(height: 6),
               ContentParagraph(
                 text:
@@ -119,14 +90,10 @@ class PrivacyPolicyScreen extends StatelessWidget {
               SectionTitle(title: "6. اتصل بنا"),
               SizedBox(height: 6),
               ContentParagraph(
-                text:
-                    "إذا كان لديك أي أسئلة حول سياسة الخصوصية هذه، يرجى الاتصال بنا عبر:",
+                text: "إذا كان لديك أي أسئلة حول سياسة الخصوصية هذه، يرجى الاتصال بنا عبر:",
               ),
               SizedBox(height: 6),
-              BulletPoint(
-                text:
-                    "البريد الإلكتروني:  support@taffi.app",
-              ),
+              BulletPoint(text: "البريد الإلكتروني:  support@taffi.app"),
 
               SizedBox(height: 32),
 

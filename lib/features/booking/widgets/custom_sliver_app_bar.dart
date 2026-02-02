@@ -22,6 +22,7 @@ class CustomSliverAppBar extends StatelessWidget {
       pinned: true,
       centerTitle: true,
       leading: IconButton(
+        highlightColor: Colors.black.withValues(alpha: 0.2),
         icon: Icon(Icons.arrow_back_ios_new_outlined, color: AppColors.primary),
         onPressed: () {
           Navigator.pop(context);

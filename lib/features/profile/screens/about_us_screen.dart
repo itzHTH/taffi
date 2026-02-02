@@ -17,16 +17,11 @@ class AboutUsScreen extends StatelessWidget {
         elevation: 0,
         centerTitle: true,
         leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back_ios_rounded,
-            color: AppColors.primary,
-          ),
+          highlightColor: Colors.black.withValues(alpha: 0.2),
+          icon: const Icon(Icons.arrow_back_ios_rounded, color: AppColors.primary),
           onPressed: () => Navigator.pop(context),
         ),
-        title: Text(
-          "من نحن",
-          style: Theme.of(context).textTheme.titleLarge,
-        ),
+        title: Text("من نحن", style: Theme.of(context).textTheme.titleLarge),
       ),
       body: const SafeArea(
         child: SingleChildScrollView(
@@ -61,52 +56,23 @@ class AboutUsScreen extends StatelessWidget {
 
               SectionTitle(title: "3. خدماتنا"),
               SizedBox(height: 6),
-              ContentParagraph(
-                text:
-                    "نقدم مجموعة واسعة من الخدمات الطبية التي تشمل:",
-              ),
+              ContentParagraph(text: "نقدم مجموعة واسعة من الخدمات الطبية التي تشمل:"),
               SizedBox(height: 6),
-              BulletPoint(
-                text: "حجز المواعيد الطبية بسهولة وسرعة",
-              ),
-              BulletPoint(
-                text:
-                    "التواصل المباشر مع الأطباء المتخصصين",
-              ),
-              BulletPoint(
-                text: "إدارة السجلات والملفات الطبية",
-              ),
-              BulletPoint(
-                text: "متابعة المواعيد والعلاجات",
-              ),
-              BulletPoint(
-                text: "البحث عن أفضل الأطباء والتخصصات",
-              ),
+              BulletPoint(text: "حجز المواعيد الطبية بسهولة وسرعة"),
+              BulletPoint(text: "التواصل المباشر مع الأطباء المتخصصين"),
+              BulletPoint(text: "إدارة السجلات والملفات الطبية"),
+              BulletPoint(text: "متابعة المواعيد والعلاجات"),
+              BulletPoint(text: "البحث عن أفضل الأطباء والتخصصات"),
 
               SizedBox(height: 16),
 
               SectionTitle(title: "4. قيمنا"),
               SizedBox(height: 6),
-              BulletPoint(
-                text:
-                    "الجودة: نلتزم بتقديم أعلى معايير الجودة في كل خدماتنا",
-              ),
-              BulletPoint(
-                text:
-                    "الخصوصية: نحترم خصوصية بياناتك ونحميها بكل السبل",
-              ),
-              BulletPoint(
-                text:
-                    "الاحترافية: فريقنا من المتخصصين المؤهلين لخدمتك",
-              ),
-              BulletPoint(
-                text:
-                    "الابتكار: نستخدم أحدث التقنيات لتحسين خدماتنا",
-              ),
-              BulletPoint(
-                text:
-                    "الشفافية: نعمل بوضوح ومصداقية مع جميع مستخدمينا",
-              ),
+              BulletPoint(text: "الجودة: نلتزم بتقديم أعلى معايير الجودة في كل خدماتنا"),
+              BulletPoint(text: "الخصوصية: نحترم خصوصية بياناتك ونحميها بكل السبل"),
+              BulletPoint(text: "الاحترافية: فريقنا من المتخصصين المؤهلين لخدمتك"),
+              BulletPoint(text: "الابتكار: نستخدم أحدث التقنيات لتحسين خدماتنا"),
+              BulletPoint(text: "الشفافية: نعمل بوضوح ومصداقية مع جميع مستخدمينا"),
 
               SizedBox(height: 16),
 
@@ -121,26 +87,16 @@ class AboutUsScreen extends StatelessWidget {
 
               SectionTitle(title: "6. تواصل معنا"),
               SizedBox(height: 6),
-              ContentParagraph(
-                text:
-                    "نحن هنا لخدمتك، لا تتردد في التواصل معنا:",
-              ),
+              ContentParagraph(text: "نحن هنا لخدمتك، لا تتردد في التواصل معنا:"),
               SizedBox(height: 6),
-              BulletPoint(
-                text:
-                    "البريد الإلكتروني:  support@taffi.app",
-              ),
+              BulletPoint(text: "البريد الإلكتروني:  support@taffi.app"),
 
               SizedBox(height: 32),
 
               Center(
                 child: Column(
                   children: [
-                    Icon(
-                      Icons.favorite,
-                      color: AppColors.primary,
-                      size: 32,
-                    ),
+                    Icon(Icons.favorite, color: AppColors.primary, size: 32),
                     SizedBox(height: 8),
                     Text(
                       "نحن معك في رحلتك نحو صحة أفضل",

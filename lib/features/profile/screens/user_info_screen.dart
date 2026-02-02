@@ -95,6 +95,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
           elevation: 0,
           centerTitle: true,
           leading: IconButton(
+            highlightColor: Colors.black.withValues(alpha: 0.2),
             icon: Icon(Icons.arrow_back_ios_rounded, color: AppColors.primary),
             onPressed: () => Navigator.pop(context),
           ),
