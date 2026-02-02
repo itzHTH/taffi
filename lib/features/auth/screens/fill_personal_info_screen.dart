@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:taffi/core/constants/app_constants.dart';
+import 'package:taffi/core/data/local/shard_pers.dart';
 import 'package:taffi/core/enums/status_enum.dart';
 import 'package:taffi/core/routing/route_names.dart';
 import 'package:taffi/core/theme/app_colors.dart';
@@ -76,6 +77,7 @@ class _FillPersonalInfoScreenState extends State<FillPersonalInfoScreen> {
 
     if (result) {
       Navigator.pushNamedAndRemoveUntil(context, RouteNames.main, (route) => false);
+      SharedPrefsHelper.instance.setBoolValue(AppConstants.isNewUser, false);
     } else {
       SnackBarHelper.showError(context, userProvider.errorMessage);
     }

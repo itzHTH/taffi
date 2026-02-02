@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:taffi/core/constants/api_config.dart';
+import 'package:taffi/core/constants/app_constants.dart';
 import 'package:taffi/core/data/local/secure_storage.dart';
+import 'package:taffi/core/data/local/shard_pers.dart';
 import 'package:taffi/core/data/remote/api_service.dart';
 import 'package:taffi/core/data/remote/server_exception.dart';
 import 'package:taffi/core/enums/status_enum.dart';
@@ -91,6 +93,7 @@ class UserProvider extends ChangeNotifier {
 
     try {
       await SecureStorage.instance.deleteTokens();
+      SharedPrefsHelper.instance.remove(AppConstants.isNewUser);
       loadUserStatus = Status.success;
       notifyListeners();
     } catch (e) {

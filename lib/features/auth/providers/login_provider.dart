@@ -1,7 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:taffi/core/constants/api_config.dart';
+import 'package:taffi/core/constants/app_constants.dart';
 import 'package:taffi/core/data/local/secure_storage.dart';
+import 'package:taffi/core/data/local/shard_pers.dart';
 import 'package:taffi/core/data/remote/api_service.dart';
 import 'package:taffi/core/data/remote/server_exception.dart';
 import 'package:taffi/core/enums/status_enum.dart';
@@ -96,6 +98,7 @@ class LoginProvider extends ChangeNotifier {
 
           // Check If The User Is New User
           if (authModel.isNewUser == true) {
+            await SharedPrefsHelper.instance.setBoolValue(AppConstants.isNewUser, true);
             NavigationService().pushNamedAndRemoveUntil(
               RouteNames.fillPersonalInfo,
               arguments: true, // isFromGoogle

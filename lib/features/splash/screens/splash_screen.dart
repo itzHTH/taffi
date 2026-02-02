@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:taffi/core/constants/app_constants.dart';
 import 'package:taffi/core/data/local/secure_storage.dart';
+import 'package:taffi/core/data/local/shard_pers.dart';
 import 'package:taffi/core/routing/route_names.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -96,6 +98,7 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
     final storage = SecureStorage.instance;
     final String? refreshToken = await storage.getRefreshToken();
     final String? refreshTokenExpireAt = await storage.getRefreshTokenExpireAt();
+    final bool isNewUser = SharedPrefsHelper.instance.getBoolValue(AppConstants.isNewUser) ?? false;
 
     if (!mounted) return;
 
@@ -104,7 +107,11 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
         refreshTokenExpireAt != null &&
         refreshTokenExpireAt.isNotEmpty) {
       if (DateTime.now().isBefore(DateTime.parse(refreshTokenExpireAt))) {
-        Navigator.pushReplacementNamed(context, RouteNames.main);
+        if (isNewUser) {
+          Navigator.pushReplacementNamed(context, RouteNames.fillPersonalInfo, arguments: true);
+        } else {
+          Navigator.pushReplacementNamed(context, RouteNames.main);
+        }
       } else {
         Navigator.pushReplacementNamed(context, RouteNames.login);
       }

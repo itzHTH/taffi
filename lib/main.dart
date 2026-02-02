@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:taffi/core/data/local/shard_pers.dart';
 import 'package:taffi/core/routing/app_router.dart';
 import 'package:taffi/core/routing/route_names.dart';
 import 'package:taffi/core/services/navigation_service.dart';
@@ -17,6 +18,7 @@ void main() {
   tz.initializeTimeZones();
   tz.setLocalLocation(tz.getLocation('Asia/Baghdad'));
   WidgetsFlutterBinding.ensureInitialized();
+  SharedPrefsHelper.initShared();
 
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   SystemChrome.setSystemUIOverlayStyle(
