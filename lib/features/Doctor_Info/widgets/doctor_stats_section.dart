@@ -20,7 +20,7 @@ class DoctorStatsSection extends StatelessWidget {
             label: 'المرضى',
           ),
           StatItem(
-            value: "${((doctorModel?.experienceYears ?? 0) * 2000).toString()} د.أ",
+            value: "${((doctorModel?.experienceYears ?? 0) * 2000).toString()} د.ع",
             label: 'الكشفيه',
           ),
         ],

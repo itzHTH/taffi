@@ -31,12 +31,12 @@ class _DateSelectionWidgetState extends State<DateSelectionWidget> {
 
   // to get the first valid date (if today is not valid, skip to the next valid date)
   DateTime _getValidInitialDate() {
-    // If no work days are set, return today
+    // If no work days are set, return tomorrow
     if (workDays.isEmpty) {
-      return BaghdadTimeHelper.now();
+      return BaghdadTimeHelper.now().add(const Duration(days: 1));
     }
 
-    DateTime date = BaghdadTimeHelper.now();
+    DateTime date = BaghdadTimeHelper.now().add(const Duration(days: 1));
     int attempts = 0;
     // Prevent infinite loop - max 7 days ahead
     while (!workDays.contains(date.weekday) && attempts < 7) {

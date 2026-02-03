@@ -15,15 +15,19 @@ class DateAndBookBodyWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<DoctorProvider>(
-      builder: (context, ref, child) {
+    return Selector<DoctorProvider, Status>(
+      selector: (context, ref) => ref.doctorStatus,
+      builder: (context, status, child) {
         return Column(
           children: [
-            switch (ref.doctorStatus) {
+            switch (status) {
               Status.loading => ShimmerBodyWidget(),
               Status.error => ErrorRetryWidget(
-                onRetry: () => ref.getDoctorSchedule(ref.doctor!.id!),
-                errorMessage: ref.errorMessage ?? "حدث خطأ أثناء تحميل المواعيد",
+                onRetry: () => context.read<DoctorProvider>().getDoctorSchedule(
+                  context.read<DoctorProvider>().doctor!.id!,
+                ),
+                errorMessage:
+                    context.read<DoctorProvider>().errorMessage ?? "حدث خطأ أثناء تحميل المواعيد",
               ),
               Status.success => Column(
                 children: [

@@ -40,12 +40,19 @@ class Helpers {
     List<String> slots = [];
 
     DateFormat inputFormat = DateFormat('HH:mm');
+    DateFormat outputFormat = DateFormat('hh:mm');
 
     DateTime start = inputFormat.parse(startTime);
     DateTime end = inputFormat.parse(endTime);
 
     while (start.isBefore(end)) {
-      slots.add(inputFormat.format(start));
+      String formattedTime = outputFormat.format(start);
+      if (start.hour >= 12) {
+        formattedTime += ' مساءاً';
+      } else {
+        formattedTime += ' صباحاً';
+      }
+      slots.add(formattedTime);
       start = start.add(Duration(minutes: interval));
     }
 
@@ -53,7 +60,24 @@ class Helpers {
   }
 
   static String formatTimeOfDay(String timeString) {
-    return "$timeString:00.000";
+    if (timeString.contains('مساءاً')) {
+      timeString = timeString.replaceAll(' مساءاً', '');
+      DateTime time = DateFormat('hh:mm').parse(timeString);
+      if (time.hour != 12) {
+        time = time.add(const Duration(hours: 12));
+      }
+      return "${DateFormat('HH:mm').format(time).toString()}:00.000";
+    } else if (timeString.contains('صباحاً')) {
+      timeString = timeString.replaceAll(' صباحاً', '');
+      DateTime time = DateFormat('hh:mm').parse(timeString);
+      if (time.hour == 12) {
+        time = time.subtract(const Duration(hours: 12)); // 12 AM is 00:00
+      }
+      return "${DateFormat('HH:mm').format(time).toString()}:00.000";
+    }
+
+    DateTime time = DateFormat('hh:mm').parse(timeString);
+    return "${DateFormat('HH:mm').format(time).toString()}:00.000";
   }
 
   static bool isDateTimeBeforeNow(String date, String time) {

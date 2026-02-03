@@ -87,7 +87,7 @@ class _DoctorInfoScreenState extends State<DoctorInfoScreen> {
       if (appointmentProvider.status == Status.success) {
         SnackBarHelper.showSuccess(
           context,
-          'تم تأكيد الحجز بنجاح! سيتم إرسال التفاصيل إلى بريدك الإلكتروني',
+          'تم تأكيد الحجز بنجاح !',
           duration: const Duration(seconds: 4),
         );
         Navigator.pop(context);
