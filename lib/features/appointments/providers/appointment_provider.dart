@@ -107,4 +107,12 @@ class AppointmentProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+  Future<void> resetAppointmentProvider() async {
+    appointmentsResponse = [];
+    status = Status.initial;
+    bookStatus = Status.initial;
+    errorMessage = '';
+    notifyListeners();
+  }
 }

@@ -6,6 +6,7 @@ import 'package:taffi/core/routing/route_names.dart';
 import 'package:taffi/core/widgets/confirmation_dialog.dart';
 import 'package:taffi/core/widgets/custom_refresh_indicator.dart';
 import 'package:taffi/core/widgets/error_retry_widget.dart';
+import 'package:taffi/features/appointments/providers/appointment_provider.dart';
 import 'package:taffi/features/auth/providers/user_provider.dart';
 import 'package:taffi/features/profile/widgets/menu_item.dart';
 import 'package:taffi/features/profile/widgets/user_details_widget.dart';
@@ -78,6 +79,10 @@ class ProfileScreen extends StatelessWidget {
                             );
 
                             if (shouldLogout == true && context.mounted) {
+                              await context.read<UserProvider>().resetUserProvider();
+                              if (!context.mounted) return;
+                              await context.read<AppointmentProvider>().resetAppointmentProvider();
+                              if (!context.mounted) return;
                               await userProvider.logout();
                               if (context.mounted) {
                                 Navigator.pushNamedAndRemoveUntil(

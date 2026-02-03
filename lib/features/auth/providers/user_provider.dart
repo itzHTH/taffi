@@ -102,4 +102,12 @@ class UserProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+  Future<void> resetUserProvider() async {
+    user = null;
+    loadUserStatus = Status.initial;
+    updateUserStatus = Status.initial;
+    errorMessage = '';
+    notifyListeners();
+  }
 }

@@ -48,9 +48,7 @@ class ConfirmationDialog extends StatelessWidget {
       ? 'هل أنت متأكد من تسجيل الخروج؟'
       : 'هل أنت متأكد من إلغاء الموعد مع ';
 
-  String get _infoMessage => isBooking
-      ? 'سيتم إرسال تأكيد الحجز إلى بريدك الإلكتروني'
-      : isLogout
+  String get _infoMessage => isLogout
       ? 'سيتم تسجيل خروجك من التطبيق وستحتاج إلى تسجيل الدخول مرة أخرى'
       : 'لن تتمكن من التراجع عن هذا الإجراء';
 
@@ -299,26 +297,27 @@ class ConfirmationDialog extends StatelessWidget {
                   ],
 
                   // Info message
-                  Container(
-                    padding: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: _infoColor.withValues(alpha: 0.1),
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: _infoColor.withValues(alpha: 0.3), width: 1),
-                    ),
-                    child: Row(
-                      children: [
-                        Icon(Icons.info_outline_rounded, color: _infoColor, size: 20),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: Text(
-                            _infoMessage,
-                            style: TextStyle(fontSize: 13, color: _infoColor, height: 1.4),
+                  if (!isBooking)
+                    Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: _infoColor.withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: _infoColor.withValues(alpha: 0.3), width: 1),
+                      ),
+                      child: Row(
+                        children: [
+                          Icon(Icons.info_outline_rounded, color: _infoColor, size: 20),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: Text(
+                              _infoMessage,
+                              style: TextStyle(fontSize: 13, color: _infoColor, height: 1.4),
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
                 ],
               ),
             ),
