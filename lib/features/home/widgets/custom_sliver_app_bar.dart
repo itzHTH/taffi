@@ -59,33 +59,15 @@ class CustomSliverAppBar extends StatelessWidget {
         },
       ),
       actions: [
-        Stack(
-          children: [
-            SizedBox(
-              width: 60,
-              height: 40,
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, RouteNames.notifications);
-                },
-                child: SvgPicture.asset("assets/images/bell.svg", fit: BoxFit.cover),
-              ),
-            ),
-            Positioned(
-              top: 0,
-              left: 0,
-
-              child: Container(
-                width: 14,
-                height: 14,
-                decoration: BoxDecoration(
-                  color: Color(0xffFF1414),
-                  shape: BoxShape.circle,
-                  boxShadow: [BoxShadow(color: Color(0xffFF1414), blurRadius: 1)],
-                ),
-              ),
-            ),
-          ],
+        SizedBox(
+          width: 60,
+          height: 40,
+          child: ElevatedButton(
+            onPressed: () {
+              Navigator.pushNamed(context, RouteNames.notifications);
+            },
+            child: SvgPicture.asset("assets/images/bell.svg", fit: BoxFit.cover),
+          ),
         ),
       ],
     );
