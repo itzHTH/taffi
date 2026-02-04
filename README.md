@@ -100,7 +100,7 @@ dart pub global activate fvm
 
   #### A. Clone the repository
   ```bash
-  git clone [https://github.com/itzHTH/taffi.git](https://github.com/itzHTH/taffi.git)
+  git clone https://github.com/itzHTH/taffi.git
   ```
 
 #### B. Navigate to the project directory
