@@ -85,6 +85,48 @@ It relies on **ASP.NET Core** to manage complex business logic, ensure data inte
 
 ---
 
+## 💻 Installation & Setup
+
+This project uses **FVM (Flutter Version Management)** to ensure development environment consistency.
+
+### 1. Prerequisites
+First, ensure you have **FVM** installed globally:
+```bash
+dart pub global activate fvm
+```
+##
+
+### 2. Clone & Configure
+
+  #### A. Clone the repository
+  ```bash
+  git clone [https://github.com/itzHTH/taffi.git](https://github.com/itzHTH/taffi.git)
+  ```
+
+#### B. Navigate to the project directory
+```bash
+cd taffi
+```
+
+#### C. Install the specific Flutter SDK version used in this project
+```bash
+fvm install
+```
+
+#### D. Install dependencies
+```bash
+fvm flutter pub get
+```
+##
+
+### 3. Run the Application
+Start the app using FVM proxy:
+```bash
+fvm flutter run
+```
+
+---
+
 ## 🛠️ Tech Stack
 
 * **Framework:** Flutter & Dart
